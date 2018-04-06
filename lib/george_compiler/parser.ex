@@ -6,7 +6,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Expressoes
 
-  define :exp, "arithexp"
+  define :exp, "arithexp / boolexp"
 
   # Expressoes aritimeticas
 
@@ -22,8 +22,16 @@ defmodule GeorgeCompiler.Parser do
 
   define :rem, "decimal <space?> <remOp> <space?> arithexp / decimal <space?> <remOp> <space?> decimal"
 
+  # Operações Booleanas
+  define :boolexp, "equals"
 
-   # Numeros
+  define :equals, "value <space?> <remOp> <space?> exp / value <space?> <remOp> <space?> value"
+
+  # Value
+
+  define :value, "bool / decimal"
+
+  # Numeros
 
   define :decimal, "decimalP / decimalN" do
     digitis ->
@@ -59,4 +67,21 @@ defmodule GeorgeCompiler.Parser do
   define :divOp, "[/]"
 
   define :remOp, "[%]"
+
+  # Bolleano
+
+  define :bool, "true / false"
+
+  define :true, "true"
+
+  define :false, "false"
+
+
+
+  # Operadores Booleanos
+
+  define :equalsOp, "equal equal"
+
+  define :equal, "[=]"
+
 end
