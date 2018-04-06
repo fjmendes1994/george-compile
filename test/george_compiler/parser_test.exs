@@ -24,6 +24,10 @@ defmodule ParserTest do
     assert GeorgeCompiler.Parser.parse("10 + -20 - 30 / 40 * 50 % 60") == {:ok, ["10", ["20", ["30", ["40", ["50", "60"]]]]]}
   end
 
+  test "equals siples" do
+    assert GeorgeCompiler.Parser.parse("10==20") == {:ok, ["10", "20"]}
+  end
+
 
 
 

@@ -25,11 +25,11 @@ defmodule GeorgeCompiler.Parser do
   # Operações Booleanas
   define :boolexp, "equals"
 
-  define :equals, "value <space?> <remOp> <space?> exp / value <space?> <remOp> <space?> value"
+  define :equals, "value <space?> <equalsOp> <space?> exp / value <space?> <equalsOp> <space?> value"
 
   # Value
 
-  define :value, "bool / decimal"
+  define :value, "decimal / bool"
 
   # Numeros
 
