@@ -44,7 +44,7 @@ defmodule GeorgeCompiler.Parser do
   # na arvore com os dois casos diferentes
   define :decimalN, "<minus> digit+"
 
-  # Sinal Negativo ( Temos que checar se havera problemas com o sinal de negativo)
+  # Sinal Negativo ( Temos que checar se havera problemas com o operador de subtração )
 
   define :minus, "[-]"
 
