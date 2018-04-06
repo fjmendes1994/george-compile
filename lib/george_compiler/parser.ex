@@ -6,11 +6,13 @@ defmodule GeorgeCompiler.Parser do
 
   define :exp, "arithexp"
 
-  define :arithexp, "sum / sub"
+  define :arithexp, "sum / sub / div"
 
   define :sum, "decimal <space?> <sumOp> <space?> arithexp / decimal <space?> <sumOp> <space?> decimal"
 
   define :sub, "decimal <space?> <subOp> <space?> arithexp / decimal <space?> <subOp> <space?> decimal"
+
+  define :div, "decimal <space?> <divOp> <space?> arithexp / decimal <space?> <divOp> <space?> decimal"
 
   define :decimal, "decimalP / decimalN" do
     digitis ->
@@ -43,7 +45,7 @@ defmodule GeorgeCompiler.Parser do
 
   define :mulOp, "[*]"
 
-  define :divOp, "[div]"
+  define :divOp, "[/]"
 
   define :remOp, "[%]"
 end

@@ -15,6 +15,10 @@ defmodule ParserTest do
     assert GeorgeCompiler.Parser.parse("-11 - 20 + -30") == {:ok, ["11", ["20", "30"]]}
   end
 
+  test "divisao simples" do
+    assert GeorgeCompiler.Parser.parse("-11 / 20 + -30") == {:ok, ["11", ["20", "30"]]}
+  end
+
 
 
 end
