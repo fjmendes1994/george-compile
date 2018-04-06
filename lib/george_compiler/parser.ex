@@ -10,7 +10,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Expressoes aritimeticas
 
-  define :arithexp, "sum / sub / div / mul"
+  define :arithexp, "sum / sub / div / mul / rem"
 
   define :sum, "decimal <space?> <sumOp> <space?> arithexp / decimal <space?> <sumOp> <space?> decimal"
 
@@ -19,6 +19,8 @@ defmodule GeorgeCompiler.Parser do
   define :div, "decimal <space?> <divOp> <space?> arithexp / decimal <space?> <divOp> <space?> decimal"
 
   define :mul, "decimal <space?> <mulOp> <space?> arithexp / decimal <space?> <mulOp> <space?> decimal"
+
+  define :rem, "decimal <space?> <remOp> <space?> arithexp / decimal <space?> <remOp> <space?> decimal"
 
 
    # Numeros

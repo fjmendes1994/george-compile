@@ -1,21 +1,8 @@
 defmodule GeorgeCompiler do
   @moduledoc """
-  Documentation for GeorgeCompiler.
+   Compilador Geroge
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> GeorgeCompiler.hello
-      :world
-
-  """
-  def hello do
-    :world
-  end
-
-  IO.inspect(GeorgeCompiler.Parser.parse("11 - 20 + -30 - 50"))
+  GeorgeCompiler.Parser.parse("10 + -20 - 30 / 40 * 50 % 60") |> IO.inspect()
 
 end
