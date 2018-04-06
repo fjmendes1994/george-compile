@@ -1,0 +1,4 @@
+%{
+  "dbg": {:hex, :dbg, "1.0.1", "9c29813e5df8b4d275325416523d511e315656b8ac27a60519791f9cf476d83d", [:mix], [], "hexpm"},
+  "neotomex": {:hex, :neotomex, "0.1.7", "64f76513653aa87ea7abdde0fd600e56955d838020a13d88f2bf334c88ac3e7a", [:mix], [], "hexpm"},
+}
