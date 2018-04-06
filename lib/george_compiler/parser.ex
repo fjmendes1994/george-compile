@@ -4,15 +4,24 @@ defmodule GeorgeCompiler.Parser do
 
   @root true
 
+  # Expressoes
+
   define :exp, "arithexp"
 
-  define :arithexp, "sum / sub / div"
+  # Expressoes aritimeticas
+
+  define :arithexp, "sum / sub / div / mul"
 
   define :sum, "decimal <space?> <sumOp> <space?> arithexp / decimal <space?> <sumOp> <space?> decimal"
 
   define :sub, "decimal <space?> <subOp> <space?> arithexp / decimal <space?> <subOp> <space?> decimal"
 
   define :div, "decimal <space?> <divOp> <space?> arithexp / decimal <space?> <divOp> <space?> decimal"
+
+  define :mul, "decimal <space?> <mulOp> <space?> arithexp / decimal <space?> <mulOp> <space?> decimal"
+
+
+   # Numeros
 
   define :decimal, "decimalP / decimalN" do
     digitis ->
