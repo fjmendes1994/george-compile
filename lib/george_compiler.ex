@@ -16,6 +16,6 @@ defmodule GeorgeCompiler do
     :world
   end
 
-  IO.inspect(GeorgeCompiler.Parser.parse("11+ 20 + 30"))
+  IO.inspect(GeorgeCompiler.Parser.parse("11 - 20 + -30 - 50"))
 
 end
