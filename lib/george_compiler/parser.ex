@@ -54,11 +54,7 @@ defmodule GeorgeCompiler.Parser do
   # Aqui temos que checar se a implementação correta é usando minus ou <minus>, observar mudanças
   # na arvore com os dois casos diferentes
   
-  define :decimalN, "minus digit+"
-
-  # Sinal Negativo ( Temos que checar se havera problemas com o operador de subtração )
- 
-  define :minus, "[-]"
+  define :decimalN, "<subOp> digit+"
 
   # Digito
 
@@ -72,9 +68,13 @@ defmodule GeorgeCompiler.Parser do
 
   define :priority, "priorityArit / priorityExp"
 
-  define :priorityArit, "'(' arithexp ')'"
+  define :priorityArit, "<lp> arithexp <rp>"
 
-  define :priorityExp, "'(' exp ')'"
+  define :priorityExp, "<lp> exp <rp>"
+
+  define :lp, "[(]"
+
+  define :rp, "[)]"
 
   # Operadores Aritmeticos
 
