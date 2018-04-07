@@ -6,7 +6,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Expressoes
 
-  define :exp, "arithexp / boolexp"
+  define :exp, "arithexp / boolexp / value"
 
   # Expressoes aritimeticas
 
@@ -41,7 +41,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Value
 
-  define :value, "decimal / bool / exp"
+  define :value, "priority / decimal / bool / exp"
 
   # Numeros
 
@@ -65,6 +65,10 @@ defmodule GeorgeCompiler.Parser do
   # Espaços
 
   define :space, "[ \\r\\n\\s\\t]*"
+
+  # Valores prioritarios
+
+  define :priority, "'(' exp ')'"
 
   # Operadores Aritmeticos
 
