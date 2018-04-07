@@ -7,4 +7,6 @@ defmodule GeorgeCompiler do
 
   # Aqui ta caindo na recursão infinita descobrir porque ( perguntar pro joao)
   GeorgeCompiler.Parser.parse("2 < (1 + 10)") |> IO.inspect
+
+  GeorgeCompiler.Parser.parse("2 + (1 + 10)") |> IO.inspect
 end

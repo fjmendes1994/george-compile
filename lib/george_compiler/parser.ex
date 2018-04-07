@@ -10,7 +10,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Expressoes aritimeticas
 
-  define :arithexp, "sum / sub / div / mul / rem"
+  define :arithexp, "sum / sub / div / mul / rem / priorityExp"
 
   define :sum, "decimal <space?> <sumOp> <space?> arithexp / decimal <space?> <sumOp> <space?> decimal"
 
@@ -70,7 +70,11 @@ defmodule GeorgeCompiler.Parser do
 
   # Valores prioritarios
 
-  define :priority, "'(' exp ')'"
+  define :priority, "priorityArit / priorityExp"
+
+  define :priorityArit, "'(' arithexp ')'"
+
+  define :priorityExp, "'(' exp ')'"
 
   # Operadores Aritmeticos
 
