@@ -53,7 +53,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Aqui temos que checar se a implementação correta é usando minus ou <minus>, observar mudanças
   # na arvore com os dois casos diferentes
-  define :decimalN, "<minus> digit+"
+  define :decimalN, "minus digit+"
 
   # Sinal Negativo ( Temos que checar se havera problemas com o operador de subtração )
   define :minus, "[-]"
