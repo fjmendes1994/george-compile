@@ -25,7 +25,7 @@ defmodule GeorgeCompiler.Parser do
   # Operações Booleanas
   define :boolexp, "equals"
 
-  define :equals, "value <space?> <equalsOp> <space?> exp / value <space?> <equalsOp> <space?> value"
+  define :equals, "value <space?> <boolOp> <space?> exp / value <space?> <boolOp> <space?> value"
 
   # Value
 
@@ -33,20 +33,12 @@ defmodule GeorgeCompiler.Parser do
 
   # Numeros
 
-  define :decimal, "decimalP / decimalN" do
-    digitis ->
-      Enum.join(digitis)
+  #TODO VERIFICAR SE É <subOp?> OU subOp?, POIS NÃO SABEMOS SE NA ÁRVORE DEVE REPRESENTAR O SINAL NEGATIVO 
+
+  define :decimal, "<subOp?> digit+" do
+    digits ->
+      Enum.join(digits)
   end
-
-  define :decimalP, "digit+"
-
-  # Aqui temos que checar se a implementação correta é usando minus ou <minus>, observar mudanças
-  # na arvore com os dois casos diferentes
-  define :decimalN, "<minus> digit+"
-
-  # Sinal Negativo ( Temos que checar se havera problemas com o operador de subtração )
-
-  define :minus, "[-]"
 
   # Digito
 
@@ -68,7 +60,7 @@ defmodule GeorgeCompiler.Parser do
 
   define :remOp, "[%]"
 
-  # Bolleano
+  # Booleano
 
   define :bool, "true / false"
 
@@ -80,8 +72,23 @@ defmodule GeorgeCompiler.Parser do
 
   # Operadores Booleanos
 
+  define :boolOp, "equalsOp / notEqualsOp / higherOp / smallerOp"
+
   define :equalsOp, "equal equal"
 
+  define :notEqualsOp, "not equal"
+
+  define :higherOp, "higher equal?"
+
+  define :smallerOp, "smaller equal?"
+
+  define :higher, "[>]"
+
+  define :smaller, "[<]"
+
   define :equal, "[=]"
+
+  define :not, "[!]"
+
 
 end
