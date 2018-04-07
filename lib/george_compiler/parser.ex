@@ -23,22 +23,40 @@ defmodule GeorgeCompiler.Parser do
   define :rem, "decimal <space?> <remOp> <space?> arithexp / decimal <space?> <remOp> <space?> decimal"
 
   # Operações Booleanas
-  define :boolexp, "equals"
+  define :boolexp, "equals / greaterEquals / lessEquals / greater / less / notEquals"
 
-  define :equals, "value <space?> <boolOp> <space?> exp / value <space?> <boolOp> <space?> value"
+  define :notEquals, "value <space?> <notEqualsOp> <space?> value"
+
+  define :equals, "value <space?> <equalsOp> <space?> value"
+
+  define :greater, "value <space?> <greaterOp> <space?> value"
+
+  define :less, "value <space?> <lessOp> <space?> value"
+
+  define :greaterEquals, "value <space?> <greaterEqualsOp> <space?> value"
+
+  define :lessEquals, "value <space?> <lessEqualsOp> <space?> value"
+
+  define :notExp, "<notOp> boolexp"
 
   # Value
 
-  define :value, "decimal / bool"
+  define :value, "decimal / bool / exp"
 
   # Numeros
 
-  #TODO VERIFICAR SE É <subOp?> OU subOp?, POIS NÃO SABEMOS SE NA ÁRVORE DEVE REPRESENTAR O SINAL NEGATIVO 
-
-  define :decimal, "<subOp?> digit+" do
-    digits ->
-      Enum.join(digits)
+ define :decimal, "decimalP / decimalN" do
+    digitis -> Enum.join(digitis)
   end
+
+  define :decimalP, "digit+"
+
+  # Aqui temos que checar se a implementação correta é usando minus ou <minus>, observar mudanças
+  # na arvore com os dois casos diferentes
+  define :decimalN, "<minus> digit+"
+
+  # Sinal Negativo ( Temos que checar se havera problemas com o operador de subtração )
+  define :minus, "[-]"
 
   # Digito
 
@@ -72,23 +90,24 @@ defmodule GeorgeCompiler.Parser do
 
   # Operadores Booleanos
 
-  define :boolOp, "equalsOp / notEqualsOp / higherOp / smallerOp"
+  # Acho que não podemos usar isso pois na hora de gerar a BPLC não conseguiriamos diferenciar as operações.
+  # define :boolOp, "equalsOp / notEqualsOp / higherOp / smallerOp"
 
   define :equalsOp, "equal equal"
 
-  define :notEqualsOp, "not equal"
+  define :notEqualsOp, "notOp equal"
 
-  define :higherOp, "higher equal?"
+  define :greaterEqualsOp, "greaterOp equal"
 
-  define :smallerOp, "smaller equal?"
+  define :lessEqualsOp, "lessOp equal"
 
-  define :higher, "[>]"
+  define :greaterOp, "[>]"
 
-  define :smaller, "[<]"
+  define :lessOp, "[<]"
 
   define :equal, "[=]"
 
-  define :not, "[!]"
+  define :notOp, "[!]"
 
 
 end
