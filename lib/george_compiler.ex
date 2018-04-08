@@ -9,4 +9,6 @@ defmodule GeorgeCompiler do
   GeorgeCompiler.Parser.parse("2 < (1 + 10)") |> IO.inspect
 
   GeorgeCompiler.Parser.parse("2 + (1 + 10)") |> IO.inspect
+
+  GeorgeCompiler.Parser.parse("ab := 2") |> IO.inspect
 end

@@ -5,6 +5,7 @@ defmodule GeorgeCompiler.Parser do
   @root true
 
   # Expressoes
+  define :command, "atrib / exp"
 
   define :exp, "arithexp / boolexp / value"
 
@@ -117,5 +118,20 @@ defmodule GeorgeCompiler.Parser do
 
   define :notOp, "[!]"
 
+  # Atribuição
+
+  define :atrib, "varName <space?> <atrOp> <space?> value"
+
+  define :varName, "word/ word decimal*"
+
+  define :word, "letter+" do
+    letter -> Enum.join(letter)
+  end
+
+  define :letter, "[a-z, A-Z]"
+
+  #Quando usa [] cai em loop infinito
+  #TODO: Verificar pq
+  define :atrOp, "<':='>"
 
 end
