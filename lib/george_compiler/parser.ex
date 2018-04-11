@@ -122,13 +122,13 @@ defmodule GeorgeCompiler.Parser do
 
   define :atrib, "varName <space?> <atrOp> <space?> value"
 
-  define :varName, "word/ word decimal*"
+  define :varName, "word"
 
   define :word, "letter+" do
     letter -> Enum.join(letter)
   end
 
-  define :letter, "[a-z, A-Z]"
+  define :letter, "[a-z,A-Z]"
 
   #Quando usa [] cai em loop infinito
   #TODO: Verificar pq
