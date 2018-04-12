@@ -132,6 +132,8 @@ defmodule GeorgeCompiler.Parser do
 
   #Quando usa [] cai em loop infinito
   #TODO: Verificar pq
-  define :atrOp, "<':='>"
+  define :atrOp, "twoPoints equal"
+
+  define :twoPoints, "[:]"
 
 end
