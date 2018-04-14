@@ -124,11 +124,13 @@ defmodule GeorgeCompiler.Parser do
 
   define :varName, "word"
 
-  define :word, "letter+" do
+  #Usar letter e digit está caindo em recurão infinita
+  #TODO: Mudar a regra a-zA-Z0-9 para letter,digit*
+  define :word, "letter[a-zA-Z0-9]*" do
     letter -> Enum.join(letter)
   end
 
-  define :letter, "[a-z,A-Z]"
+  define :letter, "[a-zA-Z]"
 
   #Quando usa [] cai em loop infinito
   #TODO: Verificar pq

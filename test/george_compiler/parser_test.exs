@@ -49,4 +49,8 @@ defmodule ParserTest do
   test "atrib simples com palavra" do
     assert GeorgeCompiler.Parser.parse("ab := 2") == {:ok,["ab","2"]}
   end
+
+  test "atrib simples com numeros no nome" do
+    assert GeorgeCompiler.Parser.parse("ab2 := 2") == {:ok,["ab2","2"]}
+  end
 end
