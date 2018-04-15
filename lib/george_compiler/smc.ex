@@ -1,6 +1,6 @@
 defmodule GeorgeCompiler.SMC do
 
-    def parseC(parse) do
+    def eval(parse) do
         {_, parsed} = parse
         createC(parsed, Stack.new)
     end 
