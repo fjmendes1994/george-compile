@@ -53,4 +53,25 @@ defmodule ParserTest do
   test "atrib simples com numeros no nome" do
     assert GeorgeCompiler.Parser.parse("ab2 := 2") == {:ok,["ab2","2"]}
   end
+
+
+  @doc """
+    Testes da criação da pilha c
+  """
+  # Este teste está quebrando o parser
+  #test "parser para pilha de controle(C) com vazio" do
+  #  assert GeorgeCompiler.Parser.parse("") |> GeorgeCompiler.parseC == %Stack{elements: ["5"]}
+  #end
+
+  test "parser para pilha de controle(C) com 1 valor" do
+    assert GeorgeCompiler.Parser.parse("5") |> GeorgeCompiler.parseC == %Stack{elements: ["5"]}
+  end
+
+  test "parser para pilha de controle(C) com 2 operandos" do
+    assert GeorgeCompiler.Parser.parse("3+2") |> GeorgeCompiler.parseC == %Stack{elements: ["3","2"]}
+  end
+
+  test "parser para pilha de controle(C) com 3 operandos" do
+    assert GeorgeCompiler.Parser.parse("5+7*2") |> GeorgeCompiler.parseC == %Stack{elements: ["5","7","2"]}
+  end
 end
