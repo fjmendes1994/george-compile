@@ -11,38 +11,30 @@ defmodule GeorgeCompiler.Parser do
 
   # Expressoes aritimeticas
 
-  define :arithexp, "sum / sub / div / mul / rem / priorityExp"
+  define :arithexp, "sum / sub / div / mul / rem"
 
-  define :sum, "decimal <space?> <sumOp> <space?> arithexp / decimal <space?> <sumOp> <space?> decimal"
-
-  define :sub, "decimal <space?> <subOp> <space?> arithexp / decimal <space?> <subOp> <space?> decimal"
-
-  define :div, "decimal <space?> <divOp> <space?> arithexp / decimal <space?> <divOp> <space?> decimal"
-
-  define :mul, "decimal <space?> <mulOp> <space?> arithexp / decimal <space?> <mulOp> <space?> decimal"
-
-  define :rem, "decimal <space?> <remOp> <space?> arithexp / decimal <space?> <remOp> <space?> decimal"
+  define :sum, "decimal  sumOp  arithexp / decimal  sumOp decimal"
+  define :sub, "decimal  subOp  arithexp / decimal  subOp  decimal"
+  define :div, "decimal  divOp  arithexp / decimal  divOp  decimal"
+  define :mul, "decimal  mulOp  arithexp / decimal  mulOp  decimal"
+  define :rem, "decimal  remOp  arithexp / decimal  remOp  decimal"
 
   # Operações Booleanas
   define :boolexp, "equals / greaterEquals / lessEquals / greater / less / notEquals"
 
-  define :notEquals, "value <space?> <notEqualsOp> <space?> value"
+  define :notEquals,     "value notEqualsOp     value"
+  define :equals,        "value equalsOp        value"
+  define :greater,       "value greaterOp       value"
+  define :less,          "value lessOp          value"
+  define :greaterEquals, "value greaterEqualsOp value"
+  define :lessEquals,    "value lessEqualsOp    value"
+  define :notExp,        "notOp boolexp"
 
-  define :equals, "value <space?> <equalsOp> <space?> value"
-
-  define :greater, "value <space?> <greaterOp> <space?> value"
-
-  define :less, "value <space?> <lessOp> <space?> value"
-
-  define :greaterEquals, "value <space?> <greaterEqualsOp> <space?> value"
-
-  define :lessEquals, "value <space?> <lessEqualsOp> <space?> value"
-
-  define :notExp, "<notOp> boolexp"
+  define :notOp, "[~]"
 
   # Value
 
-  define :value, "priority / decimal / bool / exp"
+  define :value, "decimal / exp"
 
   # Numeros
 
@@ -54,8 +46,8 @@ defmodule GeorgeCompiler.Parser do
 
   # Aqui temos que checar se a implementação correta é usando minus ou <minus>, observar mudanças
   # na arvore com os dois casos diferentes
-  
-  define :decimalN, "<subOp> digit+"
+
+  define :decimalN, "subOp digit+"
 
   # Digito
 
@@ -65,62 +57,48 @@ defmodule GeorgeCompiler.Parser do
 
   define :space, "[ \\r\\n\\s\\t]*"
 
-  # Valores prioritarios
-
-  define :priority, "priorityArit / priorityExp"
-
-  define :priorityArit, "<lp> arithexp <rp>"
-
-  define :priorityExp, "<lp> exp <rp>"
-
-  define :lp, "[(]"
-
-  define :rp, "[)]"
-
   # Operadores Aritmeticos
 
-  define :sumOp, "[+]"
-
-  define :subOp, "[-]"
-
-  define :mulOp, "[*]"
-
-  define :divOp, "[/]"
-
-  define :remOp, "[%]"
-
-  # Booleano
-
-  define :bool, "true / false"
-
-  define :true, "true"
-
-  define :false, "false"
+  define :sumOp, "<space?> [+] <space?>"  do
+    [x] -> x
+  end
+  define :subOp, "<space?> [-] <space?>" do
+    [x] -> x
+  end
+  define :mulOp, "<space?> [*] <space?>" do
+    [x] -> x
+  end
+  define :divOp, "<space?> [/] <space?>" do
+    [x] -> x
+  end
+  define :remOp, "<space?> [%] <space?>" do
+    [x] -> x
+  end
 
   # Operadores Booleanos
 
-  # Acho que não podemos usar isso pois na hora de gerar a BPLC não conseguiriamos diferenciar as operações.
-  # define :boolOp, "equalsOp / notEqualsOp / higherOp / smallerOp"
-
-  define :equalsOp, "equal equal"
-
-  define :notEqualsOp, "notOp equal"
-
-  define :greaterEqualsOp, "greaterOp equal"
-
-  define :lessEqualsOp, "lessOp equal"
-
-  define :greaterOp, "[>]"
-
-  define :lessOp, "[<]"
-
-  define :equal, "[=]"
-
-  define :notOp, "[!]"
+  define :equalsOp, "<space?> [=][=] <space?>" do
+    x -> Enum.join(x)
+  end
+  define :notEqualsOp, "<space?> [!][=] <space?>" do
+    x -> Enum.join(x)
+  end
+  define :greaterOp, "<space?> [>] <space?>" do
+    x -> Enum.join(x)
+  end
+  define :greaterEqualsOp, "<space?> [>][=] <space?>" do
+    x -> Enum.join(x)
+  end
+  define :lessOp, "<space?> [<] <space?>" do
+    x -> Enum.join(x)
+  end
+  define :lessEqualsOp, "<space?> [<][=] <space?>" do
+    x -> Enum.join(x)
+  end
 
   # Atribuição
 
-  define :atrib, "varName <space?> <atrOp> <space?> value"
+  define :atrib, "varName atrOp value"
 
   define :varName, "word"
 
@@ -134,8 +112,6 @@ defmodule GeorgeCompiler.Parser do
 
   #Quando usa [] cai em loop infinito
   #TODO: Verificar pq
-  define :atrOp, "twoPoints equal"
-
-  define :twoPoints, "[:]"
+  define :atrOp, "<space?> [:][=] <space?>"
 
 end
