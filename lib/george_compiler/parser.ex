@@ -5,51 +5,51 @@ defmodule GeorgeCompiler.Parser do
   @root true
 
   # Expressoes
-  define :command, "atrib / exp"
+  define :CommandDecl, "atrib / Expression"
 
-  define :exp, "arithexp / boolexp / value"
+  define :Expression, "ExpressionDecl / PredicateDecl / value"
 
   # Expressoes aritimeticas
 
-  define :arithexp, "sum / sub / div / mul / rem"
+  define :ExpressionDecl, "sum / sub / div / mul / rem"
 
-  define :sum, "decimal  sumOp  arithexp / decimal  sumOp decimal"
-  define :sub, "decimal  subOp  arithexp / decimal  subOp  decimal"
-  define :div, "decimal  divOp  arithexp / decimal  divOp  decimal"
-  define :mul, "decimal  mulOp  arithexp / decimal  mulOp  decimal"
-  define :rem, "decimal  remOp  arithexp / decimal  remOp  decimal"
+  define :sum, "ident  sumOp  ExpressionDecl / ident  sumOp ident"
+  define :sub, "ident  subOp  ExpressionDecl / ident  subOp  ident"
+  define :div, "ident  divOp  ExpressionDecl / ident  divOp  ident"
+  define :mul, "ident  mulOp  ExpressionDecl / ident  mulOp  ident"
+  define :rem, "ident  remOp  ExpressionDecl / ident  remOp  ident"
 
   # Operações Booleanas
-  define :boolexp, "equals / greaterEquals / lessEquals / greater / less / notEquals"
+  define :PredicateDecl, "equals / greaterEquals / lessEquals / greater / less / notEquals"
 
-  define :notEquals,     "value notEqualsOp     value"
-  define :equals,        "value equalsOp        value"
-  define :greater,       "value greaterOp       value"
-  define :less,          "value lessOp          value"
-  define :greaterEquals, "value greaterEqualsOp value"
-  define :lessEquals,    "value lessEqualsOp    value"
-  define :notExp,        "notOp boolexp"
+  define :notEquals,     "ident notEqualsOp     ident"
+  define :equals,        "ident equalsOp        ident"
+  define :greater,       "ident greaterOp       ident"
+  define :less,          "ident lessOp          ident"
+  define :greaterEquals, "ident greaterEqualsOp ident"
+  define :lessEquals,    "ident lessEqualsOp    ident"
+  define :notExp,        "notOp PredicateDecl"
 
-  define :notOp, "[~]"
+  # Comandos
+
+    define :atrib, "ident atrOp value"
+
+    define :ident, "decimal / varName"
+
 
   # Value
 
-  define :value, "decimal / exp"
+  define :value, "decimal / Expression"
 
   # Numeros
 
- define :decimal, "decimalP / decimalN" do
-    digitis -> Enum.join(digitis)
+  define :decimal, "decimalP / decimalN" do
+      digitis -> Enum.join(digitis)
   end
 
   define :decimalP, "digit+"
 
-  # Aqui temos que checar se a implementação correta é usando minus ou <minus>, observar mudanças
-  # na arvore com os dois casos diferentes
-
   define :decimalN, "subOp digit+"
-
-  # Digito
 
   define :digit, "[0-9]"
 
@@ -96,22 +96,20 @@ defmodule GeorgeCompiler.Parser do
     x -> Enum.join(x)
   end
 
-  # Atribuição
+  define :notOp, "[~]"
 
-  define :atrib, "varName atrOp value"
-
-  define :varName, "word"
+  # Nome de Variaveis
 
   #Usar letter e digit está caindo em recurão infinita
   #TODO: Mudar a regra a-zA-Z0-9 para letter,digit*
-  define :word, "letter[a-zA-Z0-9]*" do
+  define :varName, "letter[a-zA-Z0-9]*" do
     letter -> Enum.join(letter)
   end
 
   define :letter, "[a-zA-Z]"
 
-  #Quando usa [] cai em loop infinito
-  #TODO: Verificar pq
-  define :atrOp, "<space?> [:][=] <space?>"
+  define :atrOp, "<space?> [:][=] <space?>" do
+    x -> Enum.join(x)
+  end
 
 end
