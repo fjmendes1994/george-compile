@@ -64,14 +64,14 @@ defmodule ParserTest do
   #end
 
   test "parser para pilha de controle(C) com 1 valor" do
-    assert GeorgeCompiler.Parser.parse("5") |> GeorgeCompiler.parseC == %Stack{elements: ["5"]}
+    assert GeorgeCompiler.Parser.parse("5") |> GeorgeCompiler.SMC.parseC == %Stack{elements: ["5"]}
   end
 
   test "parser para pilha de controle(C) com 2 operandos" do
-    assert GeorgeCompiler.Parser.parse("3+2") |> GeorgeCompiler.parseC == %Stack{elements: ["3","2"]}
+    assert GeorgeCompiler.Parser.parse("3+2") |> GeorgeCompiler.SMC.parseC == %Stack{elements: ["3","2"]}
   end
 
   test "parser para pilha de controle(C) com 3 operandos" do
-    assert GeorgeCompiler.Parser.parse("5+7*2") |> GeorgeCompiler.parseC == %Stack{elements: ["5","7","2"]}
+    assert GeorgeCompiler.Parser.parse("5+7*2") |> GeorgeCompiler.SMC.parseC == %Stack{elements: ["5","7","2"]}
   end
 end
