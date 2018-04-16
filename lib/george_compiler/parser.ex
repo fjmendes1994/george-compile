@@ -7,7 +7,7 @@ defmodule GeorgeCompiler.Parser do
   # Expressoes
   define :CommandDecl, "atrib / Expression"
 
-  define :Expression, "ExpressionDecl / PredicateDecl / value"
+  define :Expression, "ExpressionDecl / PredicateDecl"
 
   # Expressoes aritimeticas
 
@@ -39,7 +39,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Value
 
-  define :value, "decimal / Expression"
+  define :value, "Expression / decimal"
 
   # Numeros
 
