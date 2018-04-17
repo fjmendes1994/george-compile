@@ -1,21 +1,15 @@
-# GeorgeCompiler
+# JorgeCompiler
+  
+  Trabalho da disciplina de compiladores do curso de ciencia da computação.
+  Universidade Federal Fluminense, Nitéroi, 2018.
 
-**TODO: Add description**
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `george_compiler` to your list of dependencies in `mix.exs`:
+## Baixar dependecias
 
 ```elixir
-def deps do
-  [
-    {:george_compiler, "~> 0.1.0"}
-  ]
-end
+mix deps.get
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/george_compiler](https://hexdocs.pm/george_compiler).
-
+## Executar o projeto
+```elixir
+mix run
+```
