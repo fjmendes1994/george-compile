@@ -77,32 +77,32 @@ defmodule GeorgeCompiler.Parser do
   @root true
   define :CommandDecl, "Expression"
 
-  define :Expression, "ExpressionDecl"
+  define :Expression, "PredicateDecl / ExpressionDecl"
 
   # Expressoes aritimeticas
 
-  define :ExpressionDecl, "additiveExp / PredicateDecl"
+  define :ExpressionDecl, "additiveExp / decimal / ident"
 
   define :additiveExp, "sum / sub / multitiveExp"
 
   define :multitiveExp, "mul / rem / div"
 
-  define :sum, "decimal sumOp ExpressionDecl / ident sumOp ExpressionDecl / decimal sumOp decimal / ident sumOp ident"
-  define :sub, "decimal subOp ExpressionDecl / ident subOp ExpressionDecl / decimal subOp decimal / ident subOp ident"
-  define :div, "decimal divOp ExpressionDecl / ident divOp ExpressionDecl / decimal divOp decimal / ident divOp ident"
-  define :mul, "decimal mulOp ExpressionDecl / ident mulOp ExpressionDecl / decimal mulOp decimal / ident mulOp ident"
-  define :rem, "decimal remOp ExpressionDecl / ident remOp ExpressionDecl / decimal remOp decimal / ident remOp ident"
+  define :sum, "decimal sumOp ExpressionDecl / ident sumOp ExpressionDecl "
+  define :sub, "decimal subOp ExpressionDecl / ident subOp ExpressionDecl "
+  define :div, "decimal divOp ExpressionDecl / ident divOp ExpressionDecl "
+  define :mul, "decimal mulOp ExpressionDecl / ident mulOp ExpressionDecl "
+  define :rem, "decimal remOp ExpressionDecl / ident remOp ExpressionDecl "
 
   # Expressoes Booleanas
 
   define :PredicateDecl, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals"
 
-  define :notEquals, "decimal notEqualsOp ExpressionDecl / ident notEqualsOp ExpressionDecl / decimal notEqualsOp decimal / ident notEqualsOp ident"
-  define :equals, "decimal equalsOp ExpressionDecl / ident equalsOp ExpressionDecl / decimal equalsOp decimal / ident equalsOp ident"
-  define :greater, "decimal greaterOp ExpressionDecl / ident greaterOp ExpressionDecl / decimal greaterOp decimal / ident greaterOp ident"
-  define :less, "decimal lessOp ExpressionDecl / ident lessOp ExpressionDecl / decimal lessOp decimal / ident lessOp ident"
-  define :greaterEquals, "decimal greaterEqualsOp ExpressionDecl / ident greaterEqualsOp ExpressionDecl / decimal greaterEqualsOp decimal / ident greaterEqualsOp ident"
-  define :lessEquals, "decimal lessEqualsOp ExpressionDecl / ident lessEqualsOp ExpressionDecl / decimal lessEqualsOp decimal / ident lessEqualsOp ident"
+  define :notEquals, "decimal notEqualsOp ExpressionDecl / ident notEqualsOp ExpressionDecl "
+  define :equals, "decimal equalsOp ExpressionDecl / ident equalsOp ExpressionDecl "
+  define :greater, "decimal greaterOp ExpressionDecl / ident greaterOp ExpressionDecl "
+  define :less, "decimal lessOp ExpressionDecl / ident lessOp ExpressionDecl "
+  define :greaterEquals, "decimal greaterEqualsOp ExpressionDecl / ident greaterEqualsOp ExpressionDecl "
+  define :lessEquals, "decimal lessEqualsOp ExpressionDecl / ident lessEqualsOp ExpressionDecl "
   define :negExp, "negOp PredicateDecl"
 
 end
