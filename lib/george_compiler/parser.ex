@@ -81,7 +81,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Expressoes aritimeticas
 
-  define :ExpressionDecl, "additiveExp / decimal / ident"
+  define :ExpressionDecl, "PredicateDecl / additiveExp / decimal / ident"
 
   define :additiveExp, "sum / sub / multitiveExp"
 
