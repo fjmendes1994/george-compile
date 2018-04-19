@@ -69,13 +69,18 @@ defmodule GeorgeCompiler.Parser do
   define :letter, "[a-zA-Z]"
   define :lowcase, "[a-z]+"
   define :upcase, "[A-Z]+"
-  define :word, "lowcase* upcase / lowcase upcase*"
-  define :ident, "word digit*"
+  define :word, "lowcase* upcase / lowcase upcase*" do
+    x -> Enum.join(x)
+  end
+
+  define :ident, "word digit* ident?" do
+    x -> Enum.join(x)
+  end
 
 
   # Expressoes
   @root true
-  define :CommandDecl, "Expression"
+  define :CommandDecl, "atrib / Expression"
 
   define :Expression, "PredicateDecl / ExpressionDecl"
 
@@ -104,5 +109,12 @@ defmodule GeorgeCompiler.Parser do
   define :greaterEquals, "decimal greaterEqualsOp ExpressionDecl / ident greaterEqualsOp ExpressionDecl "
   define :lessEquals, "decimal lessEqualsOp ExpressionDecl / ident lessEqualsOp ExpressionDecl "
   define :negExp, "negOp PredicateDecl"
+
+  # Comandos
+
+  define :atrib, "ident assOp Expression"
+
+
+
 
 end

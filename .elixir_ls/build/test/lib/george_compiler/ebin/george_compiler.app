@@ -1,7 +1,7 @@
 {application,george_compiler,
              [{applications,[kernel,stdlib,elixir,logger,dbg,neotomex]},
               {description,"george_compiler"},
-              {modules,['Elixir.GeorgeCompiler',
+              {modules,['Elixir.GeorgeCompiler','Elixir.GeorgeCompiler.BPLC',
                         'Elixir.GeorgeCompiler.Parser',
                         'Elixir.GeorgeCompiler.SMC','Elixir.Stack']},
               {registered,[]},
