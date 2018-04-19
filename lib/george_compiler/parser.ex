@@ -92,22 +92,22 @@ defmodule GeorgeCompiler.Parser do
 
   define :multitiveExp, "mul / rem / div"
 
-  define :sum, "decimal sumOp ExpressionDecl / ident sumOp ExpressionDecl "
-  define :sub, "decimal subOp ExpressionDecl / ident subOp ExpressionDecl "
-  define :div, "decimal divOp ExpressionDecl / ident divOp ExpressionDecl "
-  define :mul, "decimal mulOp ExpressionDecl / ident mulOp ExpressionDecl "
-  define :rem, "decimal remOp ExpressionDecl / ident remOp ExpressionDecl "
+  define :sum, "(decimal / ident) sumOp ExpressionDecl"
+  define :sub, "(decimal / ident) subOp ExpressionDecl"
+  define :div, "(decimal / ident) divOp ExpressionDecl"
+  define :mul, "(decimal / ident) mulOp ExpressionDecl"
+  define :rem, "(decimal / ident) remOp ExpressionDecl"
 
   # Expressoes Booleanas
 
   define :PredicateDecl, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals"
 
-  define :notEquals, "decimal notEqualsOp ExpressionDecl / ident notEqualsOp ExpressionDecl "
-  define :equals, "decimal equalsOp ExpressionDecl / ident equalsOp ExpressionDecl "
-  define :greater, "decimal greaterOp ExpressionDecl / ident greaterOp ExpressionDecl "
-  define :less, "decimal lessOp ExpressionDecl / ident lessOp ExpressionDecl "
-  define :greaterEquals, "decimal greaterEqualsOp ExpressionDecl / ident greaterEqualsOp ExpressionDecl "
-  define :lessEquals, "decimal lessEqualsOp ExpressionDecl / ident lessEqualsOp ExpressionDecl "
+  define :notEquals, "(decimal / ident) notEqualsOp ExpressionDecl"
+  define :equals, "(decimal / ident) equalsOp ExpressionDecl"
+  define :greater, "(decimal / ident) greaterOp ExpressionDecl"
+  define :less, "(decimal / ident) lessOp ExpressionDecl"
+  define :greaterEquals, "(decimal / ident) greaterEqualsOp ExpressionDecl"
+  define :lessEquals, "(decimal / ident) lessEqualsOp ExpressionDecl"
   define :negExp, "negOp PredicateDecl"
 
   # Comandos

@@ -16,26 +16,16 @@ defmodule ParserTest do
     assert GeorgeCompiler.Parser.parse!("2 <= 3" )  == ["2", "<=", "3"]
   end
 
-#  test "atribuicao simples" do
-#    assert GeorgeCompiler.Parser.parse!("ab := 2" )
-#  end
-#
-#  test "atribuicao expressoes aritimeticas" do
-#    assert GeorgeCompiler.Parser.parse!("ab := 2 + 3" )
-#  end
-#
-#  test "atribuicao expressoes booleanas" do
-#    assert GeorgeCompiler.Parser.parse!("ab := 2 > 3" )
-#  end  test "atribuicao simples" do
-#    assert GeorgeCompiler.Parser.parse!("ab := 2" )
-#  end
-#
-#  test "atribuicao expressoes aritimeticas" do
-#    assert GeorgeCompiler.Parser.parse!("ab := 2 + 3" )
-#  end
-#
-#  test "atribuicao expressoes booleanas" do
-#    assert GeorgeCompiler.Parser.parse!("ab := 2 > 3" )
-#  end
+ test "atribuicao simples" do
+   assert GeorgeCompiler.Parser.parse!("ab := 2" )
+ end
+
+ test "atribuicao expressoes aritimeticas" do
+   assert GeorgeCompiler.Parser.parse!("ab := 2 + 3" )
+ end
+
+ test "atribuicao expressoes booleanas" do
+   assert GeorgeCompiler.Parser.parse!("ab := 2 > 3" )
+ end
 
 end
