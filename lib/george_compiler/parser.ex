@@ -60,6 +60,21 @@ defmodule GeorgeCompiler.Parser do
   define :elseOp, "<space?> [e][l][s][e] <space?>"do
     x -> Enum.join(x)
   end
+  define :whileOp, "<space?> [w][h][i][l][e] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :printOp, "<space?> [p][r][i][n][t] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :exitOp, "<space?> [e][x][i][t] <space?>"do
+    x -> Enum.join(x)
+  end
+    define :seqOp, "<space?> [;] <space?>" do
+      [x] -> x
+    end
+    define :choOp, "<space?> [|] <space?>" do
+      [x] -> x
+    end
 
   # Numeros
 
@@ -94,7 +109,7 @@ defmodule GeorgeCompiler.Parser do
   define :BlockCommandDecl, "<lk> CommandDecl+ <rk> "
 
   @root true
-  define :CommandDecl, "atrib / if / Expression"
+  define :CommandDecl, "choice / seq / cmd"
 
   define :Expression, "PredicateDecl / ExpressionDecl"
 
@@ -125,11 +140,25 @@ defmodule GeorgeCompiler.Parser do
   define :negExp, "negOp PredicateDecl"
 
   # Comandos
+  define :cmd, "atrib / if / while / print / exit / call / Expression"
 
   define :atrib, "ident assOp Expression"
 
   define :else, "elseOp (CommandDecl / BlockCommandDecl)"
   define :if, "ifOp <lp> PredicateDecl <rp> (CommandDecl / BlockCommandDecl) else?"
+
+  define :while, "whileOp <lp> PredicateDecl <rp> BlockCommandDecl"
+
+  define :print, "printOp <lp> Expression <rp>"
+
+  define :exit, "exitOp <lp> Expression <rp>"
+
+  define :call, "ident <lp> Expression* <rp> "
+
+  define :seq, "cmd seqOp CommandDecl"
+
+  define :choice, "cmd choOp CommandDecl"
+
 
 
 
