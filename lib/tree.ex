@@ -1,3 +1,7 @@
 defmodule Tree do
-    defstruct parent: nil, leafs: [], isLeaf: false
+    defstruct leafs: []
+
+    def addLeaf(tree, value) do
+        %{tree | leafs: tree.leafs ++ [value]}
+    end
 end
