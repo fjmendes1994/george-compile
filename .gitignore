@@ -25,3 +25,4 @@ george_compiler-*.tar
 # Ignore Idea
 /.idea/
 
+/.elixir_ls/
