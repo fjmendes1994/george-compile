@@ -20,4 +20,14 @@ defmodule SMCBoolTest do
         s = Stack.new |> Stack.push(5) |> Stack.push(5)
         assert equals(s) |> nt == Stack.new |> Stack.push(false)
     end
+
+    test "maior que" do
+        s = Stack.new |> Stack.push(5) |> Stack.push(3) 
+        assert greater_than(s) == Stack.new |> Stack.push(true)
+    end
+
+    test "menor que" do
+        s = Stack.new |> Stack.push(3) |> Stack.push(5) 
+        assert lesser_than(s) == Stack.new |> Stack.push(true)
+    end
 end
