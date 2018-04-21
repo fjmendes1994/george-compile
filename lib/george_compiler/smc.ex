@@ -13,7 +13,12 @@ defmodule GeorgeCompiler.SMC do
 
     def do_operation(node, s, m, c) do
         if Tree.is_leaf node do 
-            modify_s(node,s,m,c)
+            modify_s(node, s, m, c)
+        else
+            if is_arit_exp(node.value) do
+                c = arit_decompose_tree(node, c)
+                {s, m, c}
+            end
         end
     end
 
