@@ -69,4 +69,31 @@ defmodule SMCTest do
     s = Stack.new |> Stack.push(2)
     assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
   end
+
+  #Expressão: 5 + 5 - 2
+  test "Multiplas operações add e sub" do
+    tree = Tree.new("sub") |> Tree.add_leaf(5) |> Tree.add_leaf(2)
+    c = Stack.new |> Stack.push(Tree.new("add") |> Tree.add_leaf(5) |> Tree.add_leaf(tree))
+    s = Stack.new |> Stack.push(8)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
+  end
+
+  #Expressão: 3 * 5 + 2
+  test "Multiplas operações mult e add" do
+    tree = Tree.new("mult") |> Tree.add_leaf(3) |> Tree.add_leaf(5)
+    c = Stack.new |> Stack.push(Tree.new("add") |> Tree.add_leaf(tree) |> Tree.add_leaf(2))
+    s = Stack.new |> Stack.push(17)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
+  end
+
+  #Expressão: 2 * 10 - 3 * 1
+  test "Multiplas operações mult e sub" do
+    tree_a = Tree.new("mult") |> Tree.add_leaf(2) |> Tree.add_leaf(10)
+    tree_b = Tree.new("mult") |> Tree.add_leaf(3) |> Tree.add_leaf(1)
+
+    c = Stack.new |> Stack.push(Tree.new("sub") |> Tree.add_leaf(tree_a) |> Tree.add_leaf(tree_b))
+    s = Stack.new |> Stack.push(17)
+    
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
+  end
 end

@@ -8,8 +8,12 @@ defmodule Tree do
 
     def new(value), do: %Tree{value: value}
 
-    def add_leaf(tree, value) do
+    def add_leaf(tree, value) when not is_map(value) do
         %{tree | leafs: tree.leafs ++ [Tree.new(value)]}
+    end
+    
+    def add_leaf(tree, value) when is_map(value) do
+        %{tree | leafs: tree.leafs ++ [value]}
     end
 
     def get_leaf(tree, nth), do: Enum.at(tree.leafs, nth)
