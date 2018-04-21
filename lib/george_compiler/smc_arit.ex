@@ -36,6 +36,20 @@ defmodule GeorgeCompiler.SMC.Arit do
         Map.has_key? @operations, operation
     end
 
+    @doc "Usado para inserir o tipo de operação no topo da pilha antes de empilhar os valores"
+    def arit_decompose_tree(tree, c) do
+       tree |> push_values(Stack.push(c, tree.value)) 
+    end
+
+    defp push_values(tree, c) do
+        elem = Enum.at(tree.leafs,0)
+        if length(tree.leafs) > 1 do
+            %{tree | leafs: tree.leafs |> Enum.drop(1) } |> push_values(c) |> Stack.push(elem)
+        else
+            c |> Stack.push(elem)
+        end
+    end
+
     defp pop_twice(s) do
         {x,s} = Stack.pop(s)
         {y,s} = Stack.pop(s)
