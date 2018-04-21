@@ -21,26 +21,62 @@ defmodule SMCBoolTest do
         assert equals(s) |> nt == Stack.new |> Stack.push(false)
     end
 
-    test "maior que" do
+    @doc "Testes para > e <"
+    test "maior que verdadeiro" do
         s = Stack.new |> Stack.push(5) |> Stack.push(3) 
         assert greater_than(s) == Stack.new |> Stack.push(true)
     end
 
-    test "menor que" do
+    test "menor que verdadeiro" do
         s = Stack.new |> Stack.push(3) |> Stack.push(5) 
         assert lesser_than(s) == Stack.new |> Stack.push(true)
     end
 
-    test "maior igual que" do
+    test "maior que falso" do
+        s = Stack.new |> Stack.push(3) |> Stack.push(5) 
+        assert greater_than(s) == Stack.new |> Stack.push(false)
+    end
+
+    test "menor que falso" do
+        s = Stack.new |> Stack.push(5) |> Stack.push(3) 
+        assert lesser_than(s) == Stack.new |> Stack.push(false)
+    end
+
+    @doc "testes para >= e <="
+    # MAIOR OU IGUAL
+    test "maior igual que verdadeiro" do
         s = Stack.new |> Stack.push(5) |> Stack.push(5) 
         assert greater_equals_than(s) == Stack.new |> Stack.push(true)
     end
 
-    test "menor igual que" do
+    test "maior igual que verdadeiro 2" do
+        s = Stack.new |> Stack.push(6) |> Stack.push(5) 
+        assert greater_equals_than(s) == Stack.new |> Stack.push(true)
+    end
+
+    test "maior igual que falso" do
+        s = Stack.new |> Stack.push(6) |> Stack.push(7) 
+        assert greater_equals_than(s) == Stack.new |> Stack.push(false)
+    end
+
+    #MENOR OU IGUAL
+    test "menor igual que verdadeiro" do
         s = Stack.new |> Stack.push(5) |> Stack.push(5) 
         assert lesser_equals_than(s) == Stack.new |> Stack.push(true)
     end
 
+    test "menor igual que verdadeiro 2" do
+        s = Stack.new |> Stack.push(3) |> Stack.push(5) 
+        assert lesser_equals_than(s) == Stack.new |> Stack.push(true)
+    end
+
+    test "menor igual que falso" do
+        s = Stack.new |> Stack.push(5) |> Stack.push(4) 
+        assert lesser_equals_than(s) == Stack.new |> Stack.push(false)
+    end
+
+
+    @doc "AND e OR"
     test "teste de and verdadeiro" do
         s = Stack.new |> Stack.push(true) |> Stack.push(true) 
         assert bool_and(s) == Stack.new |> Stack.push(true)
