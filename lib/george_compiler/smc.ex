@@ -11,6 +11,9 @@ defmodule GeorgeCompiler.SMC do
     end
 
     def do_operation(value, s, m, c) do
+        if Tree.is_leaf value do
+            s = Stack.push(value)
+        end
         {s, m, c}
     end
 end
