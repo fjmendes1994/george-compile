@@ -40,4 +40,24 @@ defmodule SMCBoolTest do
         s = Stack.new |> Stack.push(5) |> Stack.push(5) 
         assert lesser_equals_than(s) == Stack.new |> Stack.push(true)
     end
+
+    test "teste de and verdadeiro" do
+        s = Stack.new |> Stack.push(true) |> Stack.push(true) 
+        assert bool_and(s) == Stack.new |> Stack.push(true)
+    end
+
+    test "teste de and falso" do
+        s = Stack.new |> Stack.push(true) |> Stack.push(false) 
+        assert bool_and(s) == Stack.new |> Stack.push(false)
+    end
+
+    test "teste de or verdadeiro" do
+        s = Stack.new |> Stack.push(true) |> Stack.push(false) 
+        assert bool_or(s) == Stack.new |> Stack.push(true)
+    end
+
+    test "teste de or falso" do
+        s = Stack.new |> Stack.push(false) |> Stack.push(false) 
+        assert bool_or(s) == Stack.new |> Stack.push(false)
+    end
 end

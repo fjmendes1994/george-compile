@@ -38,6 +38,16 @@ defmodule GeorgeCompiler.SMC.Bool do
         Stack.push(s, x <= y)
     end
 
+    def bool_and(s) do
+        {y, x, s} = pop_twice(s)
+        Stack.push(s, x and y)
+    end
+
+    def bool_or(s) do
+        {y, x, s} = pop_twice(s)
+        Stack.push(s, x or y)
+    end
+
     def pop_twice(s) do
         {x, s} = Stack.pop(s)
         {y, s} = Stack.pop(s)
