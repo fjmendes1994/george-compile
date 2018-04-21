@@ -156,12 +156,31 @@ defmodule SMCTest do
   end
 
   @doc "Testes booleanos"
-
   test "Igualdade booleana" do
     c = Stack.new 
         |> Stack.push(Tree.new("eq") 
                       |> Tree.add_leaf(5) 
                       |> Tree.add_leaf(5))
+    s = Stack.new 
+        |> Stack.push(true)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "Maior que" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("gt") 
+                      |> Tree.add_leaf(6) 
+                      |> Tree.add_leaf(5))
+    s = Stack.new 
+        |> Stack.push(true)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "Menor que" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("lt") 
+                      |> Tree.add_leaf(5) 
+                      |> Tree.add_leaf(6))
     s = Stack.new 
         |> Stack.push(true)
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
