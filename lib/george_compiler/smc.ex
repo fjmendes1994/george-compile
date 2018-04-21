@@ -10,7 +10,6 @@ defmodule GeorgeCompiler.SMC do
     end
 
     def do_operation(node, s, m, c) do
-        IO.inspect s
         cond do
             Tree.is_leaf node -> 
                 if GeorgeCompiler.SMC.Arit.is_arit_exp(node.value) do
