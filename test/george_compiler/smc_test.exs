@@ -17,4 +17,10 @@ defmodule SMCTest do
     s = Stack.new |> Stack.push(6) |> Stack.push(5)
     assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
   end
+
+  test "Esvazia pilha c e fez soma utilzando s" do
+    c = Stack.new |> Stack.push(Tree.new("add")) |> Stack.push((Tree.new(5))) |> Stack.push((Tree.new(6)))
+    s = Stack.new |> Stack.push(11)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
+  end
 end
