@@ -38,15 +38,20 @@ defmodule GeorgeCompiler.SMC.Arit do
 
     @doc "Usado para inserir o tipo de operação no topo da pilha antes de empilhar os valores"
     def arit_decompose_tree(tree, c) do
-       tree |> push_values(Stack.push(c, Tree.new(tree.value)))
+       tree 
+       |> push_values(Stack.push(c, Tree.new(tree.value)))
     end
 
     defp push_values(tree, c) do
         elem = Enum.at(tree.leafs,0)
         if length(tree.leafs) > 1 do
-            %{tree | leafs: tree.leafs |> Enum.drop(1)} |> push_values(c) |> Stack.push(elem)
+            %{tree | leafs: tree.leafs 
+                            |> Enum.drop(1)} 
+            |> push_values(c) 
+            |> Stack.push(elem)
         else
-            c |> Stack.push(elem)
+            c 
+            |> Stack.push(elem)
         end
     end
 
