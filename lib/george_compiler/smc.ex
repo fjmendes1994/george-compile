@@ -1,5 +1,4 @@
 defmodule GeorgeCompiler.SMC do
-    
     def evaluate(s, m, c) do
         if Stack.depth(c) > 0 do
             {value, c} = Stack.pop(c)
@@ -12,8 +11,7 @@ defmodule GeorgeCompiler.SMC do
 
     def do_operation(value, s, m, c) do
         if Tree.is_leaf value do
-            s = Stack.push(value)
+            {Stack.push(s,value.value), m, c}
         end
-        {s, m, c}
     end
 end
