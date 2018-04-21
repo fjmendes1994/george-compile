@@ -10,14 +10,17 @@ defmodule GeorgeCompiler.SMC do
     end
 
     def do_operation(node, s, m, c) do
-        cond do
-            Tree.is_leaf node -> 
-                if GeorgeCompiler.SMC.Arit.is_arit_exp(node.value) do
-                    s = node.value |> GeorgeCompiler.SMC.Arit.artit_exp(s)
-                    {s, m, c}
-                else
-                    {Stack.push(s,node.value), m, c} 
-                end
+        if Tree.is_leaf node do 
+            modify_s(node,s,m,c)
+        end
+    end
+
+    defp modify_s(node, s, m, c) do
+        if GeorgeCompiler.SMC.Arit.is_arit_exp(node.value) do
+            s = node.value |> GeorgeCompiler.SMC.Arit.artit_exp(s)
+            {s, m, c}
+        else
+            {Stack.push(s,node.value), m, c} 
         end
     end
 end
