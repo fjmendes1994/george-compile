@@ -32,13 +32,13 @@ defmodule GeorgeCompiler.SMC.Arit do
         Stack.push(s, y/x)
     end
 
+    def is_arit_exp(operation) do
+        IO.inspect Map.has_key? @operations, operation
+    end
+    
     defp pop_twice(s) do
         {x,s} = Stack.pop(s)
         {y,s} = Stack.pop(s)
         {x,y,s}
-    end
-
-    def is_arit_exp(operation) do
-        IO.inspect Map.has_key? @operations, operation
     end
 end
