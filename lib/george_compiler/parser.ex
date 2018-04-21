@@ -54,6 +54,12 @@ defmodule GeorgeCompiler.Parser do
   define :seqOp, "<space?> [;] <space?>"
   define :comOp, "<space?> [,] <space?>"
   define :iniOp, "<space?> [=] <space?>"
+  define :ifOp, "<space?> [i][f] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :elseOp, "<space?> [e][l][s][e] <space?>"do
+    x -> Enum.join(x)
+  end
 
   # Numeros
 
@@ -77,10 +83,18 @@ defmodule GeorgeCompiler.Parser do
     x -> Enum.join(x)
   end
 
+  # Chaves e parenteses
+  define :lp, "<space?> [(] <space?>"
+  define :rp, "<space?> [)] <space?>"
+  define :lk, "<space?> [{] <space?>"
+  define :rk, "<space?> [}] <space?>"
+
 
   # Expressoes
+  define :BlockCommandDecl, "<lk> CommandDecl+ <rk> "
+
   @root true
-  define :CommandDecl, "atrib / Expression"
+  define :CommandDecl, "atrib / if / Expression"
 
   define :Expression, "PredicateDecl / ExpressionDecl"
 
@@ -114,6 +128,8 @@ defmodule GeorgeCompiler.Parser do
 
   define :atrib, "ident assOp Expression"
 
+  define :else, "elseOp (CommandDecl / BlockCommandDecl)"
+  define :if, "ifOp <lp> PredicateDecl <rp> (CommandDecl / BlockCommandDecl) else?"
 
 
 
