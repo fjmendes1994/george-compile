@@ -2,57 +2,6 @@ defmodule GeorgeCompiler.Parser do
 
   use Neotomex.ExGrammar
 
-  @root true
-
-  # Expressoes
-  define :CommandDecl, "atrib / Expression"
-
-  define :Expression, "ExpressionDecl / PredicateDecl"
-
-  # Expressoes aritimeticas
-
-  define :ExpressionDecl, "sum / sub / div / mul / rem"
-
-  define :sum, "ident  sumOp  ExpressionDecl / ident  sumOp ident"
-  define :sub, "ident  subOp  ExpressionDecl / ident  subOp  ident"
-  define :div, "ident  divOp  ExpressionDecl / ident  divOp  ident"
-  define :mul, "ident  mulOp  ExpressionDecl / ident  mulOp  ident"
-  define :rem, "ident  remOp  ExpressionDecl / ident  remOp  ident"
-
-  # Operações Booleanas
-  define :PredicateDecl, "equals / greaterEquals / lessEquals / greater / less / notEquals"
-
-  define :notEquals,     "ident notEqualsOp     ident"
-  define :equals,        "ident equalsOp        ident"
-  define :greater,       "ident greaterOp       ident"
-  define :less,          "ident lessOp          ident"
-  define :greaterEquals, "ident greaterEqualsOp ident"
-  define :lessEquals,    "ident lessEqualsOp    ident"
-  define :notExp,        "notOp PredicateDecl"
-
-  # Comandos
-
-    define :atrib, "ident atrOp value"
-
-    define :ident, "decimal / varName"
-
-
-  # Value
-
-  define :value, "Expression / decimal"
-
-  # Numeros
-
-  define :decimal, "decimalP / decimalN" do
-      digitis -> Enum.join(digitis)
-  end
-
-  define :decimalP, "digit+"
-
-  define :decimalN, "subOp digit+"
-
-  define :digit, "[0-9]"
-
   # Espaços
 
   define :space, "[ \\r\\n\\s\\t]*"
@@ -95,21 +44,77 @@ defmodule GeorgeCompiler.Parser do
   define :lessEqualsOp, "<space?> [<][=] <space?>" do
     x -> Enum.join(x)
   end
+  define :negOp, "[~]"
 
-  define :notOp, "[~]"
+  # Operadores de Comandos
+
+  define :assOp, "<space?> [:][=] <space?>" do
+    x -> Enum.join(x)
+  end
+  define :seqOp, "<space?> [;] <space?>"
+  define :comOp, "<space?> [,] <space?>"
+  define :iniOp, "<space?> [=] <space?>"
+
+  # Numeros
+
+  define :digit, "[0-9]"
+  define :decimalP, "digit+"
+  define :decimalN, "subOp digit+"
+  define :decimal, "decimalP / decimalN" do
+    digitis -> Enum.join(digitis)
+  end
 
   # Nome de Variaveis
 
-  #Usar letter e digit está caindo em recurão infinita
-  #TODO: Mudar a regra a-zA-Z0-9 para letter,digit*
-  define :varName, "letter[a-zA-Z0-9]*" do
-    letter -> Enum.join(letter)
-  end
-
   define :letter, "[a-zA-Z]"
-
-  define :atrOp, "<space?> [:][=] <space?>" do
+  define :lowcase, "[a-z]+"
+  define :upcase, "[A-Z]+"
+  define :word, "lowcase* upcase / lowcase upcase*" do
     x -> Enum.join(x)
   end
+
+  define :ident, "word digit* ident?" do
+    x -> Enum.join(x)
+  end
+
+
+  # Expressoes
+  @root true
+  define :CommandDecl, "atrib / Expression"
+
+  define :Expression, "PredicateDecl / ExpressionDecl"
+
+  # Expressoes aritimeticas
+
+  define :ExpressionDecl, "PredicateDecl / additiveExp / decimal / ident"
+
+  define :additiveExp, "sum / sub / multitiveExp"
+
+  define :multitiveExp, "mul / rem / div"
+
+  define :sum, "(decimal / ident) sumOp ExpressionDecl"
+  define :sub, "(decimal / ident) subOp ExpressionDecl"
+  define :div, "(decimal / ident) divOp ExpressionDecl"
+  define :mul, "(decimal / ident) mulOp ExpressionDecl"
+  define :rem, "(decimal / ident) remOp ExpressionDecl"
+
+  # Expressoes Booleanas
+
+  define :PredicateDecl, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals"
+
+  define :notEquals, "(decimal / ident) notEqualsOp ExpressionDecl"
+  define :equals, "(decimal / ident) equalsOp ExpressionDecl"
+  define :greater, "(decimal / ident) greaterOp ExpressionDecl"
+  define :less, "(decimal / ident) lessOp ExpressionDecl"
+  define :greaterEquals, "(decimal / ident) greaterEqualsOp ExpressionDecl"
+  define :lessEquals, "(decimal / ident) lessEqualsOp ExpressionDecl"
+  define :negExp, "negOp PredicateDecl"
+
+  # Comandos
+
+  define :atrib, "ident assOp Expression"
+
+
+
 
 end
