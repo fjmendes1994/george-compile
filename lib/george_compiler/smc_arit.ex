@@ -2,7 +2,8 @@ defmodule GeorgeCompiler.SMC.Arit do
     @operations %{  
         "add" => &GeorgeCompiler.SMC.Arit.add/1, 
         "sub" => &GeorgeCompiler.SMC.Arit.sub/1,
-        "mult"=> &GeorgeCompiler.SMC.Arit.mult/1
+        "mult"=> &GeorgeCompiler.SMC.Arit.mult/1,
+        "div"=> &GeorgeCompiler.SMC.Arit.div/1
     }
 
     def artit_exp(operation,s) do
@@ -11,22 +12,30 @@ defmodule GeorgeCompiler.SMC.Arit do
     end
 
     def add(s)do
-        {x,s} = Stack.pop(s)
-        {y,s} = Stack.pop(s)
+        {x,y,s} = pop_twice(s)
         Stack.push(s, x+y)
     end
 
-    @doc "Subtração sendo feito ao contrário para compensar ordem da pilha"
+    def mult(s)do
+        {x,y,s} = pop_twice(s)
+        Stack.push(s, y*x)
+    end
+
+    @doc "Subtração e divisão sendo feitas ao contrário para compensar ordem da pilha"
     def sub(s)do
-        {x,s} = Stack.pop(s)
-        {y,s} = Stack.pop(s)
+        {x,y,s} = pop_twice(s)
         Stack.push(s, y-x)
     end
 
-    def mult(s)do
+    def div(s)do
+        {x,y,s} = pop_twice(s)
+        Stack.push(s, y/x)
+    end
+
+    defp pop_twice(s) do
         {x,s} = Stack.pop(s)
         {y,s} = Stack.pop(s)
-        Stack.push(s, y*x)
+        {x,y,s}
     end
 
     def is_arit_exp(operation) do
