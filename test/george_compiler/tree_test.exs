@@ -23,4 +23,12 @@ defmodule TreeTest do
     test "Adicionar 2 folhas e pegar a primeira" do
         assert Tree.new |> Tree.add_leaf(1) |> Tree.add_leaf(2) |> Tree.get_leaf(1) == 2
     end
+
+    test "Verifica se é folha" do
+        assert Tree.new(5) |> Tree.is_leaf == true
+    end
+
+    test "Verifica se não é folha" do
+        assert Tree.new(5) |> Tree.add_leaf("add") |> Tree.is_leaf == false
+    end
 end

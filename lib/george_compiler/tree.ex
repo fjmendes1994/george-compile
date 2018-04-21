@@ -1,4 +1,7 @@
 defmodule Tree do
+    @moduledoc """
+    Módulo de árvore que serve como componente da pilha de controle 
+    """
     defstruct leafs: [], value: nil
 
     def new(), do: %Tree{}
@@ -10,4 +13,6 @@ defmodule Tree do
     end
 
     def get_leaf(tree, nth), do: Enum.at(tree.leafs, nth)
+
+    def is_leaf(tree), do: length(tree.leafs) == 0
 end
