@@ -8,4 +8,6 @@ defmodule Tree do
     def add_leaf(tree, value) do
         %{tree | leafs: tree.leafs ++ [value]}
     end
+
+    def get_leaf(tree, nth), do: Enum.at(tree.leafs, nth)
 end
