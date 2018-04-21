@@ -42,24 +42,28 @@ defmodule SMCTest do
     assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
   end
 
+  #Expressão: 1+2
   test "Decompoe arvore em c e faz adição utilzando s" do
     c = Stack.new |> Stack.push(Tree.new("add") |> Tree.add_leaf(1) |> Tree.add_leaf(2))
     s = Stack.new |> Stack.push(3)
     assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
   end
 
+  #Expressão: 1-2
   test "Decompoe arvore em c e faz subtração utilzando s" do
     c = Stack.new |> Stack.push(Tree.new("sub") |> Tree.add_leaf(1) |> Tree.add_leaf(2))
     s = Stack.new |> Stack.push(-1)
     assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
   end
 
+  #Expressão: 182
   test "Decompoe arvore em c e faz multiplicação utilzando s" do
     c = Stack.new |> Stack.push(Tree.new("mult") |> Tree.add_leaf(1) |> Tree.add_leaf(2))
     s = Stack.new |> Stack.push(2)
     assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
   end
 
+  #Expressão: 2/1
   test "Decompoe arvore em c e faz divisao utilzando s" do
     c = Stack.new |> Stack.push(Tree.new("div") |> Tree.add_leaf(2) |> Tree.add_leaf(1))
     s = Stack.new |> Stack.push(2)
