@@ -1,40 +1,26 @@
 defmodule GeorgeCompiler.SMC do
-
-    def eval(parse) do
-        {_, parsed} = parse
-        createC(Stack.new, parsed, length(parsed)-1)
-    end 
-    
-    defp createC(c, parser, parserLength) when not is_binary(parser) do
-        if  parserLength == 0 do
-			Stack.push c, Enum.at(parser, parserLength)
-		else
-			Enum.at(parser,parserLength) |> pushC(c) |> createC(parser,parserLength-1)
-		end
-	end
-
-    defp pushC(parser, c) do
-        Stack.push c, parser
-    end
-	
-	
-	
-	#============================MÉTODOS ANTIGOS==================================
-	"""
-	 def eval(parse) do
-        {_, parsed} = parse
-        createC(parsed, Stack.new)
-    end 
-    
-    defp createC(parser, c) when not is_binary(parser) do
-        value = Enum.at(parser,0)
-        Enum.at(parser,1) |> createC(c) |> Stack.push(value)
+    def evaluate(s, m, c) do
+        if Stack.depth(c) > 0 do
+            {node, c} = Stack.pop(c)
+            {s, m, c} = do_operation(node, s, m, c)
+            evaluate(s, m, c)
+        else
+            {s, m, c}
+        end
     end
 
-    defp createC(parser, c) do
-        Stack.push c, parser
+    def do_operation(node, s, m, c) do
+        if Tree.is_leaf node do 
+            modify_s(node,s,m,c)
+        end
     end
-	"""
 
-
+    defp modify_s(node, s, m, c) do
+        if GeorgeCompiler.SMC.Arit.is_arit_exp(node.value) do
+            s = node.value |> GeorgeCompiler.SMC.Arit.artit_exp(s)
+            {s, m, c}
+        else
+            {Stack.push(s,node.value), m, c} 
+        end
+    end
 end

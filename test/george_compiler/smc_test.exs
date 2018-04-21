@@ -3,20 +3,42 @@ defmodule SMCTest do
 
   use ExUnit.Case
 
-  # Este teste está quebrando o parser
-  #test "parser para pilha de controle(C) com vazio" do
-  #  assert GeorgeCompiler.Parser.parse("") |> GeorgeCompiler.eval == %Stack{elements: ["5"]}
-  #end
-
-  test "parser para pilha de controle(C) com 1 valor" do
-    assert GeorgeCompiler.Parser.parse("5") |> GeorgeCompiler.SMC.eval == %Stack{elements: ["5"]}
+  test "Verifica pilhas" do
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, Stack.new) == {Stack.new, Stack.new, Stack.new}
   end
 
-  test "parser para pilha de controle(C) com 2 operandos" do
-    assert GeorgeCompiler.Parser.parse("3+2") |> GeorgeCompiler.SMC.eval == %Stack{elements: ["3","2"]}
+  test "Esvazia pilha c e para" do
+    c = Stack.new |> Stack.push((Tree.new(5))) |> Stack.push((Tree.new(6)))
+    assert elem(GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c),2) == Stack.new
   end
 
-  test "parser para pilha de controle(C) com 3 operandos" do
-    assert GeorgeCompiler.Parser.parse("5+7*2") |> GeorgeCompiler.SMC.eval == %Stack{elements: ["5","7","2"]}
+  test "Esvazia pilha c e verifica s" do
+    c = Stack.new |> Stack.push((Tree.new(5))) |> Stack.push((Tree.new(6)))
+    s = Stack.new |> Stack.push(6) |> Stack.push(5)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
+  end
+
+  test "Esvazia pilha c e faz soma utilzando s" do
+    c = Stack.new |> Stack.push(Tree.new("add")) |> Stack.push((Tree.new(5))) |> Stack.push((Tree.new(6)))
+    s = Stack.new |> Stack.push(11)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
+  end
+
+  test "Esvazia pilha c e faz subtração utilzando s" do
+    c = Stack.new |> Stack.push(Tree.new("sub")) |> Stack.push((Tree.new(5))) |> Stack.push((Tree.new(6)))
+    s = Stack.new |> Stack.push(1)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
+  end
+
+  test "Esvazia pilha c e faz multiplicação utilzando s" do
+    c = Stack.new |> Stack.push(Tree.new("mult")) |> Stack.push((Tree.new(5))) |> Stack.push((Tree.new(6)))
+    s = Stack.new |> Stack.push(30)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
+  end
+
+  test "Esvazia pilha c e faz divisão utilzando s" do
+    c = Stack.new |> Stack.push(Tree.new("div")) |> Stack.push((Tree.new(1))) |> Stack.push((Tree.new(2)))
+    s = Stack.new |> Stack.push(2)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, c) == {s,Stack.new,Stack.new}
   end
 end
