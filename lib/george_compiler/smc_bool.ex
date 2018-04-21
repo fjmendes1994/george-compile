@@ -1,7 +1,7 @@
 defmodule GeorgeCompiler.SMC.Bool do
     @operations %{
         "eq" => &GeorgeCompiler.SMC.Bool.equals/1,
-        "not" => &GeorgeCompiler.SMC.Bool.not_equals/1
+        "not" => &GeorgeCompiler.SMC.Bool.nt/1
     }
 
     def equals(s) do
@@ -9,7 +9,7 @@ defmodule GeorgeCompiler.SMC.Bool do
         Stack.push(s, x==y)
     end
 
-    def not_equals(s) do
+    def nt(s) do
         {x, s} = Stack.pop(s)
         Stack.push(s, not x)
     end
