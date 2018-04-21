@@ -23,7 +23,7 @@ defmodule SMCAritTest do
 
     test "Divisão da árvore" do
         tree = Tree.new("add") |> Tree.add_leaf(5) |> Tree.add_leaf(3)
-        decomposed = Stack.new |> Stack.push(Tree.new("add")) |> Stack.push(Tree.new(5)) |> Stack.push(Tree.new(3))
+        decomposed = Stack.new |> Stack.push(Tree.new("add")) |> Stack.push(Tree.new(3)) |> Stack.push(Tree.new(5))
         assert GeorgeCompiler.SMC.Arit.arit_decompose_tree(tree, Stack.new) == decomposed
     end
 end
