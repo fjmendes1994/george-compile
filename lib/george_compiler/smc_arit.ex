@@ -1,5 +1,5 @@
 defmodule GeorgeCompiler.SMC.Arit do
-    @operations %{"add" => &add/2, "sub" => &sub/2}
+    @operations %{"add" => &Arit.add/1, "sub" => &Arit.sub/1}
 
     def artit_exp(operation,s) do
         expression = @operations[operation]
