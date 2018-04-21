@@ -3,7 +3,9 @@ defmodule GeorgeCompiler.SMC.Bool do
         "eq" => &GeorgeCompiler.SMC.Bool.equals/1,
         "not" => &GeorgeCompiler.SMC.Bool.nt/1,
         "gt" => &GeorgeCompiler.SMC.Bool.greater_than/1,
-        "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/1
+        "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/1,
+        "get" => &GeorgeCompiler.SMC.Bool.greater_than/1,
+        "let" => &GeorgeCompiler.SMC.Bool.lesser_than/1
     }
 
     def nt(s) do
@@ -24,6 +26,16 @@ defmodule GeorgeCompiler.SMC.Bool do
     def lesser_than(s) do
         {y, x, s} = pop_twice(s)
         Stack.push(s, x < y)
+    end
+
+    def greater_equals_than(s) do
+        {y, x, s} = pop_twice(s)
+        Stack.push(s, x >= y)
+    end
+
+    def lesser_equals_than(s) do
+        {y, x, s} = pop_twice(s)
+        Stack.push(s, x <= y)
     end
 
     def pop_twice(s) do

@@ -30,4 +30,14 @@ defmodule SMCBoolTest do
         s = Stack.new |> Stack.push(3) |> Stack.push(5) 
         assert lesser_than(s) == Stack.new |> Stack.push(true)
     end
+
+    test "maior igual que" do
+        s = Stack.new |> Stack.push(5) |> Stack.push(5) 
+        assert greater_equals_than(s) == Stack.new |> Stack.push(true)
+    end
+
+    test "menor igual que" do
+        s = Stack.new |> Stack.push(5) |> Stack.push(5) 
+        assert lesser_equals_than(s) == Stack.new |> Stack.push(true)
+    end
 end
