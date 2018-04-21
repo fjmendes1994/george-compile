@@ -19,11 +19,18 @@ defmodule SMCAritTest do
         assert create_s() |> GeorgeCompiler.SMC.Arit.div  == Stack.new |> Stack.push(2)   
     end
 
-    def create_s(), do: Stack.new |> Stack.push(2) |> Stack.push(1)
+    def create_s(), do: Stack.new 
+                        |> Stack.push(2) 
+                        |> Stack.push(1)
 
     test "Divisão da árvore" do
-        tree = Tree.new("add") |> Tree.add_leaf(5) |> Tree.add_leaf(3)
-        decomposed = Stack.new |> Stack.push(Tree.new("add")) |> Stack.push(Tree.new(3)) |> Stack.push(Tree.new(5))
+        tree = Tree.new("add") 
+                |> Tree.add_leaf(5) 
+                |> Tree.add_leaf(3)
+        decomposed = Stack.new 
+                    |> Stack.push(Tree.new("add")) 
+                    |> Stack.push(Tree.new(3)) 
+                    |> Stack.push(Tree.new(5))
         assert GeorgeCompiler.SMC.Arit.arit_decompose_tree(tree, Stack.new) == decomposed
     end
 end
