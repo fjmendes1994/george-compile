@@ -8,6 +8,11 @@ defmodule GeorgeCompiler.SMC.Bool do
         "let" => &GeorgeCompiler.SMC.Bool.lesser_than/1
     }
 
+    def bool_exp(exp, s) do
+        operation = @operations[exp]
+        operation.(s)
+    end
+
     def nt(s) do
         {x, s} = Stack.pop(s)
         Stack.push(s, not x)
@@ -55,14 +60,14 @@ defmodule GeorgeCompiler.SMC.Bool do
     end
 
     def is_bool_exp(operation) do
-        Enum.member? @operations, operation
+        Map.has_key? @operations, operation
     end
 
     def bool_decompose_tree(tree, c) do
         if tree.value == "not" do
-            c |> Stack.push(Tree.new("not")) |> Stack.push(Enum.at(tree.leafs,0))
+            c |> Stack.push(Tree.new(tree.value)) |> Stack.push(Enum.at(tree.leafs,0))
         else
-            push_values(tree, c)
+            tree |> push_values(Stack.push(c, Tree.new(tree.value)))
         end
     end
 
