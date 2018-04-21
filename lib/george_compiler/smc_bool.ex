@@ -53,4 +53,25 @@ defmodule GeorgeCompiler.SMC.Bool do
         {y, s} = Stack.pop(s)
         {x, y, s}
     end
+
+    def is_bool_exp(operation) do
+        Enum.member? @operations, operation
+    end
+
+    def bool_decompose_tree(tree, c) do
+        if tree.value == "not" do
+            c |> Stack.push(Tree.new("not")) |> Stack.push(Enum.at(tree.leafs,0))
+        else
+            push_values(tree, c)
+        end
+    end
+
+    def push_values(tree, c) do
+        elem = Enum.at(tree.leafs, 0)
+        if length(tree.leafs) > 1 do
+            %{tree | leafs: tree.leafs |> Enum.drop(1)} |> push_values(c) |> Stack.push(elem)
+        else
+            c |> Stack.push(elem)
+        end
+    end
 end
