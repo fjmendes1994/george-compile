@@ -1,6 +1,7 @@
 defmodule GeorgeCompiler.SMC do
     import GeorgeCompiler.SMC.Arit
     import GeorgeCompiler.SMC.Bool
+    import GeorgeCompiler.SMC.Control
 
     def evaluate(s, m, c) do
         if Stack.depth(c) > 0 do
@@ -23,6 +24,11 @@ defmodule GeorgeCompiler.SMC do
                 if is_bool_exp(node.value) do
                     c = bool_decompose_tree(node ,c)
                     {s, m , c}
+                else 
+                    if is_control(node.value) do
+                        c = control_decompose_tree(node, c)
+                        {s, m , c}
+                    end
                 end
             end
         end
