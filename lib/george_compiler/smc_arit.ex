@@ -2,7 +2,7 @@ defmodule GeorgeCompiler.SMC.Arit do
     @operations %{  
         "add" => &GeorgeCompiler.SMC.Arit.add/1, 
         "sub" => &GeorgeCompiler.SMC.Arit.sub/1,
-        "mult"=> &GeorgeCompiler.SMC.Arit.mult/1,
+        "mul"=> &GeorgeCompiler.SMC.Arit.mult/1,
         "div"=> &GeorgeCompiler.SMC.Arit.div/1
     }
 
