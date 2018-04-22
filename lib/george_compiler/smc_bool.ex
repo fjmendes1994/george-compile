@@ -1,11 +1,13 @@
 defmodule GeorgeCompiler.SMC.Bool do
     @operations %{
         "eq" => &GeorgeCompiler.SMC.Bool.equals/1,
+		"neq" => &GeorgeCompiler.SMC.Bool.not_equals/1,
         "not" => &GeorgeCompiler.SMC.Bool.nt/1,
         "gt" => &GeorgeCompiler.SMC.Bool.greater_than/1,
         "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/1,
-        "get" => &GeorgeCompiler.SMC.Bool.greater_than/1,
-        "let" => &GeorgeCompiler.SMC.Bool.lesser_than/1
+        "ge" => &GeorgeCompiler.SMC.Bool.greater_equals_than/1,
+        "le" => &GeorgeCompiler.SMC.Bool.lesser_equals_than/1,
+		"neg" => &GeorgeCompiler.SMC.Bool.nt/1
     }
 
     def bool_exp(exp, s) do
@@ -22,6 +24,11 @@ defmodule GeorgeCompiler.SMC.Bool do
         {x, y, s} = pop_twice(s)
         Stack.push(s, x==y)
     end
+	
+	def not_equals(s) do
+		{x, y, s} = pop_twice(s)
+		Stack.push(s, x != y)
+	end
 
     def greater_than(s) do
         {y, x, s} = pop_twice(s)
