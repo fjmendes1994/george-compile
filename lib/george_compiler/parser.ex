@@ -9,7 +9,7 @@ defmodule GeorgeCompiler.Parser do
   # Operadores Aritmeticos
 
   define :sumOp, "<space?> [+] <space?>"  do
-	[x] -> x
+    [x] -> x
   end
   define :subOp, "<space?> [-] <space?>" do
     [x] -> x
