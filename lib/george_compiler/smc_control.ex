@@ -1,6 +1,6 @@
 defmodule GeorgeCompiler.SMC.Control do
     @operations %{
-        "atrib" => &GeorgeCompiler.SMC.Control.atrib/1
+        "atrib" => &GeorgeCompiler.SMC.Control.atrib/2
     }
 
     def control(exp, s, m) do
@@ -15,7 +15,7 @@ defmodule GeorgeCompiler.SMC.Control do
 
     def control_decompose_tree(tree, c) do
         c = c
-            |> Stack.push(tree.value)
+            |> Stack.push(Tree.new(tree.value))
         case tree.value do
             "atrib" -> atrib_decompose(tree, c)
         end

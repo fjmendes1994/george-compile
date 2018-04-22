@@ -200,7 +200,7 @@ defmodule SMCTest do
     c = Stack.new
         |> Stack.push(Tree.new("atrib")
                       |> Tree.add_leaf("var")
-                      |> Tree.add_leaf("5"))
+                      |> Tree.add_leaf(5))
     m = %{"var" => 5}
 
     assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, m, Stack.new}
