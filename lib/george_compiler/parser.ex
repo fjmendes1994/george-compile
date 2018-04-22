@@ -9,7 +9,7 @@ defmodule GeorgeCompiler.Parser do
   # Operadores Aritmeticos
 
   define :sumOp, "<space?> [+] <space?>"  do
-    [x] -> x
+	[x] -> x
   end
   define :subOp, "<space?> [-] <space?>" do
     [x] -> x
@@ -82,7 +82,7 @@ defmodule GeorgeCompiler.Parser do
   define :decimalP, "digit+"
   define :decimalN, "subOp digit+"
   define :decimal, "decimalP / decimalN" do
-    digitis -> Enum.join(digitis)
+      digitis -> Enum.join(digitis) |> String.to_integer
   end
 
   # Nome de Variaveis
@@ -121,11 +121,25 @@ defmodule GeorgeCompiler.Parser do
 
   define :multitiveExp, "mul / rem / div"
 
-  define :sum, "(decimal / ident) sumOp ExpressionDecl"
-  define :sub, "(decimal / ident) subOp ExpressionDecl"
-  define :div, "(decimal / ident) divOp ExpressionDecl"
-  define :mul, "(decimal / ident) mulOp ExpressionDecl"
-  define :rem, "(decimal / ident) remOp ExpressionDecl"
+  define :sum, "(decimal / ident) sumOp ExpressionDecl" do
+	[x,_,y] -> IO.inspect Tree.new("add") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+
+  define :sub, "(decimal / ident) subOp ExpressionDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("sub") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+
+  define :div, "(decimal / ident) divOp ExpressionDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("div") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+
+  define :mul, "(decimal / ident) mulOp ExpressionDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("mul") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+
+  define :rem, "(decimal / ident) remOp ExpressionDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("rem") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
 
   # Expressoes Booleanas
 
