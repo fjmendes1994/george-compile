@@ -45,7 +45,13 @@ defmodule GeorgeCompiler.SMC do
                     |> bool_exp(s)
                 {s, m, c}
             else
-                {Stack.push(s,node.value), m, c} 
+                if is_control(node.value) do
+                    {s, m} = node.value 
+                            |> control(s, m)
+                    {s, m, c}
+                else
+                    {Stack.push(s,node.value), m, c} 
+                end
             end
         end
     end

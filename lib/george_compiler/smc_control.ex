@@ -3,6 +3,11 @@ defmodule GeorgeCompiler.SMC.Control do
         "atrib" => &GeorgeCompiler.SMC.Control.atrib/1
     }
 
+    def control(exp, s, m) do
+        operation = @operations[exp]
+        {s, m} = operation.(s,m)
+    end
+
     def atrib(s, m) do
         {value, var, s} = pop_twice(s)
         {s, Map.put(m, var, value)}
@@ -10,7 +15,7 @@ defmodule GeorgeCompiler.SMC.Control do
 
     def control_decompose_tree(tree, c) do
         c = c
-            |> tree.value
+            |> Stack.push(tree.value)
         case tree.value do
             "atrib" -> atrib_decompose(tree, c)
         end
