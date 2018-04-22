@@ -64,11 +64,7 @@ defmodule GeorgeCompiler.SMC.Bool do
     end
 
     def bool_decompose_tree(tree, c) do
-        if tree.value == "not" do
-            c |> Stack.push(Tree.new(tree.value)) |> Stack.push(Enum.at(tree.leafs,0))
-        else
-            tree |> push_values(Stack.push(c, Tree.new(tree.value)))
-        end
+        tree |> push_values(Stack.push(c, Tree.new(tree.value)))
     end
 
     def push_values(tree, c) do
