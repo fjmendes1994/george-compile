@@ -9,7 +9,7 @@ defmodule GeorgeCompiler.Parser do
   # Operadores Aritmeticos
 
   define :sumOp, "<space?> [+] <space?>"  do
-    [x] -> x
+	[x] -> x
   end
   define :subOp, "<space?> [-] <space?>" do
     [x] -> x
@@ -145,13 +145,27 @@ defmodule GeorgeCompiler.Parser do
 
   define :PredicateDecl, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals"
 
-  define :notEquals, "(decimal / ident) notEqualsOp ExpressionDecl"
-  define :equals, "(decimal / ident) equalsOp ExpressionDecl"
-  define :greater, "(decimal / ident) greaterOp ExpressionDecl"
-  define :less, "(decimal / ident) lessOp ExpressionDecl"
-  define :greaterEquals, "(decimal / ident) greaterEqualsOp ExpressionDecl"
-  define :lessEquals, "(decimal / ident) lessEqualsOp ExpressionDecl"
-  define :negExp, "negOp PredicateDecl"
+  define :notEquals, "(decimal / ident) notEqualsOp ExpressionDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("neq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :equals, "(decimal / ident) equalsOp ExpressionDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("eq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :greater, "(decimal / ident) greaterOp ExpressionDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("gt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :less, "(decimal / ident) lessOp ExpressionDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("lt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :greaterEquals, "(decimal / ident) greaterEqualsOp ExpressionDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("ge") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :lessEquals, "(decimal / ident) lessEqualsOp ExpressionDecl" do
+ 	[x,_,y] -> IO.inspect Tree.new("le") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :negExp, "negOp PredicateDecl" do
+  	[x,_,y] -> IO.inspect Tree.new("neg") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
 
   # Comandos
   define :cmd, "atrib / if / while / print / exit / call / Expression"
