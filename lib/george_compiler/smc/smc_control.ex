@@ -15,7 +15,7 @@ defmodule GeorgeCompiler.SMC.Control do
 
     def control_decompose_tree(tree, c) do
         c = c
-            |> Stack.push(Tree.new(tree.value))
+            |> StackUtils.push_as_tree(tree.value)
         case tree.value do
             "atrib" -> atrib_decompose(tree, c)
         end

@@ -58,7 +58,8 @@ defmodule GeorgeCompiler.SMC.Bool do
     end
 
     def bool_decompose_tree(tree, c) do
-        tree |> push_values(Stack.push(c, Tree.new(tree.value)))
+        tree 
+        |> push_values(StackUtils.push_as_tree(c, tree.value))
     end
 
     def push_values(tree, c) do
@@ -66,7 +67,8 @@ defmodule GeorgeCompiler.SMC.Bool do
         if length(tree.leafs) > 1 do
             tree
             |> TreeUtils.remove_first_leaf
-            |> push_values(c) |> Stack.push(elem)
+            |> push_values(c) 
+            |> Stack.push(elem)
         else
             c |> Stack.push(elem)
         end
