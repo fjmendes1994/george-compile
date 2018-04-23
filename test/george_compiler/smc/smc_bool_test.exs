@@ -129,4 +129,53 @@ defmodule SMCBoolTest do
             |> Stack.push(false) 
         assert bool_or(s, %{}) == Stack.new |> Stack.push(false)
     end
+
+
+    @doc "alguns testes utilizando variáveis"
+    test "igualdade com variaveis" do
+        s = Stack.new 
+            |> Stack.push("x") 
+            |> Stack.push("y") 
+        m = %{"x" => 5, "y" => 5}
+        assert equals(s, m) == Stack.new |> Stack.push(true)
+    end
+    
+    test "negação com variavel" do
+        s = Stack.new 
+            |> Stack.push("x") 
+        m = %{"x" => true}
+        assert nt(s, m) == Stack.new |> Stack.push(false)
+    end
+
+    test "maior que verdadeiro com variaveis" do
+        s = Stack.new 
+            |> Stack.push("x") 
+            |> Stack.push("y") 
+        m = %{"x" => 5, "y" => 3}
+        assert greater_than(s, m) == Stack.new |> Stack.push(true)
+    end
+
+    test "menor que verdadeiro com variaveis" do
+        s = Stack.new 
+            |> Stack.push("x") 
+            |> Stack.push("y") 
+        m = %{"x" => 3, "y" => 5}
+        assert lesser_than(s, m) == Stack.new |> Stack.push(true)
+    end
+
+    test "teste de and verdadeiro com variaveis" do
+        s = Stack.new 
+            |> Stack.push("x") 
+            |> Stack.push("y") 
+        m = %{"x" => true, "y" => true}
+        assert bool_and(s, m) == Stack.new |> Stack.push(true)
+    end
+
+    test "teste de or verdadeiro com variaveis" do
+        s = Stack.new 
+            |> Stack.push("x") 
+            |> Stack.push("y") 
+        m = %{"x" => false, "y" => true}
+        assert bool_or(s, m) == Stack.new |> Stack.push(true)
+    end
 end
