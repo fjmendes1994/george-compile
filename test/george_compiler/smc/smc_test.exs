@@ -284,7 +284,6 @@ defmodule SMCTest do
                       |> Tree.add_leaf("x"))
     s = Stack.new 
         |> Stack.push(true)
-
     m = %{"x" => false}
     assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
