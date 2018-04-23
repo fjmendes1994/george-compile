@@ -26,16 +26,16 @@ make build
 ## Run
 (default path is "/example")
 ```elixir
-make run --file=<file_name>
+make run file=<file_name>
 ```
 
 or
 
 ```elixir
-make run --path=<path_to_file> --file=<file_name>
+make run path=<path_to_file> file=<file_name>
 ```
 
 ## Clean
 ```elixir
-make clean --file=<file_name>
+make clean
 ```
