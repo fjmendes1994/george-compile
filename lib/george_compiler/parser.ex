@@ -45,6 +45,8 @@ defmodule GeorgeCompiler.Parser do
     x -> Enum.join(x)
   end
   define :negOp, "[~]"
+  define :orOP, "<space?> [o][r] <space?>"
+  define :andOP, "<space?> [a][n][d] <space?>"
 
   # Operadores de Comandos
 
@@ -106,10 +108,6 @@ defmodule GeorgeCompiler.Parser do
 
 
   # Expressoes
-  define :BlockCommandDecl, "<lk> CommandDecl+ <rk> "
-
-  @root true
-  define :CommandDecl, "choice / seq / cmd"
 
   define :Expression, "PredicateDecl / ExpressionDecl"
 
@@ -143,7 +141,9 @@ defmodule GeorgeCompiler.Parser do
 
   # Expressoes Booleanas
 
-  define :PredicateDecl, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals"
+  define :PredicateDecl, "and / or / boolExp"
+
+  define :boolExp, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals"
 
   define :notEquals, "(decimal / ident) notEqualsOp ExpressionDecl" do
     [x,_,y] -> IO.inspect Tree.new("neq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
@@ -166,8 +166,15 @@ defmodule GeorgeCompiler.Parser do
   define :negExp, "negOp PredicateDecl" do
     [x,_,y] -> IO.inspect Tree.new("neg") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
+  define :or, "boolExp orOP PredicateDecl"
+  define :and, "boolExp andOP PredicateDecl"
 
   # Comandos
+  define :BlockCommandDecl, "<lk> CommandDecl+ <rk> "
+
+  @root true
+  define :CommandDecl, "choice / seq / cmd"
+
   define :cmd, "atrib / if / while / print / exit / call / Expression"
 
   define :atrib, "ident assOp Expression"
@@ -186,6 +193,7 @@ defmodule GeorgeCompiler.Parser do
   define :seq, "cmd seqOp CommandDecl"
 
   define :choice, "cmd choOp CommandDecl"
+
 
 
 
