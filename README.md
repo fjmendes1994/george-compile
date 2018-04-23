@@ -24,7 +24,7 @@ make build
 ```
 
 ## Run
-(default path /example)
+(default path is "/example")
 ```elixir
 make run --file=<file_name>
 ```
