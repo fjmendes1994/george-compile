@@ -1,15 +1,41 @@
-# JorgeCompiler
+# GeorgeCompiler
   
   Trabalho da disciplina de compiladores do curso de ciencia da computação.
   Universidade Federal Fluminense, Nitéroi, 2018.
 
-## Baixar dependecias
+## Install
 
+#### Mac
 ```elixir
-mix deps.get
+make mac-install
+```
+#### Ubuntu
+```elixir
+make ubuntu-install
+```
+#### Manjaro
+```elixir
+make manjaro-install
 ```
 
-## Executar o projeto
+## Build
 ```elixir
-mix run
+make build
+```
+
+## Run
+(default path /example)
+```elixir
+make run --file=<file_name>
+```
+
+or
+
+```elixir
+make run --path=<path_to_file> --file=<file_name>
+```
+
+## Clean
+```elixir
+make clean --file=<file_name>
 ```
