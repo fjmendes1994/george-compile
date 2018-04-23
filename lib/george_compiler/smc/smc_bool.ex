@@ -8,9 +8,9 @@ defmodule GeorgeCompiler.SMC.Bool do
         "let" => &GeorgeCompiler.SMC.Bool.lesser_than/1
     }
 
-    def bool_exp(exp, s) do
+    def bool_exp(exp, s, m, c) do
         operation = @operations[exp]
-        operation.(s)
+        {operation.(s), m, c}
     end
 
     def nt(s) do

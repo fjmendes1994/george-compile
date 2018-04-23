@@ -3,9 +3,10 @@ defmodule GeorgeCompiler.SMC.Control do
         "atrib" => &GeorgeCompiler.SMC.Control.atrib/2
     }
 
-    def control(exp, s, m) do
+    def control(exp, s, m, c) do
         operation = @operations[exp]
-        operation.(s,m)
+        {s, m} = operation.(s,m)
+        {s, m, c}
     end
 
     def atrib(s, m) do

@@ -6,9 +6,9 @@ defmodule GeorgeCompiler.SMC.Arit do
         "div"=> &GeorgeCompiler.SMC.Arit.div/1
     }
 
-    def artit_exp(operation,s) do
+    def artit_exp(operation, s, m, c) do
         expression = @operations[operation]
-        expression.(s)
+        {expression.(s), m, c}
     end
 
     def add(s)do

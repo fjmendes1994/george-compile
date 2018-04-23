@@ -33,9 +33,8 @@ defmodule GeorgeCompiler.SMC do
         if is_value node.value do
             {Stack.push(s,node.value), m, c} 
         else
-            s = get_operation(node.value)
-                |> apply_operation(node.value, s, m, c)
-            {s, m, c}
+            get_operation(node.value)
+            |> apply_operation(node.value, s, m, c)
         end
     end
 
@@ -45,13 +44,13 @@ defmodule GeorgeCompiler.SMC do
 
     defp get_operation(operation) do
         cond do
-            is_arit_exp(operation) -> &artit_exp/2
-            is_bool_exp(operation) -> &bool_exp/2
-            is_control(operation) -> &control/3
+            is_arit_exp(operation) -> &artit_exp/4
+            is_bool_exp(operation) -> &bool_exp/4
+            is_control(operation) -> &control/4
         end
     end
 
     defp apply_operation(function, operation, s, m, c) do
-        function.(operation, s)
+        function.(operation, s, m, c)
     end
 end
