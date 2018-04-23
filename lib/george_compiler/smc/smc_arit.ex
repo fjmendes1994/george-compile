@@ -2,7 +2,7 @@ defmodule GeorgeCompiler.SMC.Arit do
     @operations %{  
         "add" => &GeorgeCompiler.SMC.Arit.add/2, 
         "sub" => &GeorgeCompiler.SMC.Arit.sub/2,
-        "mult"=> &GeorgeCompiler.SMC.Arit.mult/2,
+        "mul"=> &GeorgeCompiler.SMC.Arit.mul/2,
         "div"=> &GeorgeCompiler.SMC.Arit.div/2
     }
 
@@ -16,7 +16,7 @@ defmodule GeorgeCompiler.SMC.Arit do
         Stack.push(s, get_value(x, m) + get_value(y, m))
     end
 
-    def mult(s, m)do
+    def mul(s, m)do
         {x,y,s} = StackUtils.pop_twice(s)
         Stack.push(s, get_value(x, m) * get_value(y, m))
     end
