@@ -1,56 +1,64 @@
 defmodule GeorgeCompiler.SMC.Bool do
     @operations %{
-        "eq" => &GeorgeCompiler.SMC.Bool.equals/1,
-        "not" => &GeorgeCompiler.SMC.Bool.nt/1,
-        "gt" => &GeorgeCompiler.SMC.Bool.greater_than/1,
-        "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/1,
-        "get" => &GeorgeCompiler.SMC.Bool.greater_than/1,
-        "let" => &GeorgeCompiler.SMC.Bool.lesser_than/1
+        "eq" => &GeorgeCompiler.SMC.Bool.equals/2,
+        "not" => &GeorgeCompiler.SMC.Bool.nt/2,
+        "gt" => &GeorgeCompiler.SMC.Bool.greater_than/2,
+        "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/2,
+        "get" => &GeorgeCompiler.SMC.Bool.greater_than/2,
+        "let" => &GeorgeCompiler.SMC.Bool.lesser_than/2
     }
 
     def bool_exp(exp, s, m, c) do
         operation = @operations[exp]
-        {operation.(s), m, c}
+        {operation.(s, m), m, c}
     end
 
-    def nt(s) do
+    def nt(s, m) do
         {x, s} = Stack.pop(s)
-        Stack.push(s, not x)
+        Stack.push(s, not get_value(x, m))
     end
 
-    def equals(s) do
+    def equals(s, m) do
         {x, y, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x==y)
+        Stack.push(s, get_value(x, m) == get_value(y, m))
     end
 
-    def greater_than(s) do
+    def greater_than(s, m) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x > y)
+        Stack.push(s, get_value(x, m) > get_value(y, m))
     end
 
-    def lesser_than(s) do
+    def lesser_than(s, m) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x < y)
+        Stack.push(s, get_value(x, m) < get_value(y, m))
     end
 
-    def greater_equals_than(s) do
+    def greater_equals_than(s, m) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x >= y)
+        Stack.push(s, get_value(x, m) >= get_value(y, m))
     end
 
-    def lesser_equals_than(s) do
+    def lesser_equals_than(s, m) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x <= y)
+        Stack.push(s, get_value(x, m) <= get_value(y, m))
     end
 
-    def bool_and(s) do
+    def bool_and(s, m) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x and y)
+        Stack.push(s, get_value(x, m) and get_value(y, m))
     end
 
-    def bool_or(s) do
+    def bool_or(s, m) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x or y)
+        Stack.push(s, get_value(x, m) or get_value(y, m))
+    end
+
+    defp get_value(value, m) do
+        if is_binary(value) do
+            m[value]
+        else
+            value
+        end
     end
 
     def is_bool_exp(operation), do: Map.has_key? @operations, operation
