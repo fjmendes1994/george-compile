@@ -19,44 +19,38 @@ defmodule GeorgeCompiler.SMC.Bool do
     end
 
     def equals(s) do
-        {x, y, s} = pop_twice(s)
+        {x, y, s} = StackUtils.pop_twice(s)
         Stack.push(s, x==y)
     end
 
     def greater_than(s) do
-        {y, x, s} = pop_twice(s)
+        {y, x, s} = StackUtils.pop_twice(s)
         Stack.push(s, x > y)
     end
 
     def lesser_than(s) do
-        {y, x, s} = pop_twice(s)
+        {y, x, s} = StackUtils.pop_twice(s)
         Stack.push(s, x < y)
     end
 
     def greater_equals_than(s) do
-        {y, x, s} = pop_twice(s)
+        {y, x, s} = StackUtils.pop_twice(s)
         Stack.push(s, x >= y)
     end
 
     def lesser_equals_than(s) do
-        {y, x, s} = pop_twice(s)
+        {y, x, s} = StackUtils.pop_twice(s)
         Stack.push(s, x <= y)
     end
 
     def bool_and(s) do
-        {y, x, s} = pop_twice(s)
+        {y, x, s} = StackUtils.pop_twice(s)
         Stack.push(s, x and y)
     end
 
     def bool_or(s) do
-        {y, x, s} = pop_twice(s)
+        {y, x, s} = StackUtils.pop_twice(s)
         Stack.push(s, x or y)
-    end
-
-    def pop_twice(s) do
-        {x, s} = Stack.pop(s)
-        {y, s} = Stack.pop(s)
-        {x, y, s}
     end
 
     def is_bool_exp(operation) do
@@ -70,7 +64,9 @@ defmodule GeorgeCompiler.SMC.Bool do
     def push_values(tree, c) do
         elem = Enum.at(tree.leafs, 0)
         if length(tree.leafs) > 1 do
-            %{tree | leafs: tree.leafs |> Enum.drop(1)} |> push_values(c) |> Stack.push(elem)
+            tree
+            |> TreeUtils.remove_first_leaf
+            |> push_values(c) |> Stack.push(elem)
         else
             c |> Stack.push(elem)
         end
