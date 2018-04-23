@@ -88,7 +88,7 @@ defmodule SMCTest do
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
-  #Expressão: 182
+  #Expressão: 1*2
   test "Decompoe arvore em c e faz multiplicação utilzando s" do
     c = Stack.new
         |> Stack.push(Tree.new("mult") 
@@ -108,6 +108,54 @@ defmodule SMCTest do
     s = Stack.new 
         |> Stack.push(2)
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+  end
+
+  #Expressão: x+y, x=1 e y=2
+  test "Decompoe arvore em c e faz adição utilzando s e m" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("add") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+      |> Stack.push(3)
+    m = %{"x" => 1, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
+  #Expressão: x,y, x=1 e y=2
+  test "Decompoe arvore em c e faz subtração utilzando s e m" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("sub") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(-1)
+    m = %{"x" => 1, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
+  #Expressão: x*y, x=1 e y=2
+  test "Decompoe arvore em c e faz multiplicação utilzando s e m" do
+    c = Stack.new
+        |> Stack.push(Tree.new("mult") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(2)
+    m = %{"x" => 1, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
+  #Expressão: x/y, x=2 e y=1
+  test "Decompoe arvore em c e faz divisao utilzando s e m" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("div") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(2)
+    m = %{"x" => 2, "y" => 1}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   #Expressão: 5 + 5 - 2
@@ -154,6 +202,8 @@ defmodule SMCTest do
     
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
+
+
 
   @doc "Testes booleanos"
   test "Igualdade booleana" do
