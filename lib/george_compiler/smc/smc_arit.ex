@@ -1,35 +1,43 @@
 defmodule GeorgeCompiler.SMC.Arit do
     @operations %{  
-        "add" => &GeorgeCompiler.SMC.Arit.add/1, 
-        "sub" => &GeorgeCompiler.SMC.Arit.sub/1,
-        "mult"=> &GeorgeCompiler.SMC.Arit.mult/1,
-        "div"=> &GeorgeCompiler.SMC.Arit.div/1
+        "add" => &GeorgeCompiler.SMC.Arit.add/2, 
+        "sub" => &GeorgeCompiler.SMC.Arit.sub/2,
+        "mult"=> &GeorgeCompiler.SMC.Arit.mult/2,
+        "div"=> &GeorgeCompiler.SMC.Arit.div/2
     }
 
     def artit_exp(operation, s, m, c) do
         expression = @operations[operation]
-        {expression.(s), m, c}
+        {expression.(s, m), m, c}
     end
 
-    def add(s)do
+    def add(s, m)do
         {x,y,s} = StackUtils.pop_twice(s)
-        Stack.push(s, x+y)
+        Stack.push(s, get_value(x, m) + get_value(y, m))
     end
 
-    def mult(s)do
+    def mult(s, m)do
         {x,y,s} = StackUtils.pop_twice(s)
-        Stack.push(s, y*x)
+        Stack.push(s, get_value(x, m) * get_value(y, m))
+    end
+
+    defp get_value(value, m) do
+        if is_binary(value) do
+            m[value]
+        else
+            value
+        end
     end
 
     @doc "Subtração e divisão sendo feitas ao contrário para compensar ordem da pilha"
-    def sub(s)do
+    def sub(s, m)do
         {x,y,s} = StackUtils.pop_twice(s)
-        Stack.push(s, y-x)
+        Stack.push(s, get_value(y, m) - get_value(x, m))
     end
 
-    def div(s)do
+    def div(s, m)do
         {x,y,s} = StackUtils.pop_twice(s)
-        Stack.push(s, y/x)
+        Stack.push(s, get_value(y, m) / get_value(x, m))
     end
 
     def is_arit_exp(operation), do: Map.has_key? @operations, operation
