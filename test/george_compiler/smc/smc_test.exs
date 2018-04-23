@@ -297,4 +297,25 @@ defmodule SMCTest do
     m = %{"var" => 5}
     assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, m, Stack.new}
   end
+
+  test "if sem else" do
+    greater = Tree.new("gt")
+              |> Tree.add_leaf(6)
+              |> Tree.add_leaf(5)
+    sum = Tree.new("add")
+            |> Tree.add_leaf(2)
+            |> Tree.add_leaf(2)
+    sub = Tree.new("sub")
+            |> Tree.add_leaf(2)
+            |> Tree.add_leaf(2)
+
+    if_tree = Tree.new("if")
+                |> Tree.add_leaf(greater)
+                |> Tree.add_leaf(sum)
+                |> Tree.add_leaf(sub)
+    c = Stack.new
+        |> Stack.push(if_tree)
+    
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new |> Stack.push(4), %{}, Stack.new}
+  end
 end

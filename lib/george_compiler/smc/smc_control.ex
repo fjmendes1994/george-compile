@@ -49,12 +49,11 @@ defmodule GeorgeCompiler.SMC.Control do
 
     defp if_decompose(tree, s, m, c) do
         c = c
-            |> StackUtils.push_as_tree(tree.value)
             |> Stack.push(Enum.at(tree.leafs, 0))
         s = s
             |> Stack.push(Enum.at(tree.leafs, 2))
             |> Stack.push(Enum.at(tree.leafs, 1))
-        {s, m, c}
+        IO.inspect {s, m, c}
     end
 
     def is_control(operation), do: Map.has_key? @operations, operation

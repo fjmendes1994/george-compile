@@ -13,7 +13,6 @@ defmodule Tree do
     end
     
     def add_leaf(tree, value) when is_map(value) do
-        IO.inspect value
         %{tree | leafs: tree.leafs ++ [value]}
     end
 
