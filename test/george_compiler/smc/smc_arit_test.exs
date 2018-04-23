@@ -79,6 +79,6 @@ defmodule SMCAritTest do
                     |> Stack.push(Tree.new("add")) 
                     |> Stack.push(Tree.new(3)) 
                     |> Stack.push(Tree.new(5))
-        assert GeorgeCompiler.SMC.Arit.arit_decompose_tree(tree, Stack.new) == decomposed
+        assert GeorgeCompiler.SMC.Arit.arit_decompose_tree(tree, Stack.new, %{} , Stack.new) == {Stack.new , %{}, decomposed}
     end
 end

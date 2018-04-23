@@ -35,9 +35,9 @@ defmodule GeorgeCompiler.SMC.Arit do
     def is_arit_exp(operation), do: Map.has_key? @operations, operation
 
     @doc "Usado para inserir o tipo de operação no topo da pilha antes de empilhar os valores"
-    def arit_decompose_tree(tree, c) do
-       tree 
-       |> push_values(StackUtils.push_as_tree(c, tree.value))
+    def arit_decompose_tree(tree, s, m, c) do
+       {s, m, tree 
+                |> push_values(StackUtils.push_as_tree(c, tree.value))}
     end
 
     defp get_value(value, m) do

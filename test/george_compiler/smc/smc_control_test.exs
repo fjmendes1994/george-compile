@@ -12,6 +12,4 @@ defmodule SMCControlTest do
 
         assert atrib(s, %{}, Stack.new) == {Stack.new, m, Stack.new}
     end
-
-    
 end

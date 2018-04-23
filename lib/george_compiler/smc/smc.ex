@@ -17,15 +17,15 @@ defmodule GeorgeCompiler.SMC do
         if Tree.is_leaf node do 
             modify_s(node, s, m, c)
         else
-            {s, m, decompose_tree(node, c)}
+            decompose_tree(node, s, m, c)
         end
     end
 
-    defp decompose_tree(tree, c) do
+    defp decompose_tree(tree, s, m, c) do
         cond do
-            is_arit_exp(tree.value) -> arit_decompose_tree(tree, c)
-            is_bool_exp(tree.value) -> bool_decompose_tree(tree, c)
-            is_control(tree.value) -> control_decompose_tree(tree, c)
+            is_arit_exp(tree.value) -> arit_decompose_tree(tree, s, m, c)
+            is_bool_exp(tree.value) -> bool_decompose_tree(tree, s, m, c)
+            is_control(tree.value) -> control_decompose_tree(tree, s, m, c) 
         end
     end
 
