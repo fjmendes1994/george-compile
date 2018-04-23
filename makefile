@@ -1,4 +1,6 @@
 EXECS=george_compiler
+path=examples
+file=fact.imp
 
 manjaro-install:
 	sudo pacman -S elixir
@@ -20,7 +22,6 @@ build:
 	mix escript.build
 
 run:
-	./george_compiler --file=${file}
 	./george_compiler --path=${path} --file=${file}
 
 clean:
