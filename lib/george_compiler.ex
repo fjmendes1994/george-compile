@@ -15,6 +15,4 @@ defmodule GeorgeCompiler do
                                 print(j)" ) |> IO.inspect()
 #    GeorgeCompiler.Parser.parse!("ab := 2 + 3" )                       |> IO.inspect()
 #    GeorgeCompiler.Parser.parse!("ab := 2 > 3" )                       |> IO.inspect()
-
-
 end

@@ -40,7 +40,7 @@ defmodule GeorgeCompiler.SMC.Control do
             #coloca o comando no topo da pilha c e o while em seguida
             {s, m, c
                     |> Stack.push(tree)
-                    |> Stack.push(c)}
+                    |> Stack.push(code)}
         else
             {s, m, c}
         end

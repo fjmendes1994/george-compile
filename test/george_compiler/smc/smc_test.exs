@@ -374,4 +374,39 @@ defmodule SMCTest do
 				|> Stack.push(5)
 		assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}		
   end
+
+  test "While não executando" do
+    condition = Tree.new("eq")
+                |> Tree.add_leaf(4)
+                |> Tree.add_leaf(3)
+    sum = Tree.new
+
+    while = Tree.new("while")
+            |> Tree.add_leaf(condition)
+            |> Tree.add_leaf(sum)
+    c = Stack.new
+        |> Stack.push(while)
+    
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, %{}, Stack.new}
+  end
+
+  test "While executando" do
+    condition = Tree.new("lt")
+                |> Tree.add_leaf("i")
+                |> Tree.add_leaf(5)
+    sum = Tree.new("add")
+                |> Tree.add_leaf("i")
+                |> Tree.add_leaf(1)
+    atrib = Tree.new("atrib")
+            |> Tree.add_leaf("i")
+            |> Tree.add_leaf(sum)
+
+    while = Tree.new("while")
+            |> Tree.add_leaf(condition)
+            |> Tree.add_leaf(atrib)
+     c = Stack.new
+        |> Stack.push(while)
+
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{"i" => 1}, c) == {Stack.new, %{"i" => 5}, Stack.new}
+  end
 end
