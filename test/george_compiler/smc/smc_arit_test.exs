@@ -12,7 +12,7 @@ defmodule SMCAritTest do
     end
 
     test "Multiplicação" do
-        assert create_s(2, 1) |> GeorgeCompiler.SMC.Arit.mult(%{})  == Stack.new |> Stack.push(2)
+        assert create_s(2, 1) |> GeorgeCompiler.SMC.Arit.mul(%{})  == Stack.new |> Stack.push(2)
     end
 
     test "Divisão" do
@@ -28,7 +28,7 @@ defmodule SMCAritTest do
     end
 
     test "Multiplicação usando x como variavel" do
-        assert create_s("x", 1) |> GeorgeCompiler.SMC.Arit.mult(%{"x" => 2})  == Stack.new |> Stack.push(2)
+        assert create_s("x", 1) |> GeorgeCompiler.SMC.Arit.mul(%{"x" => 2})  == Stack.new |> Stack.push(2)
     end
 
     test "Divisão usando x como variavel" do
@@ -44,7 +44,7 @@ defmodule SMCAritTest do
     end
 
     test "Multiplicação usando y como variavel" do
-        assert create_s(2, "y") |> GeorgeCompiler.SMC.Arit.mult(%{"y" => 1})  == Stack.new |> Stack.push(2)
+        assert create_s(2, "y") |> GeorgeCompiler.SMC.Arit.mul(%{"y" => 1})  == Stack.new |> Stack.push(2)
     end
 
     test "Divisão usando y como variavel" do
@@ -60,7 +60,7 @@ defmodule SMCAritTest do
     end
 
     test "Multiplicação usando x e y como variaveis" do
-        assert create_s("x", "y") |> GeorgeCompiler.SMC.Arit.mult(%{"x"=> 2, "y" => 1})  == Stack.new |> Stack.push(2)
+        assert create_s("x", "y") |> GeorgeCompiler.SMC.Arit.mul(%{"x"=> 2, "y" => 1})  == Stack.new |> Stack.push(2)
     end
 
     test "Divisão usando x e y como variaveis" do

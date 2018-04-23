@@ -2,6 +2,7 @@ defmodule GeorgeCompiler.SMC.Control do
     @operations %{
         "atrib" => &GeorgeCompiler.SMC.Control.atrib/3,
         "if" => &GeorgeCompiler.SMC.Control.if_control/3,
+        "while" => &GeorgeCompiler.SMC.Control.while/3,
         "seq" => nil
     }
 
@@ -26,12 +27,32 @@ defmodule GeorgeCompiler.SMC.Control do
         end
     end
 
+    def while(s, m, c) do
+        {condition, s} = Stack.pop(s)
+        {bool_exp, s} = Stack.pop(s)
+        {code, s} = Stack.pop(s)
+
+        if condition do
+            #constroi o while de novo
+            tree = Tree.new("while")
+                    |> Tree.add_leaf(bool_exp)
+                    |> Tree.add_leaf(code)
+            #coloca o comando no topo da pilha c e o while em seguida
+            {s, m, c
+                    |> Stack.push(tree)
+                    |> Stack.push(code)}
+        else
+            {s, m, c}
+        end
+    end
+
     def control_decompose_tree(tree, s, m, c) do
         c = c
             |> StackUtils.push_as_tree(tree.value)
         case tree.value do
             "atrib" -> atrib_decompose(tree, s, m, c)
             "if" -> if_decompose(tree, s, m, c)
+            "while" -> while_decompose(tree, s, m, c)
             "seq" -> sequence_decompose(tree, s, m, c)
         end
     end
@@ -50,11 +71,20 @@ defmodule GeorgeCompiler.SMC.Control do
     end
 
     defp if_decompose(tree, s, m, c) do
-        c = c
-            |> Stack.push(Enum.at(tree.leafs, 0))
         s = s
             |> Stack.push(Enum.at(tree.leafs, 2))
             |> Stack.push(Enum.at(tree.leafs, 1))
+        c = c
+            |> Stack.push(Enum.at(tree.leafs, 0))
+        {s, m, c}
+    end
+
+    defp while_decompose(tree, s, m, c) do
+        s = s
+            |> Stack.push(Enum.at(tree.leafs, 1))
+            |> Stack.push(Enum.at(tree.leafs, 0))
+        c = c
+            |> Stack.push(Enum.at(tree.leafs, 0))
         {s, m, c}
     end
 
