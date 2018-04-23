@@ -346,14 +346,32 @@ defmodule SMCTest do
               |> Tree.add_leaf(6)
               |> Tree.add_leaf(5)
     sum = Tree.new("add")
-            |> Tree.add_leaf(2)
-            |> Tree.add_leaf(2)
+					|> Tree.add_leaf(2)
+					|> Tree.add_leaf(2)
     if_tree = Tree.new("if")
-                |> Tree.add_leaf(greater)
-                |> Tree.add_leaf(sum)
-                |> Tree.add_leaf(nil)
+							|> Tree.add_leaf(greater)
+							|> Tree.add_leaf(sum)
+							|> Tree.add_leaf(nil)
     c = Stack.new
         |> Stack.push(if_tree)
     assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, %{}, Stack.new}
+  end
+
+	test "Sequencia" do
+		sum = Tree.new("add")
+					|> Tree.add_leaf(5)
+					|> Tree.add_leaf(4)
+		div = Tree.new("div")
+					|> Tree.add_leaf(10)
+					|> Tree.add_leaf(2)
+		tree = Tree.new("seq")
+						|> Tree.add_leaf(sum)
+						|> Tree.add_leaf(div)
+		c = Stack.new
+				|> Stack.push(tree)
+		s = Stack.new
+				|> Stack.push(9)
+				|> Stack.push(5)
+		assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}		
   end
 end

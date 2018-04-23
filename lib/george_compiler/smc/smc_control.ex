@@ -1,7 +1,8 @@
 defmodule GeorgeCompiler.SMC.Control do
     @operations %{
         "atrib" => &GeorgeCompiler.SMC.Control.atrib/3,
-        "if" => &GeorgeCompiler.SMC.Control.if_control/3
+        "if" => &GeorgeCompiler.SMC.Control.if_control/3,
+        "seq" => nil
     }
 
     def control(exp, s, m, c) do
@@ -58,9 +59,10 @@ defmodule GeorgeCompiler.SMC.Control do
     end
 
     defp sequence_decompose(tree, s, m, c) do
+        {_, c} = Stack.pop(c)
         {s, m, c
-                |> Stack.push(Enum.at(tree.leafs, 0))
-                |> Stack.push(Enum.at(tree.leafs, 1))}
+                |> Stack.push(Enum.at(tree.leafs, 1))
+                |> Stack.push(Enum.at(tree.leafs, 0))}
     end
 
     def is_control(operation), do: Map.has_key? @operations, operation
