@@ -88,7 +88,7 @@ defmodule SMCTest do
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
-  #Expressão: 182
+  #Expressão: 1*2
   test "Decompoe arvore em c e faz multiplicação utilzando s" do
     c = Stack.new
         |> Stack.push(Tree.new("mult") 
@@ -108,6 +108,54 @@ defmodule SMCTest do
     s = Stack.new 
         |> Stack.push(2)
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+  end
+
+  #Expressão: x+y, x=1 e y=2
+  test "Decompoe arvore em c e faz adição utilzando s e m" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("add") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+      |> Stack.push(3)
+    m = %{"x" => 1, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
+  #Expressão: x,y, x=1 e y=2
+  test "Decompoe arvore em c e faz subtração utilzando s e m" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("sub") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(-1)
+    m = %{"x" => 1, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
+  #Expressão: x*y, x=1 e y=2
+  test "Decompoe arvore em c e faz multiplicação utilzando s e m" do
+    c = Stack.new
+        |> Stack.push(Tree.new("mult") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(2)
+    m = %{"x" => 1, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
+  #Expressão: x/y, x=2 e y=1
+  test "Decompoe arvore em c e faz divisao utilzando s e m" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("div") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(2)
+    m = %{"x" => 2, "y" => 1}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   #Expressão: 5 + 5 - 2
@@ -155,6 +203,8 @@ defmodule SMCTest do
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
+
+
   @doc "Testes booleanos"
   test "Igualdade booleana" do
     c = Stack.new 
@@ -164,6 +214,17 @@ defmodule SMCTest do
     s = Stack.new 
         |> Stack.push(true)
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "Igualdade booleana com variaveis" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("eq") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(true)
+    m = %{"x" => 5, "y" => 5}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   test "Maior que" do
@@ -176,6 +237,17 @@ defmodule SMCTest do
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
+  test "Maior que com variaveis" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("gt") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(true)
+    m = %{"x" => 3, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
   test "Menor que" do
     c = Stack.new 
         |> Stack.push(Tree.new("lt") 
@@ -186,6 +258,17 @@ defmodule SMCTest do
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
+  test "Menor que com variaveis" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("lt") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(true)
+    m = %{"x" => 1, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
   test "Negação booleana" do
     c = Stack.new 
         |> Stack.push(Tree.new("not") 
@@ -193,5 +276,102 @@ defmodule SMCTest do
     s = Stack.new 
         |> Stack.push(true)
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "Negação booleana com variavel" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("not") 
+                      |> Tree.add_leaf("x"))
+    s = Stack.new 
+        |> Stack.push(true)
+    m = %{"x" => false}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
+  @doc "Atribuição e desvios"
+  test "Atribuição com árvore" do
+    c = Stack.new
+        |> Stack.push(Tree.new("atrib")
+                      |> Tree.add_leaf("var")
+                      |> Tree.add_leaf(5))
+    m = %{"var" => 5}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, m, Stack.new}
+  end
+
+  test "if com else entrando no if" do
+    greater = Tree.new("gt")
+              |> Tree.add_leaf(6)
+              |> Tree.add_leaf(5)
+    sum = Tree.new("add")
+            |> Tree.add_leaf(2)
+            |> Tree.add_leaf(2)
+    sub = Tree.new("sub")
+            |> Tree.add_leaf(2)
+            |> Tree.add_leaf(2)
+
+    if_tree = Tree.new("if")
+                |> Tree.add_leaf(greater)
+                |> Tree.add_leaf(sum)
+                |> Tree.add_leaf(sub)
+    c = Stack.new
+        |> Stack.push(if_tree)
+    s = Stack.new
+        |> Stack.push(4)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "if com else entrando no else" do
+    greater = Tree.new("lt")
+              |> Tree.add_leaf(6)
+              |> Tree.add_leaf(5)
+    sum = Tree.new("add")
+            |> Tree.add_leaf(2)
+            |> Tree.add_leaf(2)
+    sub = Tree.new("sub")
+            |> Tree.add_leaf(2)
+            |> Tree.add_leaf(2)
+    if_tree = Tree.new("if")
+                |> Tree.add_leaf(greater)
+                |> Tree.add_leaf(sum)
+                |> Tree.add_leaf(sub)
+    c = Stack.new
+        |> Stack.push(if_tree)
+    s = Stack.new
+        |> Stack.push(0)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "if sem else entrando no else" do
+    greater = Tree.new("lt")
+              |> Tree.add_leaf(6)
+              |> Tree.add_leaf(5)
+    sum = Tree.new("add")
+					|> Tree.add_leaf(2)
+					|> Tree.add_leaf(2)
+    if_tree = Tree.new("if")
+							|> Tree.add_leaf(greater)
+							|> Tree.add_leaf(sum)
+							|> Tree.add_leaf(nil)
+    c = Stack.new
+        |> Stack.push(if_tree)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, %{}, Stack.new}
+  end
+
+	test "Sequencia" do
+		sum = Tree.new("add")
+					|> Tree.add_leaf(5)
+					|> Tree.add_leaf(4)
+		div = Tree.new("div")
+					|> Tree.add_leaf(10)
+					|> Tree.add_leaf(2)
+		tree = Tree.new("seq")
+						|> Tree.add_leaf(sum)
+						|> Tree.add_leaf(div)
+		c = Stack.new
+				|> Stack.push(tree)
+		s = Stack.new
+				|> Stack.push(9)
+				|> Stack.push(5)
+		assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}		
   end
 end
