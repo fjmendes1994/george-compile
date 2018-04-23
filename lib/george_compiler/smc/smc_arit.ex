@@ -21,14 +21,6 @@ defmodule GeorgeCompiler.SMC.Arit do
         Stack.push(s, get_value(x, m) * get_value(y, m))
     end
 
-    defp get_value(value, m) do
-        if is_binary(value) do
-            m[value]
-        else
-            value
-        end
-    end
-
     @doc "Subtração e divisão sendo feitas ao contrário para compensar ordem da pilha"
     def sub(s, m)do
         {x,y,s} = StackUtils.pop_twice(s)
@@ -46,6 +38,14 @@ defmodule GeorgeCompiler.SMC.Arit do
     def arit_decompose_tree(tree, c) do
        tree 
        |> push_values(StackUtils.push_as_tree(c, tree.value))
+    end
+
+    defp get_value(value, m) do
+        if is_binary(value) do
+            m[value]
+        else
+            value
+        end
     end
 
     defp push_values(tree, c) do
