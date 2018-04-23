@@ -216,6 +216,17 @@ defmodule SMCTest do
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
+  test "Igualdade booleana com variaveis" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("eq") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(true)
+    m = %{"x" => 5, "y" => 5}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
   test "Maior que" do
     c = Stack.new 
         |> Stack.push(Tree.new("gt") 
@@ -224,6 +235,17 @@ defmodule SMCTest do
     s = Stack.new 
         |> Stack.push(true)
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "Maior que com variaveis" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("gt") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(true)
+    m = %{"x" => 3, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   test "Menor que" do
@@ -236,6 +258,17 @@ defmodule SMCTest do
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
+  test "Menor que com variaveis" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("lt") 
+                      |> Tree.add_leaf("x") 
+                      |> Tree.add_leaf("y"))
+    s = Stack.new 
+        |> Stack.push(true)
+    m = %{"x" => 1, "y" => 2}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+  end
+
   test "Negação booleana" do
     c = Stack.new 
         |> Stack.push(Tree.new("not") 
@@ -243,6 +276,17 @@ defmodule SMCTest do
     s = Stack.new 
         |> Stack.push(true)
     assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "Negação booleana com variavel" do
+    c = Stack.new 
+        |> Stack.push(Tree.new("not") 
+                      |> Tree.add_leaf("x"))
+    s = Stack.new 
+        |> Stack.push(true)
+
+    m = %{"x" => false}
+    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   @doc "Atribuição e desvios"
