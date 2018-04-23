@@ -1,6 +1,7 @@
 defmodule GeorgeCompiler.SMC.Control do
     @operations %{
-        "atrib" => &GeorgeCompiler.SMC.Control.atrib/3
+        "atrib" => &GeorgeCompiler.SMC.Control.atrib/3,
+        "if" => &GeorgeCompiler.SMC.Control.if_control/3
     }
 
     def control(exp, s, m, c) do
@@ -11,6 +12,17 @@ defmodule GeorgeCompiler.SMC.Control do
     def atrib(s, m, c) do
         {value, var, s} = StackUtils.pop_twice(s)
         {s, Map.put(m, var, value), c}
+    end
+
+    def if_control(s, m, c) do
+        {condition, s} = Stack.pop(s)
+        {if_block, s} = Stack.pop(s)
+        {else_block, s} = Stack.pop(s)
+        if condition do
+            {s, m, Stack.push(c, if_block)}
+        else
+            {s, m, Stack.push(c, else_block)}
+        end
     end
 
     def control_decompose_tree(tree, s, m, c) do
@@ -36,7 +48,13 @@ defmodule GeorgeCompiler.SMC.Control do
     end
 
     defp if_decompose(tree, s, m, c) do
-        
+        c = c
+            |> StackUtils.push_as_tree(tree.value)
+            |> Stack.push(Enum.at(tree.leafs, 0))
+        s = s
+            |> Stack.push(Enum.at(tree.leafs, 2))
+            |> Stack.push(Enum.at(tree.leafs, 1))
+        {s, m, c}
     end
 
     def is_control(operation), do: Map.has_key? @operations, operation
