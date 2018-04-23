@@ -15,7 +15,11 @@ defmodule GeorgeCompiler.SMC do
 
     def do_operation(node, s, m, c) do
         if Tree.is_leaf node do 
-            modify_s(node, s, m, c)
+            unless TreeUtils.is_nil(node) do
+                modify_s(node, s, m, c)
+            else
+                {s, m, c}
+            end
         else
             decompose_tree(node, s, m, c)
         end

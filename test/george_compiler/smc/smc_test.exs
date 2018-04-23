@@ -298,7 +298,7 @@ defmodule SMCTest do
     assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, m, Stack.new}
   end
 
-  test "if sem else" do
+  test "if com else entrando no if" do
     greater = Tree.new("gt")
               |> Tree.add_leaf(6)
               |> Tree.add_leaf(5)
@@ -315,7 +315,45 @@ defmodule SMCTest do
                 |> Tree.add_leaf(sub)
     c = Stack.new
         |> Stack.push(if_tree)
-    
-    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new |> Stack.push(4), %{}, Stack.new}
+    s = Stack.new
+        |> Stack.push(4)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "if com else entrando no else" do
+    greater = Tree.new("lt")
+              |> Tree.add_leaf(6)
+              |> Tree.add_leaf(5)
+    sum = Tree.new("add")
+            |> Tree.add_leaf(2)
+            |> Tree.add_leaf(2)
+    sub = Tree.new("sub")
+            |> Tree.add_leaf(2)
+            |> Tree.add_leaf(2)
+    if_tree = Tree.new("if")
+                |> Tree.add_leaf(greater)
+                |> Tree.add_leaf(sum)
+                |> Tree.add_leaf(sub)
+    c = Stack.new
+        |> Stack.push(if_tree)
+    s = Stack.new
+        |> Stack.push(0)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
+  end
+
+  test "if sem else entrando no else" do
+    greater = Tree.new("lt")
+              |> Tree.add_leaf(6)
+              |> Tree.add_leaf(5)
+    sum = Tree.new("add")
+            |> Tree.add_leaf(2)
+            |> Tree.add_leaf(2)
+    if_tree = Tree.new("if")
+                |> Tree.add_leaf(greater)
+                |> Tree.add_leaf(sum)
+                |> Tree.add_leaf(nil)
+    c = Stack.new
+        |> Stack.push(if_tree)
+    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, %{}, Stack.new}
   end
 end

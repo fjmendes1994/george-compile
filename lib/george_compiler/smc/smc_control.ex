@@ -53,7 +53,7 @@ defmodule GeorgeCompiler.SMC.Control do
         s = s
             |> Stack.push(Enum.at(tree.leafs, 2))
             |> Stack.push(Enum.at(tree.leafs, 1))
-        {s, m, c}
+        IO.inspect {s, m, c}
     end
 
     def is_control(operation), do: Map.has_key? @operations, operation
