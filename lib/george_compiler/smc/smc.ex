@@ -15,7 +15,7 @@ defmodule GeorgeCompiler.SMC do
 
     def do_operation(node, s, m, c) do
         if Tree.is_leaf node do 
-            unless TreeUtils.is_nil(node) do
+            unless TreeUtils.is_nil(node) and node.value != ";" do
                 modify_s(node, s, m, c)
             else
                 {s, m, c}

@@ -31,6 +31,7 @@ defmodule GeorgeCompiler.SMC.Control do
         case tree.value do
             "atrib" -> atrib_decompose(tree, s, m, c)
             "if" -> if_decompose(tree, s, m, c)
+            "seq" -> sequence_decompose(tree, s, m, c)
         end
     end
 
@@ -53,7 +54,13 @@ defmodule GeorgeCompiler.SMC.Control do
         s = s
             |> Stack.push(Enum.at(tree.leafs, 2))
             |> Stack.push(Enum.at(tree.leafs, 1))
-        IO.inspect {s, m, c}
+        {s, m, c}
+    end
+
+    defp sequence_decompose(tree, s, m, c) do
+        {s, m, c
+                |> Stack.push(Enum.at(tree.leafs, 0))
+                |> Stack.push(Enum.at(tree.leafs, 1))}
     end
 
     def is_control(operation), do: Map.has_key? @operations, operation
