@@ -53,9 +53,7 @@ defmodule GeorgeCompiler.SMC.Bool do
         Stack.push(s, x or y)
     end
 
-    def is_bool_exp(operation) do
-        Map.has_key? @operations, operation
-    end
+    def is_bool_exp(operation), do: Map.has_key? @operations, operation
 
     def bool_decompose_tree(tree, c) do
         tree 
