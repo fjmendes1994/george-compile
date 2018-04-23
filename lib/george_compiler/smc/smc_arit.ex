@@ -12,23 +12,23 @@ defmodule GeorgeCompiler.SMC.Arit do
     end
 
     def add(s)do
-        {x,y,s} = pop_twice(s)
+        {x,y,s} = StackUtils.pop_twice(s)
         Stack.push(s, x+y)
     end
 
     def mult(s)do
-        {x,y,s} = pop_twice(s)
+        {x,y,s} = StackUtils.pop_twice(s)
         Stack.push(s, y*x)
     end
 
     @doc "Subtração e divisão sendo feitas ao contrário para compensar ordem da pilha"
     def sub(s)do
-        {x,y,s} = pop_twice(s)
+        {x,y,s} = StackUtils.pop_twice(s)
         Stack.push(s, y-x)
     end
 
     def div(s)do
-        {x,y,s} = pop_twice(s)
+        {x,y,s} = StackUtils.pop_twice(s)
         Stack.push(s, y/x)
     end
 
@@ -45,19 +45,13 @@ defmodule GeorgeCompiler.SMC.Arit do
     defp push_values(tree, c) do
         elem = Enum.at(tree.leafs,0)
         if length(tree.leafs) > 1 do
-            %{tree | leafs: tree.leafs 
-                            |> Enum.drop(1)} 
+            tree
+            |> TreeUtils.remove_first_leaf
             |> push_values(c) 
             |> Stack.push(elem)
         else
             c 
             |> Stack.push(elem)
         end
-    end
-
-    defp pop_twice(s) do
-        {x,s} = Stack.pop(s)
-        {y,s} = Stack.pop(s)
-        {x,y,s}
     end
 end
