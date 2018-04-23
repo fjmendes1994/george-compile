@@ -5,11 +5,11 @@ defmodule GeorgeCompiler.SMC.Control do
 
     def control(exp, s, m) do
         operation = @operations[exp]
-        {s, m} = operation.(s,m)
+        operation.(s,m)
     end
 
     def atrib(s, m) do
-        {value, var, s} = pop_twice(s)
+        {value, var, s} = StackUtils.pop_twice(s)
         {s, Map.put(m, var, value)}
     end
 
@@ -24,8 +24,8 @@ defmodule GeorgeCompiler.SMC.Control do
     defp atrib_decompose(tree, c) do
         elem = Enum.at(tree.leafs,0)
         if length(tree.leafs) > 1 do
-            %{tree | leafs: tree.leafs 
-                            |> Enum.drop(1)} 
+            tree
+            |> TreeUtils.remove_first_leaf
             |> atrib_decompose(c) 
             |> Stack.push(elem)
         else
@@ -35,10 +35,4 @@ defmodule GeorgeCompiler.SMC.Control do
     end
 
     def is_control(operation), do: Map.has_key? @operations, operation
-
-    def pop_twice(s) do
-        {a, s} = Stack.pop(s) 
-        {b, s} = Stack.pop(s)
-        {a, b, s}
-    end
 end
