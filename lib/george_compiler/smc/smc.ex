@@ -25,7 +25,7 @@ defmodule GeorgeCompiler.SMC do
         cond do
             is_arit_exp(tree.value) -> arit_decompose_tree(tree, s, m, c)
             is_bool_exp(tree.value) -> bool_decompose_tree(tree, s, m, c)
-            is_control(tree.value) -> IO.inspect control_decompose_tree(tree, s, m, c) 
+            is_control(tree.value) -> control_decompose_tree(tree, s, m, c) 
         end
     end
 
