@@ -1,17 +1,16 @@
 defmodule GeorgeCompiler.SMC.Control do
     @operations %{
-        "atrib" => &GeorgeCompiler.SMC.Control.atrib/2
+        "atrib" => &GeorgeCompiler.SMC.Control.atrib/3
     }
 
     def control(exp, s, m, c) do
         operation = @operations[exp]
-        {s, m} = operation.(s,m)
-        {s, m, c}
+        operation.(s, m, c)
     end
 
-    def atrib(s, m) do
+    def atrib(s, m, c) do
         {value, var, s} = StackUtils.pop_twice(s)
-        {s, Map.put(m, var, value)}
+        {s, Map.put(m, var, value), c}
     end
 
     def control_decompose_tree(tree, c) do

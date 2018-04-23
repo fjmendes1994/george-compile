@@ -10,7 +10,7 @@ defmodule SMCControlTest do
             |> Stack.push(5)
         m = %{"var" => 5}
 
-        assert atrib(s, %{}) == {Stack.new, m}
+        assert atrib(s, %{}, Stack.new) == {Stack.new, m, Stack.new}
     end
 
     
