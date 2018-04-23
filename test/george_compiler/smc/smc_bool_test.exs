@@ -163,6 +163,22 @@ defmodule SMCBoolTest do
         assert lesser_than(s, m) == Stack.new |> Stack.push(true)
     end
 
+    test "maior igual que verdadeiro com variaveis" do
+        s = Stack.new 
+            |> Stack.push("x") 
+            |> Stack.push("y") 
+        m = %{"x" => 5, "y" => 3}
+        assert greater_equals_than(s, m) == Stack.new |> Stack.push(true)
+    end
+
+    test "menor igual que verdadeiro com variaveis" do
+        s = Stack.new 
+            |> Stack.push("x") 
+            |> Stack.push("y") 
+        m = %{"x" => 3, "y" => 5}
+        assert lesser_equals_than(s, m) == Stack.new |> Stack.push(true)
+    end
+
     test "teste de and verdadeiro com variaveis" do
         s = Stack.new 
             |> Stack.push("x") 
