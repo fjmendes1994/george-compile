@@ -1,7 +1,7 @@
 defmodule GeorgeCompiler.SMC.Bool do
     @operations %{
         "eq" => &GeorgeCompiler.SMC.Bool.equals/2,
-        "not" => &GeorgeCompiler.SMC.Bool.nt/2,
+        "neg" => &GeorgeCompiler.SMC.Bool.nt/2,
         "gt" => &GeorgeCompiler.SMC.Bool.greater_than/2,
         "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/2,
         "ge" => &GeorgeCompiler.SMC.Bool.greater_than/2,

@@ -271,7 +271,7 @@ defmodule SMCTest do
 
   test "Negação booleana" do
     c = Stack.new 
-        |> Stack.push(Tree.new("not") 
+        |> Stack.push(Tree.new("neg") 
                       |> Tree.add_leaf(false))
     s = Stack.new 
         |> Stack.push(true)
@@ -280,7 +280,7 @@ defmodule SMCTest do
 
   test "Negação booleana com variavel" do
     c = Stack.new 
-        |> Stack.push(Tree.new("not") 
+        |> Stack.push(Tree.new("neg") 
                       |> Tree.add_leaf("x"))
     s = Stack.new 
         |> Stack.push(true)
