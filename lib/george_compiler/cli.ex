@@ -11,7 +11,7 @@ defmodule GeorgeCompiler.CLI do
 
   def process(options) do
       case GeorgeCompiler.FileReader.readFile(options[:path],options[:file]) do
-        {:ok, file_content} -> GeorgeCompiler.Parser.parse!(file_content) |> start_smc |> IO.inspect
+        {:ok, file_content} -> GeorgeCompiler.eval_file(file_content)
         {:error, msg} -> IO.inspect msg
       end
   end
@@ -21,8 +21,5 @@ defmodule GeorgeCompiler.CLI do
    options
   end
 
-  defp start_smc(tree) do
-    GeorgeCompiler.SMC.evaluate(Stack.new, %{}, Stack.new |> Stack.push(tree))
-  end
 
 end
