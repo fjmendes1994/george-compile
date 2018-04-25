@@ -1,0 +1,7 @@
+i := 5;
+fact := i;
+while (i > 0)
+{
+    fact := fact * i; 
+    i := i - 1
+}

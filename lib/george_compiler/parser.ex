@@ -2,57 +2,6 @@ defmodule GeorgeCompiler.Parser do
 
   use Neotomex.ExGrammar
 
-  @root true
-
-  # Expressoes
-  define :CommandDecl, "atrib / Expression"
-
-  define :Expression, "ExpressionDecl / PredicateDecl"
-
-  # Expressoes aritimeticas
-
-  define :ExpressionDecl, "sum / sub / div / mul / rem"
-
-  define :sum, "ident  sumOp  ExpressionDecl / ident  sumOp ident"
-  define :sub, "ident  subOp  ExpressionDecl / ident  subOp  ident"
-  define :div, "ident  divOp  ExpressionDecl / ident  divOp  ident"
-  define :mul, "ident  mulOp  ExpressionDecl / ident  mulOp  ident"
-  define :rem, "ident  remOp  ExpressionDecl / ident  remOp  ident"
-
-  # Operações Booleanas
-  define :PredicateDecl, "equals / greaterEquals / lessEquals / greater / less / notEquals"
-
-  define :notEquals,     "ident notEqualsOp     ident"
-  define :equals,        "ident equalsOp        ident"
-  define :greater,       "ident greaterOp       ident"
-  define :less,          "ident lessOp          ident"
-  define :greaterEquals, "ident greaterEqualsOp ident"
-  define :lessEquals,    "ident lessEqualsOp    ident"
-  define :notExp,        "notOp PredicateDecl"
-
-  # Comandos
-
-    define :atrib, "ident atrOp value"
-
-    define :ident, "decimal / varName"
-
-
-  # Value
-
-  define :value, "Expression / decimal"
-
-  # Numeros
-
-  define :decimal, "decimalP / decimalN" do
-      digitis -> Enum.join(digitis)
-  end
-
-  define :decimalP, "digit+"
-
-  define :decimalN, "subOp digit+"
-
-  define :digit, "[0-9]"
-
   # Espaços
 
   define :space, "[ \\r\\n\\s\\t]*"
@@ -95,21 +44,174 @@ defmodule GeorgeCompiler.Parser do
   define :lessEqualsOp, "<space?> [<][=] <space?>" do
     x -> Enum.join(x)
   end
+  define :negOp, "[~]"
+  define :orOP, "<space?> <'or'> <space?>"
+  define :andOP, "<space?> <'and'> <space?>"
 
-  define :notOp, "[~]"
+  # Operadores de Comandos
+
+  define :assOp, "<space?> [:][=] <space?>" do
+    x -> Enum.join(x)
+  end
+  define :seqOp, "<space?> [;] <space?>"
+  define :comOp, "<space?> [,] <space?>"
+  define :iniOp, "<space?> [=] <space?>"
+  define :ifOp, "<space?> [i][f] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :elseOp, "<space?> [e][l][s][e] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :whileOp, "<space?> [w][h][i][l][e] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :printOp, "<space?> [p][r][i][n][t] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :exitOp, "<space?> [e][x][i][t] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :seqOp, "<space?> [;] <space?>" do
+    [x] -> x
+  end
+  define :choOp, "<space?> [|] <space?>" do
+    [x] -> x
+  end
+
+  # Numeros
+
+  define :digit, "[0-9]"
+  define :decimalP, "digit+"
+  define :decimalN, "subOp digit+"
+  define :decimal, "decimalP / decimalN" do
+    digitis -> Enum.join(digitis) |> String.to_integer
+  end
 
   # Nome de Variaveis
 
-  #Usar letter e digit está caindo em recurão infinita
-  #TODO: Mudar a regra a-zA-Z0-9 para letter,digit*
-  define :varName, "letter[a-zA-Z0-9]*" do
-    letter -> Enum.join(letter)
-  end
-
   define :letter, "[a-zA-Z]"
-
-  define :atrOp, "<space?> [:][=] <space?>" do
+  define :lowcase, "[a-z]+"
+  define :upcase, "[A-Z]+"
+  define :word, "lowcase* upcase / lowcase upcase*" do
     x -> Enum.join(x)
   end
 
+  define :ident, "word digit* ident?" do
+    x -> Enum.join(x)
+  end
+
+  # Chaves e parenteses
+  define :lp, "<space?> [(] <space?>"
+  define :rp, "<space?> [)] <space?>"
+  define :lk, "<space?> [{] <space?>"
+  define :rk, "<space?> [}] <space?>"
+
+
+  # Expressoes
+
+  define :Expression, "PredicateDecl / ExpressionDecl"
+
+  # Expressoes aritimeticas
+
+  define :ExpressionDecl, "PredicateDecl / additiveExp / decimal / ident"
+
+  define :additiveExp, "sum / sub / multitiveExp"
+
+  define :multitiveExp, "mul / rem / div"
+
+  define :sum, "(decimal / ident) sumOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("add") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+
+  define :sub, "(decimal / ident) subOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("sub") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+
+  define :div, "(decimal / ident) divOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("div") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+
+  define :mul, "(decimal / ident) mulOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("mul") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+
+  define :rem, "(decimal / ident) remOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("rem") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+
+  # Expressoes Booleanas
+
+  define :PredicateDecl, "and / or / boolExp"
+
+  define :boolExp, "<lp> boolExp <rp>/ negExp / equals / greaterEquals / lessEquals / greater / less / notEquals" do
+    [x] -> x
+    x -> x
+  end
+
+  define :notEquals, "(decimal / ident) notEqualsOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("neq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :equals, "(decimal / ident) equalsOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("eq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :greater, "(decimal / ident) greaterOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("gt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :less, "(decimal / ident) lessOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("lt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :greaterEquals, "(decimal / ident) greaterEqualsOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("ge") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :lessEquals, "(decimal / ident) lessEqualsOp ExpressionDecl" do
+    [x,_,y] ->  Tree.new("le") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+  end
+  define :negExp, "negOp PredicateDecl" do
+    [_, x] ->  Tree.new("neg") |> Tree.add_leaf(x)
+  end
+
+  define :or, "boolExp orOP PredicateDecl" do
+    [x, predicate] -> Tree.new("or") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
+  end
+
+  define :and, "boolExp andOP PredicateDecl" do
+    [x,[], predicate] -> Tree.new("and") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
+  end
+
+  # Comandos
+  define :BlockCommandDecl, "<lk> CommandDecl+ <rk> "
+
+  @root true
+  define :CommandDecl, "choice / seq / cmd"
+
+  define :cmd, "atrib / if / while / print / exit / call / Expression"
+
+  define :atrib, "ident assOp Expression" do
+    [var , _, exp] -> Tree.new("atrib") |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
+  end
+
+  define :else, "elseOp (CommandDecl / BlockCommandDecl)" do
+    [_, block] -> block
+  end
+
+  define :if, "ifOp <lp> PredicateDecl <rp> (CommandDecl / BlockCommandDecl) else?" do
+    [_, predicate, [[block]], [[else_block]]] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(else_block)
+    [_, predicate, [[block]], nil_value] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil_value)
+  end
+
+  define :while, "whileOp <lp> PredicateDecl <rp> BlockCommandDecl" do
+    [_, predicate, [[block]]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
+  end
+
+  define :print, "printOp <lp> Expression <rp>"
+
+  define :exit, "exitOp <lp> Expression <rp>"
+
+  define :call, "ident <lp> Expression* <rp> "
+
+  define :seq, "cmd seqOp CommandDecl" do
+    [cmd, _, commandDecl] -> Tree.new("seq") |> Tree.add_leaf(cmd) |> Tree.add_leaf(commandDecl)
+  end
+
+  define :choice, "cmd choOp CommandDecl"
 end
