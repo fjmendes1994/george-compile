@@ -199,7 +199,7 @@ defmodule GeorgeCompiler.Parser do
     [_, predicate, [[block]], nil_value] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil_value)
   end
 
-  define :while, "whileOp <lp> PredicateDecl <rp> BlockCommandDecl" do
+  define :while, "whileOp <lp?> PredicateDecl <rp?> <space?><'do'><space?> BlockCommandDecl" do
     [_, predicate, [[block]]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 

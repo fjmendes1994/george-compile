@@ -1,6 +1,6 @@
 i := 5;
-fact := i;
-while (i > 0)
+fact := 1;
+while (i > 1) do
 {
     fact := fact * i; 
     i := i - 1
