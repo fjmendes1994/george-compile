@@ -143,7 +143,10 @@ defmodule GeorgeCompiler.Parser do
 
   define :PredicateDecl, "and / or / boolExp"
 
-  define :boolExp, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals"
+  define :boolExp, "<lp> boolExp <rp>/ negExp / equals / greaterEquals / lessEquals / greater / less / notEquals" do
+    [x] -> x
+    x -> x
+  end
 
   define :notEquals, "(decimal / ident) notEqualsOp ExpressionDecl" do
     [x,_,y] ->  Tree.new("neq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
