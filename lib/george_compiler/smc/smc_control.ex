@@ -13,7 +13,7 @@ defmodule GeorgeCompiler.SMC.Control do
 
     def atrib(s, m, c) do
         {value, var, s} = StackUtils.pop_twice(s)
-        {s, Map.put(m, var, value), c}
+        {s, Map.put(m, var, get_value(value,m)), c}
     end
 
     def if_control(s, m, c) do
@@ -96,4 +96,12 @@ defmodule GeorgeCompiler.SMC.Control do
     end
 
     def is_control(operation), do: Map.has_key? @operations, operation
+
+    defp get_value(value, m) do
+        if is_binary(value) do
+            m[value]
+        else
+            value
+        end
+    end
 end

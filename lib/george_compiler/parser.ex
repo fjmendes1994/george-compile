@@ -211,9 +211,4 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :choice, "cmd choOp CommandDecl"
-
-
-
-
-
 end
