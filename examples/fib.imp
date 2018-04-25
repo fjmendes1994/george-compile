@@ -6,5 +6,4 @@ while (k < 6) {
   i := j;
   j := t;
   k := k + 1
-};
-print(j)
+}
