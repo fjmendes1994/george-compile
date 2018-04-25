@@ -3,7 +3,8 @@ defmodule GeorgeCompiler.SMC.Arit do
         "add" => &GeorgeCompiler.SMC.Arit.add/2, 
         "sub" => &GeorgeCompiler.SMC.Arit.sub/2,
         "mul"=> &GeorgeCompiler.SMC.Arit.mul/2,
-        "div"=> &GeorgeCompiler.SMC.Arit.div/2
+        "div"=> &GeorgeCompiler.SMC.Arit.div/2,
+        "rem" => &GeorgeCompiler.SMC.Arit.rem_arit/2
     }
 
     def artit_exp(operation, s, m, c) do
@@ -30,6 +31,11 @@ defmodule GeorgeCompiler.SMC.Arit do
     def div(s, m)do
         {x,y,s} = StackUtils.pop_twice(s)
         Stack.push(s, get_value(y, m) / get_value(x, m))
+    end
+
+    def rem_arit(s, m)do
+        {x,y,s} = StackUtils.pop_twice(s)
+        Stack.push(s, rem(get_value(x, m), get_value(y, m)))
     end
 
     def is_arit_exp(operation), do: Map.has_key? @operations, operation
