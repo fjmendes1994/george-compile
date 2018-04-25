@@ -45,8 +45,8 @@ defmodule GeorgeCompiler.Parser do
     x -> Enum.join(x)
   end
   define :negOp, "[~]"
-  define :orOP, "<space?> [o][r] <space?>"
-  define :andOP, "<space?> [a][n][d] <space?>"
+  define :orOP, "<space?> <'or'> <space?>"
+  define :andOP, "<space?> <'and'> <space?>"
 
   # Operadores de Comandos
 
@@ -120,23 +120,23 @@ defmodule GeorgeCompiler.Parser do
   define :multitiveExp, "mul / rem / div"
 
   define :sum, "(decimal / ident) sumOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("add") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("add") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   define :sub, "(decimal / ident) subOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("sub") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("sub") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   define :div, "(decimal / ident) divOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("div") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("div") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   define :mul, "(decimal / ident) mulOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("mul") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("mul") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   define :rem, "(decimal / ident) remOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("rem") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("rem") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   # Expressoes Booleanas
@@ -146,28 +146,34 @@ defmodule GeorgeCompiler.Parser do
   define :boolExp, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals"
 
   define :notEquals, "(decimal / ident) notEqualsOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("neq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("neq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :equals, "(decimal / ident) equalsOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("eq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("eq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :greater, "(decimal / ident) greaterOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("gt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("gt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :less, "(decimal / ident) lessOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("lt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("lt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :greaterEquals, "(decimal / ident) greaterEqualsOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("ge") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("ge") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :lessEquals, "(decimal / ident) lessEqualsOp ExpressionDecl" do
-    [x,_,y] -> IO.inspect Tree.new("le") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,_,y] ->  Tree.new("le") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :negExp, "negOp PredicateDecl" do
-    [x,_,y] -> IO.inspect Tree.new("neg") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [_, x] ->  Tree.new("neg") |> Tree.add_leaf(x)
   end
-  define :or, "boolExp orOP PredicateDecl"
-  define :and, "boolExp andOP PredicateDecl"
+
+  define :or, "boolExp orOP PredicateDecl" do
+    [x, predicate] -> Tree.new("or") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
+  end
+
+  define :and, "boolExp andOP PredicateDecl" do
+    [x,[], predicate] -> Tree.new("and") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
+  end
 
   # Comandos
   define :BlockCommandDecl, "<lk> CommandDecl+ <rk> "
@@ -177,12 +183,22 @@ defmodule GeorgeCompiler.Parser do
 
   define :cmd, "atrib / if / while / print / exit / call / Expression"
 
-  define :atrib, "ident assOp Expression"
+  define :atrib, "ident assOp Expression" do
+    [var , _, exp] -> Tree.new("atrib") |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
+  end
 
-  define :else, "elseOp (CommandDecl / BlockCommandDecl)"
-  define :if, "ifOp <lp> PredicateDecl <rp> (CommandDecl / BlockCommandDecl) else?"
+  define :else, "elseOp (CommandDecl / BlockCommandDecl)" do
+    [_, block] -> block
+  end
 
-  define :while, "whileOp <lp> PredicateDecl <rp> BlockCommandDecl"
+  define :if, "ifOp <lp> PredicateDecl <rp> (CommandDecl / BlockCommandDecl) else?" do
+    [_, predicate, [[block]], [[else_block]]] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(else_block)
+    [_, predicate, [[block]], nil_value] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil_value)
+  end
+
+  define :while, "whileOp <lp> PredicateDecl <rp> BlockCommandDecl" do
+    [_, predicate, [[block]]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
+  end
 
   define :print, "printOp <lp> Expression <rp>"
 
@@ -190,7 +206,9 @@ defmodule GeorgeCompiler.Parser do
 
   define :call, "ident <lp> Expression* <rp> "
 
-  define :seq, "cmd seqOp CommandDecl"
+  define :seq, "cmd seqOp CommandDecl" do
+    [cmd, _, commandDecl] -> Tree.new("seq") |> Tree.add_leaf(cmd) |> Tree.add_leaf(commandDecl)
+  end
 
   define :choice, "cmd choOp CommandDecl"
 

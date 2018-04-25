@@ -5,7 +5,9 @@ defmodule GeorgeCompiler.SMC.Bool do
         "gt" => &GeorgeCompiler.SMC.Bool.greater_than/2,
         "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/2,
         "ge" => &GeorgeCompiler.SMC.Bool.greater_than/2,
-        "le" => &GeorgeCompiler.SMC.Bool.lesser_than/2
+        "le" => &GeorgeCompiler.SMC.Bool.lesser_than/2,
+        "or" => &GeorgeCompiler.SMC.Bool.bool_or/2,
+        "and" => &GeorgeCompiler.SMC.Bool.bool_or/2
     }
 
     def bool_exp(exp, s, m, c) do
