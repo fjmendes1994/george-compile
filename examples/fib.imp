@@ -1,7 +1,7 @@
 i := 0;
 j := 1;
 k := 1;
-while (k < 6) {
+while (k < 6) do {
   t := i + j;
   i := j;
   j := t;
