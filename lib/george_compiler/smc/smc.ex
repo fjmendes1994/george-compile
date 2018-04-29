@@ -3,6 +3,9 @@ defmodule GeorgeCompiler.SMC do
     import GeorgeCompiler.SMC.Bool
     import GeorgeCompiler.SMC.Control
 
+    @doc """
+    Operação que consome a pilha C para aplicação das regras
+    """
     def evaluate(s, m, c) do
         if Stack.depth(c) > 0 do
             {node, c} = Stack.pop(c)
@@ -13,6 +16,12 @@ defmodule GeorgeCompiler.SMC do
         end
     end
 
+    @doc """
+    Função usada para avaliar o elemento retirado do topo da pilha C.\n
+    Avalia se é valor(incluindo nulo) ou uma árvore e chama a função que cuida da aplicação da regra correspondente.\n
+
+    C nil \< S, M, nil C \> ⇒ \< S, M, C \>
+    """
     def do_operation(node, s, m, c) do
         if Tree.is_leaf node do 
             unless TreeUtils.is_nil(node) do
@@ -35,7 +44,7 @@ defmodule GeorgeCompiler.SMC do
 
     defp modify_s(node, s, m, c) do
         if is_value node.value do
-            {Stack.push(s,node.value), m, c} 
+            push_value(node, s, m, c)
         else
             get_operation(node.value)
             |> apply_operation(node.value, s, m, c)
@@ -44,6 +53,16 @@ defmodule GeorgeCompiler.SMC do
 
     defp is_value(value) do
         not (is_arit_exp(value) or is_bool_exp(value) or is_control(value)) 
+    end
+
+    @doc """
+    Aplica operação no topo da pilha\n
+    En \< S, M, t C \> ⇒ \< n S, M, C \>\n
+    Bt \< S, M, t C \> ⇒ \< t S, M, C \>
+    """
+
+    def push_value(node, s, m, c) do
+        {Stack.push(s,node.value), m, c} 
     end
 
     defp get_operation(operation) do

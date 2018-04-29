@@ -8,10 +8,11 @@ defmodule GeorgeCompiler.SMC.Arit do
     }
 
 
-    @doc "
+    @doc """
     Função usada pelo módulo SMC para se efetuar a operação (operation). O valor é guardado no topo da pilha.
     
-    E − E \<m m\' S, M, +/-/* C\> ⇒ \<n S, M, C\>"
+    E − E \<m m\' S, M, +/-/\* C\> ⇒ \<n S, M, C\>
+    """
     def artit_exp(operation, s, m, c) do
         expression = @operations[operation]
         {expression.(s, m), m, c}
@@ -48,13 +49,15 @@ defmodule GeorgeCompiler.SMC.Arit do
         Stack.push(s, rem(get_value(x, m), get_value(y, m)))
     end
 
-    @doc "Confere se a operação está mapeada no módulo"
+    @doc "Verifica se a operação está mapeada no módulo"
     def is_arit_exp(operation), do: Map.has_key? @operations, operation
 
-    @doc "
+    @doc """
     Usado para decompor a árvore de operação. Esta função sempre empilha o tipo de operação antes de chamar a função que empilha os valores
         
-    E − I \<S, M, e +/-/* e\' 0 C\> ⇒ \<S, M, e e\' +/-/* C\>"
+    E − I \< S, M, e + / - / * e\' 0 C\> ⇒ \< S, M, e e\' +/-/ * C\>
+    """
+
     def arit_decompose_tree(tree, s, m, c) do
        {s, m, tree 
                 |> push_values(StackUtils.push_as_tree(c, tree.value))}
