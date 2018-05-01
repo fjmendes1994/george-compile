@@ -173,7 +173,7 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :if, "<ifOp> <lp> PredicateDecl <rp> (CommandDecl / BlockCommandDecl) else?" do
-    [predicate, block, [[else_block]]] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(else_block)
+    [predicate, block, else_block] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(else_block)
     [predicate, block, nil] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil)
   end
 
