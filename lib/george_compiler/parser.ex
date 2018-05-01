@@ -8,59 +8,45 @@ defmodule GeorgeCompiler.Parser do
 
   # Operadores Aritmeticos
 
-  define :sumOp, "<space?> [+] <space?>"  do
-    [x] -> x
-  end
-  define :subOp, "<space?> [-] <space?>" do
-    [x] -> x
-  end
-  define :mulOp, "<space?> [*] <space?>" do
-    [x] -> x
-  end
-  define :divOp, "<space?> [/] <space?>" do
-    [x] -> x
-  end
-  define :remOp, "<space?> [%] <space?>" do
-    [x] -> x
-  end
+  define :sumOp, "<space?> '+' <space?>"
+  define :subOp, "<space?> '-' <space?>"
+  define :mulOp, "<space?> '*' <space?>"
+  define :divOp, "<space?> '/' <space?>"
+  define :remOp, "<space?> '%' <space?>"
 
   # Operadores Booleanos
-  define :equalsOp, "<space?> [=][=] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :notEqualsOp, "<space?> [!][=] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :greaterOp, "<space?> [>] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :greaterEqualsOp, "<space?> [>][=] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :lessOp, "<space?> [<] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :lessEqualsOp, "<space?> [<][=] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :negOp, "[~]"
-  define :orOP, "<space?> <'or'> <space?>"
-  define :andOP, "<space?> <'and'> <space?>"
+
+  define :equalsOp, "<space?> '==' <space?>"
+  define :notEqualsOp, "<space?> '!=' <space?>"
+  define :greaterOp, "<space?> '>' <space?>"
+  define :greaterEqualsOp, "<space?> '>=' <space?>"
+  define :lessOp, "<space?> '<' <space?>"
+  define :lessEqualsOp, "<space?> '<=' <space?>"
+  define :negOp, "'~'"
+  define :orOP, "<space?> 'or' <space?>"
+  define :andOP, "<space?> 'and' <space?>"
 
   # Operadores de Comandos
 
-  define :assOp, "<space?> [:][=] <space?>" do
-    x -> Enum.join(x)
-  end
+  define :assOp, "<space?> ':=' <space?>"
   define :seqOp, "<space?> [;] <space?>"
   define :comOp, "<space?> [,] <space?>"
   define :iniOp, "<space?> [=] <space?>"
-  define :ifOp, "<space?><'if'><space?>"
-  define :elseOp, "<space?><'else'><space?>"
-  define :whileOp, "<space?><'while'><space?>" 
-  define :printOp, "<space?><'exit'><space?>"
-  define :exitOp, "<space?><'exit'><space?>"
-  define :doOp, "<space?> <'do'> <space?>"
+  define :ifOp, "<space?> [i][f] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :elseOp, "<space?> [e][l][s][e] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :whileOp, "<space?> [w][h][i][l][e] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :printOp, "<space?> [p][r][i][n][t] <space?>"do
+    x -> Enum.join(x)
+  end
+  define :exitOp, "<space?> [e][x][i][t] <space?>"do
+    x -> Enum.join(x)
+  end
   define :seqOp, "<space?> [;] <space?>" do
     [x] -> x
   end
@@ -160,12 +146,12 @@ defmodule GeorgeCompiler.Parser do
     [_, x] ->  Tree.new("neg") |> Tree.add_leaf(x)
   end
 
-  define :or, "boolExp orOP PredicateDecl" do
+  define :or, "boolExp <orOP> PredicateDecl" do
     [x, predicate] -> Tree.new("or") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
   end
 
-  define :and, "boolExp andOP PredicateDecl" do
-    [x,[], predicate] -> Tree.new("and") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
+  define :and, "boolExp <andOP> PredicateDecl" do
+    [x, predicate] -> Tree.new("and") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
   end
 
   # Comandos
@@ -189,8 +175,8 @@ defmodule GeorgeCompiler.Parser do
     [_, predicate, [[block]], nil_value] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil_value)
   end
 
-  define :while, "<whileOp> <lp?> PredicateDecl <rp?> <doOp> BlockCommandDecl" do
-    [predicate, [[block]]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
+  define :while, "whileOp <lp?> PredicateDecl <rp?> <space?> <'do'> <space?> BlockCommandDecl" do
+    [_, predicate, [[block]]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 
   define :print, "printOp <lp> Expression <rp>"
