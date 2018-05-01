@@ -29,18 +29,13 @@ defmodule GeorgeCompiler.Parser do
   # Operadores de Comandos
 
   define :assOp, "<space?> ':=' <space?>"
-  define :seqOp, "<space?> [;] <space?>"
-  define :comOp, "<space?> [,] <space?>"
-  define :iniOp, "<space?> [=] <space?>"
-  define :ifOp, "<space?> [i][f] <space?>"do
-    x -> Enum.join(x)
-  end
-  define :elseOp, "<space?> [e][l][s][e] <space?>"do
-    x -> Enum.join(x)
-  end
-  define :whileOp, "<space?> [w][h][i][l][e] <space?>"do
-    x -> Enum.join(x)
-  end
+  define :seqOp, "<space?> ';' <space?>"
+  define :comOp, "<space?> ',' <space?>"
+  define :iniOp, "<space?> '=' <space?>"
+  define :ifOp, "<space?> 'if' <space?>"
+  define :elseOp, "<space?> 'else' <space?>"
+  define :whileOp, "<space?> 'while' <space?>"
+  define :doOP, "<space?> 'do' <space?>"
   define :printOp, "<space?> [p][r][i][n][t] <space?>"do
     x -> Enum.join(x)
   end
@@ -177,8 +172,8 @@ defmodule GeorgeCompiler.Parser do
     [predicate, block, nil] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil)
   end
 
-  define :while, "whileOp <lp?> PredicateDecl <rp?> <space?> <'do'> <space?> BlockCommandDecl" do
-    [_, predicate, [[block]]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
+  define :while, "<whileOp> <lp> PredicateDecl <rp> <doOP> BlockCommandDecl" do
+    [predicate, block] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 
   define :print, "printOp <lp> Expression <rp>"

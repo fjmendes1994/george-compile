@@ -330,6 +330,10 @@ defmodule ParserTest do
                                                                                       }
   end
 
+  test "while" do
+    GeorgeCompiler.Parser.parse!("while (2==2) do { ab := 2 }") |> IO.inspect()
+  end
+
 end
 
 
