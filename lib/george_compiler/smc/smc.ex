@@ -1,7 +1,7 @@
 defmodule GeorgeCompiler.SMC do
     import GeorgeCompiler.SMC.Arit
     import GeorgeCompiler.SMC.Bool
-    import GeorgeCompiler.SMC.Control
+    import GeorgeCompiler.SMC.Command
 
     @doc """
     Operação que consome a pilha C para aplicação das regras

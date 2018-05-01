@@ -1,7 +1,7 @@
 defmodule SMCControlTest do
     @moduledoc false
 
-    import GeorgeCompiler.SMC.Control
+    import GeorgeCompiler.SMC.Command
     use ExUnit.Case
 
     test "Atribuição com pilha s" do
