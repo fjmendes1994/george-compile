@@ -146,12 +146,12 @@ defmodule GeorgeCompiler.Parser do
     [_, x] ->  Tree.new("neg") |> Tree.add_leaf(x)
   end
 
-  define :or, "boolExp orOP PredicateDecl" do
+  define :or, "boolExp <orOP> PredicateDecl" do
     [x, predicate] -> Tree.new("or") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
   end
 
-  define :and, "boolExp andOP PredicateDecl" do
-    [x,[], predicate] -> Tree.new("and") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
+  define :and, "boolExp <andOP> PredicateDecl" do
+    [x, predicate] -> Tree.new("and") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
   end
 
   # Comandos
@@ -175,7 +175,7 @@ defmodule GeorgeCompiler.Parser do
     [_, predicate, [[block]], nil_value] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil_value)
   end
 
-  define :while, "whileOp <lp?> PredicateDecl <rp?> <space?><'do'><space?> BlockCommandDecl" do
+  define :while, "whileOp <lp?> PredicateDecl <rp?> <space?> <'do'> <space?> BlockCommandDecl" do
     [_, predicate, [[block]]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 

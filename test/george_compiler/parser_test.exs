@@ -81,12 +81,12 @@ defmodule ParserTest do
     assert GeorgeCompiler.Parser.parse!("ab := 2 > 2") == %Tree{
                                                                  leafs: [
                                                                    %Tree{leafs: [],
-                                                                     value: "ab"},
+                                                                         value: "ab"},
                                                                    %Tree{
                                                                      leafs: [%Tree{leafs: [],
-                                                                       value: 2},
-                                                                       %Tree{leafs: [],
-                                                                         value: 2}],
+                                                                                   value: 2},
+                                                                             %Tree{leafs: [],
+                                                                                   value: 2}],
                                                                      value: "gt"
                                                                    }
                                                                  ],
@@ -96,12 +96,12 @@ defmodule ParserTest do
     assert GeorgeCompiler.Parser.parse!("ab := 2 < 2") == %Tree{
                                                                  leafs: [
                                                                    %Tree{leafs: [],
-                                                                     value: "ab"},
+                                                                         value: "ab"},
                                                                    %Tree{
                                                                      leafs: [%Tree{leafs: [],
-                                                                       value: 2},
-                                                                       %Tree{leafs: [],
-                                                                         value: 2}],
+                                                                                   value: 2},
+                                                                             %Tree{leafs: [],
+                                                                                   value: 2}],
                                                                      value: "lt"
                                                                    }
                                                                  ],
@@ -109,51 +109,106 @@ defmodule ParserTest do
                                                                }
 
     assert GeorgeCompiler.Parser.parse!("ab := 2 >= 2") == %Tree{
-             leafs: [
-               %Tree{leafs: [],
-                 value: "ab"},
-               %Tree{
-                 leafs: [%Tree{leafs: [],
-                   value: 2},
-                   %Tree{leafs: [],
-                     value: 2}],
-                 value: "ge"
-               }
-             ],
-             value: "atrib"
-           }
+                                                                 leafs: [
+                                                                   %Tree{leafs: [],
+                                                                         value: "ab"},
+                                                                   %Tree{
+                                                                     leafs: [%Tree{leafs: [],
+                                                                                   value: 2},
+                                                                             %Tree{leafs: [],
+                                                                                   value: 2}],
+                                                                     value: "ge"
+                                                                   }
+                                                                 ],
+                                                                 value: "atrib"
+                                                               }
 
     assert GeorgeCompiler.Parser.parse!("ab := 2 <= 2") == %Tree{
-             leafs: [
-               %Tree{leafs: [],
-                 value: "ab"},
-               %Tree{
-                 leafs: [%Tree{leafs: [],
-                   value: 2},
-                   %Tree{leafs: [],
-                     value: 2}],
-                 value: "le"
-               }
-             ],
-             value: "atrib"
-           }
+                                                                 leafs: [
+                                                                   %Tree{leafs: [],
+                                                                         value: "ab"},
+                                                                   %Tree{
+                                                                     leafs: [%Tree{leafs: [],
+                                                                                   value: 2},
+                                                                             %Tree{leafs: [],
+                                                                                   value: 2}],
+                                                                     value: "le"
+                                                                   }
+                                                                 ],
+                                                                 value: "atrib"
+                                                               }
 
     assert GeorgeCompiler.Parser.parse!("ab := 2 != 2") == %Tree{
-             leafs: [
-               %Tree{leafs: [],
-                 value: "ab"},
-               %Tree{
-                 leafs: [%Tree{leafs: [],
-                   value: 2},
-                   %Tree{leafs: [],
-                     value: 2}],
-                 value: "neq"
-               }
-             ],
-             value: "atrib"
-           }
+                                                                 leafs: [
+                                                                   %Tree{leafs: [],
+                                                                         value: "ab"},
+                                                                   %Tree{
+                                                                     leafs: [%Tree{leafs: [],
+                                                                                   value: 2},
+                                                                             %Tree{leafs: [],
+                                                                                   value: 2}],
+                                                                     value: "neq"
+                                                                   }
+                                                                 ],
+                                                                 value: "atrib"
+                                                               }
   end
 
+  test "and e or" do
+    assert GeorgeCompiler.Parser.parse!("ab := 2 != 2 or 2 == 2") == %Tree{
+                                                                            leafs: [
+                                                                              %Tree{leafs: [],
+                                                                                    value: "ab"},
+                                                                              %Tree{
+                                                                                leafs: [
+                                                                                  %Tree{
+                                                                                    leafs: [%Tree{leafs: [],
+                                                                                                  value: 2},
+                                                                                            %Tree{leafs: [],
+                                                                                                  value: 2}],
+                                                                                    value: "neq"
+                                                                                  },
+                                                                                  %Tree{
+                                                                                    leafs: [%Tree{leafs: [],
+                                                                                                  value: 2},
+                                                                                            %Tree{leafs: [],
+                                                                                                  value: 2}],
+                                                                                    value: "eq"
+                                                                                  }
+                                                                                ],
+                                                                                value: "or"
+                                                                              }
+                                                                            ],
+                                                                            value: "atrib"
+                                                                         }
+
+    assert GeorgeCompiler.Parser.parse!("ab := 2 != 2 and 2 == 2") == %Tree{
+                                                                             leafs: [
+                                                                               %Tree{leafs: [], value: "ab"},
+                                                                               %Tree{
+                                                                                 leafs: [
+                                                                                   %Tree{
+                                                                                     leafs: [%Tree{leafs: [],
+                                                                                                   value: 2},
+                                                                                             %Tree{leafs: [],
+                                                                                                   value: 2}],
+                                                                                     value: "neq"
+                                                                                   },
+                                                                                   %Tree{
+                                                                                     leafs: [%Tree{leafs: [],
+                                                                                                   value: 2},
+                                                                                             %Tree{leafs: [],
+                                                                                                   value: 2}],
+                                                                                     value: "eq"
+                                                                                   }
+                                                                                 ],
+                                                                                 value: "and"
+                                                                               }
+                                                                             ],
+                                                                             value: "atrib"
+                                                                           }
+
+  end
 end
 
 
