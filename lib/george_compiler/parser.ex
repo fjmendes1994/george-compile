@@ -78,11 +78,11 @@ defmodule GeorgeCompiler.Parser do
     [exp] -> exp
   end
 
-  define :ExpressionDecl, "additiveExp / decimal / ident"
+  define :ExpressionDecl, "multitiveExp / decimal / ident"
 
-  define :additiveExp, "sum / sub / multitiveExp"
+  define :additiveExp, "sum / sub"
 
-  define :multitiveExp, "mul / rem / div"
+  define :multitiveExp, "mul / rem / div / additiveExp"
 
   define :sum, "(decimal / ident) <sumOp> ExpressionDecl" do
     [x,y] ->  Tree.new("add") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
