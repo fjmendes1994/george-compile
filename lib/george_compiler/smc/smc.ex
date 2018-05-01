@@ -1,5 +1,6 @@
 defmodule GeorgeCompiler.SMC do
     import GeorgeCompiler.SMC.Arit
+    import GeorgeCompiler.SMC.Attribution
     import GeorgeCompiler.SMC.Bool
     import GeorgeCompiler.SMC.Command
 
@@ -37,6 +38,7 @@ defmodule GeorgeCompiler.SMC do
     defp decompose_tree(tree, s, m, c) do
         cond do
             is_arit_exp(tree.value) -> arit_decompose_tree(tree, s, m, c)
+            is_attribution(tree.value) -> attribution_decompose_tree(tree, s, m, c)
             is_bool_exp(tree.value) -> bool_decompose_tree(tree, s, m, c)
             is_control(tree.value) -> control_decompose_tree(tree, s, m, c) 
         end
@@ -52,7 +54,7 @@ defmodule GeorgeCompiler.SMC do
     end
 
     defp is_value(value) do
-        not (is_arit_exp(value) or is_bool_exp(value) or is_control(value)) 
+        not (is_arit_exp(value) or is_bool_exp(value) or is_control(value) or is_attribution(value))
     end
 
     @doc """
@@ -70,6 +72,7 @@ defmodule GeorgeCompiler.SMC do
             is_arit_exp(operation) -> &artit_exp/4
             is_bool_exp(operation) -> &bool_exp/4
             is_control(operation) -> &control/4
+            is_attribution(operation) -> &attrib/4
         end
     end
 

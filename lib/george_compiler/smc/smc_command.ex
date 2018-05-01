@@ -1,6 +1,5 @@
 defmodule GeorgeCompiler.SMC.Command do
     @operations %{
-        "atrib" => &GeorgeCompiler.SMC.Command.atrib/3,
         "if" => &GeorgeCompiler.SMC.Command.if_control/3,
         "while" => &GeorgeCompiler.SMC.Command.while/3,
         "seq" => nil
@@ -12,14 +11,6 @@ defmodule GeorgeCompiler.SMC.Command do
     def control(exp, s, m, c) do
         operation = @operations[exp]
         operation.(s, m, c)
-    end
-
-    @doc """
-    C := E < m v S, M, := C > ⇒ < S, M [m/v], C >
-    """
-    def atrib(s, m, c) do
-        {value, var, s} = StackUtils.pop_twice(s)
-        {s, Map.put(m, var, get_value(value,m)), c}
     end
 
     @doc """
@@ -66,28 +57,9 @@ defmodule GeorgeCompiler.SMC.Command do
         c = c
             |> StackUtils.push_as_tree(tree.value)
         case tree.value do
-            "atrib" -> atrib_decompose(tree, s, m, c)
             "if" -> if_decompose(tree, s, m, c)
             "while" -> while_decompose(tree, s, m, c)
             "seq" -> sequence_decompose(tree, s, m, c)
-        end
-    end
-
-
-    @doc """
-    Decomposição da aŕvore de atribuição. \n
-    C := I < S, M, v := e C > ⇒ < v S, M, e := C >
-    """
-    def atrib_decompose(tree, s, m, c) do
-        elem = Enum.at(tree.leafs,0)
-        if length(tree.leafs) > 1 do
-            {s, m, tree
-                    |> TreeUtils.remove_first_leaf
-                    |> atrib_decompose(s, m, c) 
-                    |> Stack.push(elem)}
-        else
-            c 
-            |> Stack.push(elem)
         end
     end
 

@@ -26,3 +26,5 @@ george_compiler-*.tar
 /.idea/
 
 /.elixir_ls/
+
+george_compiler
