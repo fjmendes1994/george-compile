@@ -1,14 +1,13 @@
 defmodule GeorgeCompiler.SMC.Bool do
-    import GeorgeCompiler.SMC.Attribution, only: [get_variable_value: 2]
     @operations %{
-        "eq" => &GeorgeCompiler.SMC.Bool.equals/2,
-        "neg" => &GeorgeCompiler.SMC.Bool.nt/2,
-        "gt" => &GeorgeCompiler.SMC.Bool.greater_than/2,
-        "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/2,
-        "ge" => &GeorgeCompiler.SMC.Bool.greater_than/2,
-        "le" => &GeorgeCompiler.SMC.Bool.lesser_than/2,
-        "or" => &GeorgeCompiler.SMC.Bool.bool_or/2,
-        "and" => &GeorgeCompiler.SMC.Bool.bool_or/2
+        "eq" => &GeorgeCompiler.SMC.Bool.equals/1,
+        "neg" => &GeorgeCompiler.SMC.Bool.nt/1,
+        "gt" => &GeorgeCompiler.SMC.Bool.greater_than/1,
+        "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/1,
+        "ge" => &GeorgeCompiler.SMC.Bool.greater_than/1,
+        "le" => &GeorgeCompiler.SMC.Bool.lesser_than/1,
+        "or" => &GeorgeCompiler.SMC.Bool.bool_or/1,
+        "and" => &GeorgeCompiler.SMC.Bool.bool_or/1
     }
 
     @doc """
@@ -16,70 +15,61 @@ defmodule GeorgeCompiler.SMC.Bool do
     """
     def bool_exp(exp, s, m, c) do
         operation = @operations[exp]
-        {operation.(s, m), m, c}
+        {operation.(s), m, c}
     end
 
     @doc """
     B ∼ E \< t S, M, ∼ C \> ⇒ \< t' S, M, C \>
     """
-    def nt(s, m) do
+    def nt(s) do
         {x, s} = Stack.pop(s)
-        Stack.push(s, not get_value(x, m))
+        Stack.push(s, not x)
     end
 
     @doc """
     B = E \< m' m S, M, = C \> ⇒ \< t S, M, C \>
     """
-    def equals(s, m) do
+    def equals(s) do
         {x, y, s} = StackUtils.pop_twice(s)
-        Stack.push(s, get_value(x, m) == get_value(y, m))
+        Stack.push(s, x == y)
     end
 
     @doc false
-    def greater_than(s, m) do
+    def greater_than(s) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, get_value(x, m) > get_value(y, m))
+        Stack.push(s, x > y)
     end
 
     @doc false
-    def lesser_than(s, m) do
+    def lesser_than(s) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, get_value(x, m) < get_value(y, m))
+        Stack.push(s, x < y)
     end
 
     @doc false
-    def greater_equals_than(s, m) do
+    def greater_equals_than(s) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, get_value(x, m) >= get_value(y, m))
+        Stack.push(s, x >= y)
     end
 
     @doc false
-    def lesser_equals_than(s, m) do
+    def lesser_equals_than(s) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, get_value(x, m) <= get_value(y, m))
+        Stack.push(s, x <= y)
     end
 
     @doc false
-    def bool_and(s, m) do
+    def bool_and(s) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, get_value(x, m) and get_value(y, m))
+        Stack.push(s, x and y)
     end
 
     @doc """
     B or E \< t' t S, M, or C \> ⇒ \< t'' S, M, C \>
     """
-    def bool_or(s, m) do
+    def bool_or(s) do
         {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, get_value(x, m) or get_value(y, m))
-    end
-
-    @doc false
-    defp get_value(value, m) do
-        if is_binary(value) do
-            get_variable_value(value, m)
-        else
-            value
-        end
+        Stack.push(s, x or y)
     end
 
     @doc "Verifica se a operação está mapeada no módulo"

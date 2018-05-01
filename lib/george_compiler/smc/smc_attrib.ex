@@ -1,7 +1,7 @@
 defmodule GeorgeCompiler.SMC.Attribution do
     
     @doc """
-    Aplicação a atribuição retirando de S o valor e o nome da variavel\n
+    Aplicação da atribuição retirando de S o valor e o nome da variavel para colocá-los no mapa M\n
     C := E < m v S, M, := C > ⇒ < S, M [m/v], C >
     """
     def attrib(_, s, m, c) do
@@ -16,7 +16,7 @@ defmodule GeorgeCompiler.SMC.Attribution do
     """
     def attribution_decompose_tree(tree, s, m, c) do
         operation = tree.value
-        #Recupera o nome da operação usando pattern matching
+        #Recupera o nome da variavel usando pattern matching
         %Tree{leafs: _, value: var} = Enum.at(tree.leafs, 0)
         value = Enum.at(tree.leafs, 1)
 

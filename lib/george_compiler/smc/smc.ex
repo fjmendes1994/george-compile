@@ -40,7 +40,7 @@ defmodule GeorgeCompiler.SMC do
             is_arit_exp(tree.value) -> arit_decompose_tree(tree, s, m, c)
             is_attribution(tree.value) -> attribution_decompose_tree(tree, s, m, c)
             is_bool_exp(tree.value) -> bool_decompose_tree(tree, s, m, c)
-            is_control(tree.value) -> control_decompose_tree(tree, s, m, c) 
+            is_command(tree.value) -> command_decompose_tree(tree, s, m, c) 
         end
     end
 
@@ -54,17 +54,24 @@ defmodule GeorgeCompiler.SMC do
     end
 
     defp is_value(value) do
-        not (is_arit_exp(value) or is_bool_exp(value) or is_control(value) or is_attribution(value))
+        not (is_arit_exp(value) or is_bool_exp(value) or is_command(value) or is_attribution(value))
     end
 
     @doc """
     Aplica operação no topo da pilha\n
+    Ev < S, M, v C > ⇒ < M (v) S, M, C > \n
     En \< S, M, t C \> ⇒ \< n S, M, C \>\n
     Bt \< S, M, t C \> ⇒ \< t S, M, C \>
     """
 
     def push_value(node, s, m, c) do
-        {Stack.push(s,node.value), m, c} 
+        value = node.value
+        s = 
+          cond do
+              is_binary value -> Stack.push(s, get_variable_value(node.value,m))
+              true -> Stack.push(s, node.value)
+          end
+        {s, m, c}
     end
 
     defp get_operation(operation) do
@@ -72,7 +79,7 @@ defmodule GeorgeCompiler.SMC do
             is_arit_exp(operation) -> &artit_exp/4
             is_attribution(operation) -> &attrib/4
             is_bool_exp(operation) -> &bool_exp/4
-            is_control(operation) -> &control/4
+            is_command(operation) -> &command/4
         end
     end
 

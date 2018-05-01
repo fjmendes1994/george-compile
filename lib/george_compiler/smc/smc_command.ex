@@ -1,6 +1,6 @@
 defmodule GeorgeCompiler.SMC.Command do
     @operations %{
-        "if" => &GeorgeCompiler.SMC.Command.if_control/3,
+        "if" => &GeorgeCompiler.SMC.Command.if_command/3,
         "while" => &GeorgeCompiler.SMC.Command.while/3,
         "seq" => nil
     }
@@ -8,7 +8,7 @@ defmodule GeorgeCompiler.SMC.Command do
     @doc """
     Função responsável por retornar as funções que efetuam operações na tupla SMC
     """
-    def control(exp, s, m, c) do
+    def command(exp, s, m, c) do
         operation = @operations[exp]
         operation.(s, m, c)
     end
@@ -16,7 +16,7 @@ defmodule GeorgeCompiler.SMC.Command do
     @doc """
     C if E < t c c' S, M, if C > ⇒ < S, M, c'' C>
     """
-    def if_control(s, m, c) do
+    def if_command(s, m, c) do
         {condition, s} = Stack.pop(s)
         {if_block, s} = Stack.pop(s)
         {else_block, s} = Stack.pop(s)
@@ -53,7 +53,7 @@ defmodule GeorgeCompiler.SMC.Command do
         end
     end
 
-    def control_decompose_tree(tree, s, m, c) do
+    def command_decompose_tree(tree, s, m, c) do
         c = c
             |> StackUtils.push_as_tree(tree.value)
         case tree.value do
@@ -101,7 +101,7 @@ defmodule GeorgeCompiler.SMC.Command do
     end
 
     @doc "Verifica se a operação está mapeada no módulo"
-    def is_control(operation), do: Map.has_key? @operations, operation
+    def is_command(operation), do: Map.has_key? @operations, operation
 
     defp get_value(value, m) do
         if is_binary(value) do

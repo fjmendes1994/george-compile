@@ -1,4 +1,4 @@
-defmodule SMCControlTest do
+defmodule SMCCommandTest do
     @moduledoc false
 
     import GeorgeCompiler.SMC.Command
@@ -23,7 +23,7 @@ defmodule SMCControlTest do
             |> Stack.push(sum)
             |> Stack.push(true)
             
-        assert if_control(s, %{}, Stack.new) == {Stack.new, %{}, Stack.new |> Stack.push(sum) }
+        assert if_command(s, %{}, Stack.new) == {Stack.new, %{}, Stack.new |> Stack.push(sum) }
     end
 
     test "if com else" do
@@ -40,6 +40,6 @@ defmodule SMCControlTest do
             |> Stack.push(sum)    
             |> Stack.push(false)
             
-        assert if_control(s, %{}, Stack.new) == {Stack.new, %{}, Stack.new |> Stack.push(sub)}
+        assert if_command(s, %{}, Stack.new) == {Stack.new, %{}, Stack.new |> Stack.push(sub)}
     end
 end
