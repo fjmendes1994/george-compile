@@ -8,65 +8,37 @@ defmodule GeorgeCompiler.Parser do
 
   # Operadores Aritmeticos
 
-  define :sumOp, "<space?> [+] <space?>"  do
-    [x] -> x
-  end
-  define :subOp, "<space?> [-] <space?>" do
-    [x] -> x
-  end
-  define :mulOp, "<space?> [*] <space?>" do
-    [x] -> x
-  end
-  define :divOp, "<space?> [/] <space?>" do
-    [x] -> x
-  end
-  define :remOp, "<space?> [%] <space?>" do
-    [x] -> x
-  end
+  define :sumOp, "<space?> '+' <space?>"
+  define :subOp, "<space?> '-' <space?>"
+  define :mulOp, "<space?> '*' <space?>"
+  define :divOp, "<space?> '/' <space?>"
+  define :remOp, "<space?> '%' <space?>"
 
   # Operadores Booleanos
-  define :equalsOp, "<space?> [=][=] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :notEqualsOp, "<space?> [!][=] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :greaterOp, "<space?> [>] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :greaterEqualsOp, "<space?> [>][=] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :lessOp, "<space?> [<] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :lessEqualsOp, "<space?> [<][=] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :negOp, "[~]"
-  define :orOP, "<space?> <'or'> <space?>"
-  define :andOP, "<space?> <'and'> <space?>"
+  define :equalsOp, "<space?> '==' <space?>"
+  define :notEqualsOp, "<space?> '!=' <space?>"
+  define :greaterOp, "<space?> '>' <space?>"
+  define :greaterEqualsOp, "<space?> '>=' <space?>"
+  define :lessOp, "<space?> '<' <space?>"
+  define :lessEqualsOp, "<space?> '<=' <space?>"
+  define :negOp, "<space?> '~'"
+  define :orOP, "<space?> 'or' <space?>"
+  define :andOP, "<space?> 'and' <space?>"
 
   # Operadores de Comandos
 
-  define :assOp, "<space?> [:][=] <space?>" do
-    x -> Enum.join(x)
-  end
-  define :seqOp, "<space?> [;] <space?>"
-  define :comOp, "<space?> [,] <space?>"
-  define :iniOp, "<space?> [=] <space?>"
-  define :ifOp, "<space?><'if'><space?>"
-  define :elseOp, "<space?><'else'><space?>"
-  define :whileOp, "<space?><'while'><space?>" 
-  define :printOp, "<space?><'exit'><space?>"
-  define :exitOp, "<space?><'exit'><space?>"
-  define :doOp, "<space?> <'do'> <space?>"
-  define :seqOp, "<space?> [;] <space?>" do
-    [x] -> x
-  end
-  define :choOp, "<space?> [|] <space?>" do
-    [x] -> x
-  end
+  define :assOp, "<space?> ':=' <space?>"
+  define :seqOp, "<space?> ';' <space?>"
+  define :comOp, "<space?> ',' <space?>"
+  define :iniOp, "<space?> '=' <space?>"
+  define :ifOp, "<space?> 'if' <space?>"
+  define :elseOp, "<space?> 'else' <space?>"
+  define :whileOp, "<space?> 'while' <space?>"
+  define :printOp, "<space?> 'exit' <space?>"
+  define :exitOp, "<space?> 'exit' <space?>"
+  define :doOp, "<space?> 'do' <space?>"
+  define :seqOp, "<space?> ';' <space?>"
+  define :choOp, "<space?> '|' <space?>"
 
   # Numeros
 
@@ -91,10 +63,10 @@ defmodule GeorgeCompiler.Parser do
   end
 
   # Chaves e parenteses
-  define :lp, "<space?> [(] <space?>"
-  define :rp, "<space?> [)] <space?>"
-  define :lk, "<space?> [{] <space?>"
-  define :rk, "<space?> [}] <space?>"
+  define :lp, "<space?> '(' <space?>"
+  define :rp, "<space?> ')' <space?>"
+  define :lk, "<space?> '{' <space?>"
+  define :rk, "<space?> '}' <space?>"
 
 
   # Expressoes
