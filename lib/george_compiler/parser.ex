@@ -155,24 +155,26 @@ defmodule GeorgeCompiler.Parser do
   end
 
   # Comandos
-  define :BlockCommandDecl, "<lk> CommandDecl+ <rk> "
+  define :BlockCommandDecl, "<lk> CommandDecl+ <rk> " do
+    [x] -> x
+  end
 
   @root true
   define :CommandDecl, "choice / seq / cmd"
 
   define :cmd, "atrib / if / while / print / exit / call / Expression"
 
-  define :atrib, "ident assOp Expression" do
-    [var , _, exp] -> Tree.new("atrib") |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
+  define :atrib, "ident <assOp> Expression" do
+    [var , exp] -> Tree.new("atrib") |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
   end
 
-  define :else, "elseOp (CommandDecl / BlockCommandDecl)" do
-    [_, block] -> block
+  define :else, "<elseOp> (CommandDecl / BlockCommandDecl)" do
+    [block] -> block
   end
 
-  define :if, "ifOp <lp> PredicateDecl <rp> (CommandDecl / BlockCommandDecl) else?" do
-    [_, predicate, [[block]], [[else_block]]] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(else_block)
-    [_, predicate, [[block]], nil_value] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil_value)
+  define :if, "<ifOp> <lp> PredicateDecl <rp> (CommandDecl / BlockCommandDecl) else?" do
+    [predicate, block, [[else_block]]] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(else_block)
+    [predicate, block, nil] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil)
   end
 
   define :while, "whileOp <lp?> PredicateDecl <rp?> <space?> <'do'> <space?> BlockCommandDecl" do
