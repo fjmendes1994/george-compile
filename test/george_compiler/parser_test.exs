@@ -328,10 +328,34 @@ defmodule ParserTest do
                                                                                         ],
                                                                                         value: "if"
                                                                                       }
+
   end
 
   test "while" do
-    GeorgeCompiler.Parser.parse!("while (2==2) do { ab := 2 }") |> IO.inspect()
+    assert GeorgeCompiler.Parser.parse!("while (2==2) do { ab := 2 }") == %Tree{
+                                                                                 leafs: [
+                                                                                   %Tree{
+                                                                                     leafs: [%Tree{leafs: [],
+                                                                                                   value: 2},
+                                                                                             %Tree{leafs: [],
+                                                                                                   value: 2}],
+                                                                                     value: "eq"
+                                                                                   },
+                                                                                   %Tree{
+                                                                                     leafs: [],
+                                                                                     value: [
+                                                                                       %Tree{
+                                                                                         leafs: [%Tree{leafs: [],
+                                                                                                       value: "ab"},
+                                                                                                 %Tree{leafs: [],
+                                                                                                       value: 2}],
+                                                                                         value: "atrib"
+                                                                                       }
+                                                                                     ]
+                                                                                   }
+                                                                                 ],
+                                                                                 value: "while"
+                                                                               }
   end
 
 end

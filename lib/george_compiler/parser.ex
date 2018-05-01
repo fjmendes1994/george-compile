@@ -151,7 +151,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Comandos
   define :BlockCommandDecl, "<lk> CommandDecl+ <rk> " do
-    [x] -> x
+    [cmd] -> cmd
   end
 
   @root true
