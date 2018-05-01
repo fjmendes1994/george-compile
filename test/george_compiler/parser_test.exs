@@ -286,7 +286,7 @@ defmodule ParserTest do
 
  test "exit" do
   assert GeorgeCompiler.Parser.parse!("exit(2+2-2--2)" ) == [
-  [],
+  ["exit"],
   %Tree{
     leafs: [
       %Tree{leafs: [], value: 2},
@@ -360,7 +360,7 @@ defmodule ParserTest do
             %Tree{
               leafs: [],
               value: [
-                [],
+                ["exit"],
                 %Tree{
                   leafs: [
                     %Tree{leafs: [], value: 2},
@@ -474,7 +474,7 @@ defmodule ParserTest do
       }
     ]
   ],
-  "|",
+  ["|"],
   %Tree{
     leafs: [
       %Tree{leafs: [], value: ["ab95", []]},
@@ -482,7 +482,7 @@ defmodule ParserTest do
         leafs: [],
         value: [
           [
-            [],
+            ["exit"],
             %Tree{
               leafs: [
                 %Tree{leafs: [], value: 2},
@@ -503,7 +503,7 @@ defmodule ParserTest do
               value: "add"
             }
           ],
-          "|",
+          ["|"],
           [
             [
               "print",
@@ -529,7 +529,7 @@ defmodule ParserTest do
                 }
               ]
             ],
-            "|",
+            ["|"],
             [
               %Tree{
                 leafs: [
@@ -545,7 +545,7 @@ defmodule ParserTest do
                 ],
                 value: "if"
               },
-              "|",
+              ["|"],
               %Tree{
                 leafs: [
                   %Tree{leafs: [], value: "ab95"},
@@ -561,7 +561,6 @@ defmodule ParserTest do
     value: "seq"
   }
 ]
-
 
   end
 
