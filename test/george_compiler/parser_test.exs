@@ -349,7 +349,7 @@ defmodule ParserTest do
                                                                                                        value: "ab"},
                                                                                                  %Tree{leafs: [],
                                                                                                        value: 2}],
-                                                                                         value: "atrib"
+                                                                                         value: "attrib"
                                                                                        }
                                                                                      ]
                                                                                    }
@@ -378,7 +378,7 @@ defmodule ParserTest do
                                                                                                                     value: "ab"},
                                                                                                               %Tree{leafs: [],
                                                                                                                     value: 2}],
-                                                                                                      value: "atrib"
+                                                                                                      value: "attrib"
                                                                                                     },
                                                                                                     %Tree{
                                                                                                       leafs: [
@@ -389,7 +389,7 @@ defmodule ParserTest do
                                                                                                             %Tree{leafs: [],
                                                                                                                   value: 3}
                                                                                                           ],
-                                                                                                          value: "atrib"
+                                                                                                          value: "attrib"
                                                                                                         },
                                                                                                         %Tree{
                                                                                                           leafs: [
@@ -398,7 +398,7 @@ defmodule ParserTest do
                                                                                                             %Tree{leafs: [],
                                                                                                                   value: 4}
                                                                                                           ],
-                                                                                                          value: "atrib"
+                                                                                                          value: "attrib"
                                                                                                         }
                                                                                                       ],
                                                                                                       value: "seq"
