@@ -4,7 +4,7 @@ defmodule GeorgeCompiler.SMC.Attribution do
     Aplicação a atribuição retirando de S o valor e o nome da variavel\n
     C := E < m v S, M, := C > ⇒ < S, M [m/v], C >
     """
-    def attrib(op, s, m, c) do
+    def attrib(_, s, m, c) do
         {value, var, s} = StackUtils.pop_twice(s)
         {s, Map.put(m, var, value), c}
     end
@@ -16,14 +16,18 @@ defmodule GeorgeCompiler.SMC.Attribution do
     """
     def attribution_decompose_tree(tree, s, m, c) do
         operation = tree.value
-        var = Enum.at(tree.leafs, 0)
+        #Recupera o nome da operação usando pattern matching
+        %Tree{leafs: _, value: var} = Enum.at(tree.leafs, 0)
         value = Enum.at(tree.leafs, 1)
 
-        #Empilha os elementos na pilha C
-        {s, m, c 
-                |> StackUtils.push_as_tree(operation)
-                |> Stack.push(var)
-                |> Stack.push(value)}
+        #Empilha o nome da variavel em S
+        s = s 
+            |> Stack.push(var)
+        #Empilha o valor e o operador em C
+        c = c 
+            |> StackUtils.push_as_tree(operation)
+            |> Stack.push(value)
+        {s, m, c}
     end
    
     @doc """

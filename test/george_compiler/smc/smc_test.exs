@@ -291,7 +291,7 @@ defmodule SMCTest do
   @doc "Atribuição e desvios"
   test "Atribuição com árvore" do
     c = Stack.new
-        |> Stack.push(Tree.new("atrib")
+        |> Stack.push(Tree.new("attrib")
                       |> Tree.add_leaf("var")
                       |> Tree.add_leaf(5))
     m = %{"var" => 5}
@@ -397,7 +397,7 @@ defmodule SMCTest do
     sum = Tree.new("add")
                 |> Tree.add_leaf("i")
                 |> Tree.add_leaf(1)
-    atrib = Tree.new("atrib")
+    atrib = Tree.new("attrib")
             |> Tree.add_leaf("i")
             |> Tree.add_leaf(sum)
 

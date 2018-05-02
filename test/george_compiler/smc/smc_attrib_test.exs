@@ -21,10 +21,13 @@ defmodule SMCAttribTest do
         tree = Tree.new("attrib")
                 |> Tree.add_leaf("var")
                 |> Tree.add_leaf(5)
+    
+        s = Stack.new
+            |> Stack.push("var")
+
         c = Stack.new
             |> Stack.push(Tree.new("attrib"))
-            |> Stack.push(Tree.new("var"))
             |> Stack.push(Tree.new(5))
-        assert attribution_decompose_tree(tree, Stack.new, %{}, Stack.new) == {Stack.new, %{}, c}
+        assert attribution_decompose_tree(tree, Stack.new, %{}, Stack.new) == {s, %{}, c}
     end
 end
