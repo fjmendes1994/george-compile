@@ -16,7 +16,7 @@ defmodule GeorgeCompiler.SMC.Attribution do
     """
     def attribution_decompose_tree(tree, s, m, c) do
         operation = tree.value
-        #Recupera o nome da operação usando pattern matching
+        #Recupera o nome da variavel usando pattern matching
         %Tree{leafs: _, value: var} = Enum.at(tree.leafs, 0)
         value = Enum.at(tree.leafs, 1)
 

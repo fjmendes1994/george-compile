@@ -64,7 +64,13 @@ defmodule GeorgeCompiler.SMC do
     """
 
     def push_value(node, s, m, c) do
-        {Stack.push(s,node.value), m, c} 
+        value = node.value
+        s = 
+          cond do
+              is_binary value -> Stack.push(s, get_variable_value(node.value,m))
+              true -> Stack.push(s, node.value)
+          end
+        {s, m, c}
     end
 
     defp get_operation(operation) do
