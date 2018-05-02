@@ -10,7 +10,4 @@ defmodule GeorgeCompiler do
   defp start_smc(tree) do
     GeorgeCompiler.SMC.evaluate(Stack.new, %{}, Stack.new |> Stack.push(tree))
   end
-
-  
-
 end

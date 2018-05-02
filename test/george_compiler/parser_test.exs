@@ -328,10 +328,92 @@ defmodule ParserTest do
                                                                                         ],
                                                                                         value: "if"
                                                                                       }
+
   end
 
   test "while" do
-    GeorgeCompiler.Parser.parse!("while (2==2) do { ab := 2 }") |> IO.inspect()
+    assert GeorgeCompiler.Parser.parse!("while (2==2) do { ab := 2 }") == %Tree{
+                                                                                 leafs: [
+                                                                                   %Tree{
+                                                                                     leafs: [%Tree{leafs: [],
+                                                                                                   value: 2},
+                                                                                             %Tree{leafs: [],
+                                                                                                   value: 2}],
+                                                                                     value: "eq"
+                                                                                   },
+                                                                                   %Tree{
+                                                                                     leafs: [],
+                                                                                     value: [
+                                                                                       %Tree{
+                                                                                         leafs: [%Tree{leafs: [],
+                                                                                                       value: "ab"},
+                                                                                                 %Tree{leafs: [],
+                                                                                                       value: 2}],
+                                                                                         value: "atrib"
+                                                                                       }
+                                                                                     ]
+                                                                                   }
+                                                                                 ],
+                                                                                 value: "while"
+                                                                               }
+  end
+
+  test "bloco com sequencia" do
+    assert GeorgeCompiler.Parser.parse!("if(2==2) {ab := 2; bc := 3 ; de := 4}") == %Tree{
+                                                                                          leafs: [
+                                                                                            %Tree{
+                                                                                              leafs: [%Tree{leafs: [],
+                                                                                                            value: 2},
+                                                                                                      %Tree{leafs: [],
+                                                                                                            value: 2}],
+                                                                                              value: "eq"
+                                                                                            },
+                                                                                            %Tree{
+                                                                                              leafs: [],
+                                                                                              value: [
+                                                                                                %Tree{
+                                                                                                  leafs: [
+                                                                                                    %Tree{
+                                                                                                      leafs: [%Tree{leafs: [],
+                                                                                                                    value: "ab"},
+                                                                                                              %Tree{leafs: [],
+                                                                                                                    value: 2}],
+                                                                                                      value: "atrib"
+                                                                                                    },
+                                                                                                    %Tree{
+                                                                                                      leafs: [
+                                                                                                        %Tree{
+                                                                                                          leafs: [
+                                                                                                            %Tree{leafs: [],
+                                                                                                                  value: "bc"},
+                                                                                                            %Tree{leafs: [],
+                                                                                                                  value: 3}
+                                                                                                          ],
+                                                                                                          value: "atrib"
+                                                                                                        },
+                                                                                                        %Tree{
+                                                                                                          leafs: [
+                                                                                                            %Tree{leafs: [],
+                                                                                                                  value: "de"},
+                                                                                                            %Tree{leafs: [],
+                                                                                                                  value: 4}
+                                                                                                          ],
+                                                                                                          value: "atrib"
+                                                                                                        }
+                                                                                                      ],
+                                                                                                      value: "seq"
+                                                                                                    }
+                                                                                                  ],
+                                                                                                  value: "seq"
+                                                                                                }
+                                                                                              ]
+                                                                                            },
+                                                                                            %Tree{leafs: [],
+                                                                                                  value: nil}
+                                                                                          ],
+                                                                                          value: "if"
+                                                                                        }
+
   end
 
 end
