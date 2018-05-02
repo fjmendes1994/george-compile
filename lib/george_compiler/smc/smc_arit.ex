@@ -10,7 +10,7 @@ defmodule GeorgeCompiler.SMC.Arit do
     @doc """
     Função usada pelo módulo SMC para se efetuar a operação (operation). O valor é guardado no topo da pilha.
     
-    E − E \<m m\' S, M, +/-/\* C\> ⇒ \<n S, M, C\>
+    E − E < m m' S, M, +/-/* C > ⇒ < n S, M, C >
     """
     def artit_exp(operation, s, m, c) do
         expression = @operations[operation]
@@ -54,7 +54,7 @@ defmodule GeorgeCompiler.SMC.Arit do
     @doc """
     Usado para decompor a árvore de operação. Esta função sempre empilha o tipo de operação antes de chamar a função que empilha os valores
         
-    E − I \< S, M, e + / - / * e\' 0 C\> ⇒ \< S, M, e e\' +/-/ * C\>
+    E − I < S, M, e + / - / * e' 0 C> ⇒ < S, M, e e' +/-/ * C>
     """
 
     def arit_decompose_tree(tree, s, m, c) do

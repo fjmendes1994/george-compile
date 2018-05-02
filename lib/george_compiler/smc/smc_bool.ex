@@ -1,5 +1,4 @@
 defmodule GeorgeCompiler.SMC.Bool do
-    import GeorgeCompiler.SMC.Attribution, only: [get_variable_value: 2]
     @operations %{
         "eq" => &GeorgeCompiler.SMC.Bool.equals/1,
         "neg" => &GeorgeCompiler.SMC.Bool.nt/1,

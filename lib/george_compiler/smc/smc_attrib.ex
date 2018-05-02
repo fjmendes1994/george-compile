@@ -1,7 +1,7 @@
 defmodule GeorgeCompiler.SMC.Attribution do
     
     @doc """
-    Aplicação a atribuição retirando de S o valor e o nome da variavel\n
+    Aplicação da atribuição retirando de S o valor e o nome da variavel para colocá-los no mapa M\n
     C := E < m v S, M, := C > ⇒ < S, M [m/v], C >
     """
     def attrib(_, s, m, c) do

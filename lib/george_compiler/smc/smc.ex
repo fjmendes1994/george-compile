@@ -59,6 +59,7 @@ defmodule GeorgeCompiler.SMC do
 
     @doc """
     Aplica operação no topo da pilha\n
+    Ev < S, M, v C > ⇒ < M (v) S, M, C > \n
     En \< S, M, t C \> ⇒ \< n S, M, C \>\n
     Bt \< S, M, t C \> ⇒ \< t S, M, C \>
     """
