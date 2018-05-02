@@ -160,7 +160,7 @@ defmodule GeorgeCompiler.Parser do
   define :cmd, "atrib / if / while / print / exit / call / Expression"
 
   define :atrib, "ident <assOp> Expression" do
-    [var , exp] -> Tree.new("atrib") |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
+    [var , exp] -> Tree.new("attrib") |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
   end
 
   define :else, "<elseOp> (CommandDecl / BlockCommandDecl)" do

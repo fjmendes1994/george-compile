@@ -10,7 +10,7 @@ defmodule ParserTest do
                                                                               value: "ab"},
                                                                         %Tree{leafs: [],
                                                                               value: 2}],
-                                                                value: "atrib"
+                                                                value: "attrib"
                                                               }
   end
 
@@ -58,7 +58,7 @@ defmodule ParserTest do
                                                                                       value: "add"
                                                                                     }
                                                                                   ],
-                                                                                  value: "atrib"
+                                                                                  value: "attrib"
                                                                                 }
   end
 
@@ -75,7 +75,7 @@ defmodule ParserTest do
                                                                       value: "eq"
                                                                     }
                                                                   ],
-                                                                  value: "atrib"
+                                                                  value: "attrib"
                                                                 }
 
     assert GeorgeCompiler.Parser.parse!("ab := 2 > 2") == %Tree{
@@ -90,7 +90,7 @@ defmodule ParserTest do
                                                                      value: "gt"
                                                                    }
                                                                  ],
-                                                                 value: "atrib"
+                                                                 value: "attrib"
                                                                }
 
     assert GeorgeCompiler.Parser.parse!("ab := 2 < 2") == %Tree{
@@ -105,7 +105,7 @@ defmodule ParserTest do
                                                                      value: "lt"
                                                                    }
                                                                  ],
-                                                                 value: "atrib"
+                                                                 value: "attrib"
                                                                }
 
     assert GeorgeCompiler.Parser.parse!("ab := 2 >= 2") == %Tree{
@@ -120,7 +120,7 @@ defmodule ParserTest do
                                                                      value: "ge"
                                                                    }
                                                                  ],
-                                                                 value: "atrib"
+                                                                 value: "attrib"
                                                                }
 
     assert GeorgeCompiler.Parser.parse!("ab := 2 <= 2") == %Tree{
@@ -135,7 +135,7 @@ defmodule ParserTest do
                                                                      value: "le"
                                                                    }
                                                                  ],
-                                                                 value: "atrib"
+                                                                 value: "attrib"
                                                                }
 
     assert GeorgeCompiler.Parser.parse!("ab := 2 != 2") == %Tree{
@@ -150,7 +150,7 @@ defmodule ParserTest do
                                                                      value: "neq"
                                                                    }
                                                                  ],
-                                                                 value: "atrib"
+                                                                 value: "attrib"
                                                                }
   end
 
@@ -179,7 +179,7 @@ defmodule ParserTest do
                                                                                 value: "or"
                                                                               }
                                                                             ],
-                                                                            value: "atrib"
+                                                                            value: "attrib"
                                                                          }
 
     assert GeorgeCompiler.Parser.parse!("ab := 2 != 2 and 2 == 2") == %Tree{
@@ -205,7 +205,7 @@ defmodule ParserTest do
                                                                                  value: "and"
                                                                                }
                                                                              ],
-                                                                             value: "atrib"
+                                                                             value: "attrib"
                                                                            }
 
   end
@@ -225,7 +225,7 @@ defmodule ParserTest do
                                                                                           value: "ab"},
                                                                                     %Tree{leafs: [],
                                                                                           value: 1}],
-                                                                            value: "atrib"
+                                                                            value: "attrib"
                                                                           },
                                                                           %Tree{leafs: [], value: nil}
                                                                         ],
@@ -252,7 +252,7 @@ defmodule ParserTest do
                                                                                             value: "ab"},
                                                                                       %Tree{leafs: [],
                                                                                             value: 1}],
-                                                                              value: "atrib"
+                                                                              value: "attrib"
                                                                             }
                                                                           ]
                                                                         },
@@ -281,7 +281,7 @@ defmodule ParserTest do
                                                                                                             value: "ab"},
                                                                                                       %Tree{leafs: [],
                                                                                                             value: 1}],
-                                                                                              value: "atrib"
+                                                                                              value: "attrib"
                                                                                             }
                                                                                           ]
                                                                                         },
@@ -290,7 +290,7 @@ defmodule ParserTest do
                                                                                                         value: "ab"},
                                                                                                   %Tree{leafs: [],
                                                                                                         value: 2}],
-                                                                                          value: "atrib"
+                                                                                          value: "attrib"
                                                                                         }
                                                                                       ],
                                                                                       value: "if"
@@ -311,7 +311,7 @@ defmodule ParserTest do
                                                                                                           value: "ab"},
                                                                                                     %Tree{leafs: [],
                                                                                                           value: 1}],
-                                                                                            value: "atrib"
+                                                                                            value: "attrib"
                                                                                           },
                                                                                           %Tree{
                                                                                             leafs: [],
@@ -321,7 +321,7 @@ defmodule ParserTest do
                                                                                                               value: "ab"},
                                                                                                         %Tree{leafs: [],
                                                                                                               value: 2}],
-                                                                                                value: "atrib"
+                                                                                                value: "attrib"
                                                                                               }
                                                                                             ]
                                                                                           }
@@ -409,7 +409,7 @@ end
 #  test "atribuicao simples" do
 #    assert GeorgeCompiler.Parser.parse!("ab := 2") == %Tree{
 #   leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
-#   value: "atrib"
+#   value: "attrib"
 # }
 #
 #  end
@@ -423,7 +423,7 @@ end
 #       value: "add"
 #     }
 #   ],
-#   value: "atrib"
+#   value: "attrib"
 # }
 #  end
 #
@@ -436,7 +436,7 @@ end
 #       value: "gt"
 #     }
 #   ],
-#   value: "atrib"
+#   value: "attrib"
 # }
 #  end
 #
@@ -464,7 +464,7 @@ end
 #           leafs: [
 #             %Tree{
 #               leafs: [%Tree{leafs: [], value: "a"}, %Tree{leafs: [], value: 1}],
-#               value: "atrib"
+#               value: "attrib"
 #             },
 #             %Tree{
 #               leafs: [
@@ -771,7 +771,7 @@ end
 #                         %Tree{leafs: [], value: "ab95"},
 #                         %Tree{leafs: [], value: 10}
 #                       ],
-#                       value: "atrib"
+#                       value: "attrib"
 #                     }
 #                   ],
 #                   value: "seq"
@@ -890,7 +890,7 @@ end
 #                   %Tree{leafs: [], value: "ab95"},
 #                   %Tree{leafs: [], value: 10}
 #                 ],
-#                 value: "atrib"
+#                 value: "attrib"
 #               }
 #             ]
 #           ]
