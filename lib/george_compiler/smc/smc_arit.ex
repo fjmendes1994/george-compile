@@ -1,4 +1,5 @@
 defmodule GeorgeCompiler.SMC.Arit do
+    import GeorgeCompiler.SMC.Attribution, only: [get_variable_value: 2]
     @operations %{  
         "add" => &GeorgeCompiler.SMC.Arit.add/2, 
         "sub" => &GeorgeCompiler.SMC.Arit.sub/2,
@@ -6,7 +7,6 @@ defmodule GeorgeCompiler.SMC.Arit do
         "div"=> &GeorgeCompiler.SMC.Arit.div/2,
         "rem" => &GeorgeCompiler.SMC.Arit.rem_arit/2
     }
-
 
     @doc """
     Função usada pelo módulo SMC para se efetuar a operação (operation). O valor é guardado no topo da pilha.
@@ -26,7 +26,7 @@ defmodule GeorgeCompiler.SMC.Arit do
 
     @doc false
     def mul(s, m)do
-        {x,y,s} = StackUtils.pop_twice(s)
+        {x, y, s} = StackUtils.pop_twice(s)
         Stack.push(s, get_value(x, m) * get_value(y, m))
     end
 
@@ -65,7 +65,7 @@ defmodule GeorgeCompiler.SMC.Arit do
 
     defp get_value(value, m) do
         if is_binary(value) do
-            m[value]
+            get_variable_value(value, m)
         else
             value
         end

@@ -70,9 +70,9 @@ defmodule GeorgeCompiler.SMC do
     defp get_operation(operation) do
         cond do
             is_arit_exp(operation) -> &artit_exp/4
+            is_attribution(operation) -> &attrib/4
             is_bool_exp(operation) -> &bool_exp/4
             is_control(operation) -> &control/4
-            is_attribution(operation) -> &attrib/4
         end
     end
 

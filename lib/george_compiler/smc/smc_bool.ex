@@ -1,4 +1,5 @@
 defmodule GeorgeCompiler.SMC.Bool do
+    import GeorgeCompiler.SMC.Attribution, only: [get_variable_value: 2]
     @operations %{
         "eq" => &GeorgeCompiler.SMC.Bool.equals/2,
         "neg" => &GeorgeCompiler.SMC.Bool.nt/2,
@@ -75,7 +76,7 @@ defmodule GeorgeCompiler.SMC.Bool do
     @doc false
     defp get_value(value, m) do
         if is_binary(value) do
-            m[value]
+            get_variable_value(value, m)
         else
             value
         end

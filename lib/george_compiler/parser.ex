@@ -173,7 +173,7 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :while, "<whileOp> <lp> PredicateDecl <rp> <doOP> BlockCommandDecl" do
-    [predicate, block] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
+    [predicate, [block]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 
   define :print, "printOp <lp> Expression <rp>"
