@@ -71,16 +71,18 @@ defmodule GeorgeCompiler.Parser do
 
 
   # Expressoes
-
   define :Expression, "PredicateDecl / ExpressionDecl"
 
   # Expressoes aritimeticas
+  define :PriorityExpressionDecl, "<lp> ExpressionDecl <rp>" do
+    [exp] -> exp
+  end
 
-  define :ExpressionDecl, "PredicateDecl / additiveExp / decimal / ident"
+  define :ExpressionDecl, "multitiveExp / decimal / ident"
 
-  define :additiveExp, "sum / sub / multitiveExp"
+  define :additiveExp, "sum / sub"
 
-  define :multitiveExp, "mul / rem / div"
+  define :multitiveExp, "mul / rem / div / additiveExp"
 
   define :sum, "(decimal / ident) <sumOp> ExpressionDecl" do
     [x,y] ->  Tree.new("add") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
@@ -103,27 +105,30 @@ defmodule GeorgeCompiler.Parser do
   end
 
   # Expressoes Booleanas
+  define :PriorityPredicateDecl, "<lp> PredicateDecl <rp>" do
+    [exp] -> exp
+  end
 
-  define :PredicateDecl, "and / or / boolExp"
+  define :PredicateDecl, "PriorityPredicateDecl / and / or / boolExp"
 
-  define :boolExp, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals"
+  define :boolExp, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals / ExpressionDecl"
 
-  define :notEquals, "(decimal / ident) <notEqualsOp> ExpressionDecl" do
+  define :notEquals, "(decimal / ident) <notEqualsOp> PredicateDecl" do
     [x,y] ->  Tree.new("neq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
-  define :equals, "(decimal / ident) <equalsOp> ExpressionDecl" do
+  define :equals, "(decimal / ident) <equalsOp> PredicateDecl" do
     [x,y] ->  Tree.new("eq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
-  define :greater, "(decimal / ident) <greaterOp> ExpressionDecl" do
+  define :greater, "(decimal / ident) <greaterOp> PredicateDecl" do
     [x,y] ->  Tree.new("gt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
-  define :less, "(decimal / ident) <lessOp> ExpressionDecl" do
+  define :less, "(decimal / ident) <lessOp> PredicateDecl" do
     [x,y] ->  Tree.new("lt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
-  define :greaterEquals, "(decimal / ident) <greaterEqualsOp> ExpressionDecl" do
+  define :greaterEquals, "(decimal / ident) <greaterEqualsOp> PredicateDecl" do
     [x,y] ->  Tree.new("ge") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
-  define :lessEquals, "(decimal / ident) <lessEqualsOp> ExpressionDecl" do
+  define :lessEquals, "(decimal / ident) <lessEqualsOp> PredicateDecl" do
     [x,y] ->  Tree.new("le") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :negExp, "<negOp> PredicateDecl" do
@@ -146,7 +151,7 @@ defmodule GeorgeCompiler.Parser do
   @root true
   define :CommandDecl, "choice / seq / cmd"
 
-  define :cmd, "atrib / if / while / print / exit / call / Expression"
+  define :cmd, "atrib / if / while / print / exit / call"
 
   define :atrib, "ident <assOp> Expression" do
     [var , exp] -> Tree.new("attrib") |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
@@ -156,12 +161,12 @@ defmodule GeorgeCompiler.Parser do
     [block] -> block
   end
 
-  define :if, "<ifOp> <lp> PredicateDecl <rp> (CommandDecl / BlockCommandDecl) else?" do
+  define :if, "<ifOp> PredicateDecl (CommandDecl / BlockCommandDecl) else?" do
     [predicate, block, else_block] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(else_block)
     [predicate, block, nil] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil)
   end
 
-  define :while, "<whileOp> <lp> PredicateDecl <rp> <doOP> BlockCommandDecl" do
+  define :while, "<whileOp> PredicateDecl <doOP> BlockCommandDecl" do
     [predicate, [block]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 
