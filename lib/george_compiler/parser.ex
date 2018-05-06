@@ -41,6 +41,11 @@ defmodule GeorgeCompiler.Parser do
   define :seqOp, "<space?> ';' <space?>"
   define :choOp, "<space?> '|' <space?>"
 
+  # Operadores de Declaração
+  
+  define :varOp, "<space?> 'var' <space?>"
+  define :constOp, "<space?> 'const' <space?>"
+  
   # Numeros
 
   define :digit, "[0-9]"
@@ -73,7 +78,7 @@ defmodule GeorgeCompiler.Parser do
   # Expressoes
   define :Expression, "PredicateDecl / ExpressionDecl"
 
-  # Expressoes aritimeticas
+  # Expressoes aritmeticas
   define :PriorityExpressionDecl, "<lp> ExpressionDecl <rp>" do
     [exp] -> exp
   end
@@ -149,11 +154,11 @@ defmodule GeorgeCompiler.Parser do
   end
 
   @root true
-  define :CommandDecl, "choice / seq / cmd"
+  define :CommandDecl, "choice / seq / cmd / simpleDeclaration"
 
-  define :cmd, "atrib / if / while / print / exit / call"
+  define :cmd, "attrib / if / while / print / exit / call"
 
-  define :atrib, "ident <assOp> Expression" do
+  define :attrib, "ident <assOp> Expression" do
     [var , exp] -> Tree.new("attrib") |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
   end
 
@@ -181,4 +186,26 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :choice, "cmd choOp CommandDecl"
+  
+  # Declarações
+  
+  define :simpleDeclaration, "simpleVarDecl / simpleConstDecl"
+  
+  define :composedVarDecl, "<comOp> ident composedVarDecl?" do
+    [ident, composedVarDecl_ident] -> Tree.new("ref") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedVarDecl_ident)
+  end
+  
+  define :composedConstDecl, "<comOp> ident composedConstDecl?" do
+	[ident, composedConstDecl_ident] -> Tree.new("cns") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
+  end
+  
+  define :simpleVarDecl, "<varOp> ident composedVarDecl?" do
+    [ident, composedVarDecl_ident] -> Tree.new("ref") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedVarDecl_ident)
+  end
+  
+  define :simpleConstDecl, "<constOp> ident composedConstDecl?" do
+	[ident, composedConstDecl_ident] -> Tree.new("cns") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
+  end
+  
+  
 end
