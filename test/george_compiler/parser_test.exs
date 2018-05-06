@@ -460,6 +460,49 @@ defmodule ParserTest do
                                                                                         }
 
   end
+  
+  test "declaração de variáveis" do
+  assert GeorgeCompiler.Parser.parse!("var x") == %Tree{
+  leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: nil}],
+  value: "ref"
+}
+  
+  assert GeorgeCompiler.Parser.parse!("var x, y, z") == %Tree{
+  leafs: [
+    %Tree{leafs: [], value: "x"},
+    %Tree{
+      leafs: [
+        %Tree{leafs: [], value: "y"},
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "z"}, %Tree{leafs: [], value: nil}],
+          value: "ref"
+        }
+      ],
+      value: "ref"
+    }
+  ],
+  value: "ref"
+}
+
+
+  assert GeorgeCompiler.Parser.parse!("const x") == %Tree{
+  leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: nil}],
+  value: "cns"
+}
+
+  assert GeorgeCompiler.Parser.parse!("const x, y") == %Tree{
+  leafs: [
+    %Tree{leafs: [], value: "x"},
+    %Tree{
+      leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: nil}],
+      value: "cns"
+    }
+  ],
+  value: "cns"
+}
+  end  
+
+
 
 end
 
