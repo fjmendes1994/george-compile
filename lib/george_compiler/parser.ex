@@ -196,7 +196,7 @@ defmodule GeorgeCompiler.Parser do
   end
   
   define :composedConstDecl, "<comOp> ident composedConstDecl?" do
-	[ident, composedConstDecl_ident] -> Tree.new("cns") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
+    [ident, composedConstDecl_ident] -> Tree.new("cns") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
   end
   
   define :simpleVarDecl, "<varOp> ident composedVarDecl?" do
@@ -204,7 +204,7 @@ defmodule GeorgeCompiler.Parser do
   end
   
   define :simpleConstDecl, "<constOp> ident composedConstDecl?" do
-	[ident, composedConstDecl_ident] -> Tree.new("cns") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
+    [ident, composedConstDecl_ident] -> Tree.new("cns") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
   end
   
   
