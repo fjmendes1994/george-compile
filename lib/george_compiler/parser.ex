@@ -42,10 +42,10 @@ defmodule GeorgeCompiler.Parser do
   define :choOp, "<space?> '|' <space?>"
 
   # Operadores de Declaração
-  
+
   define :varOp, "<space?> 'var' <space?>"
   define :constOp, "<space?> 'const' <space?>"
-  
+
   # Numeros
 
   define :digit, "[0-9]"
@@ -90,23 +90,23 @@ defmodule GeorgeCompiler.Parser do
   define :multitiveExp, "mul / rem / div / additiveExp"
 
   define :sum, "(decimal / ident) <sumOp> ExpressionDecl" do
-    [x,y] ->  Tree.new("add") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:add) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   define :sub, "(decimal / ident) <subOp> ExpressionDecl" do
-    [x,y] ->  Tree.new("sub") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:sub) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   define :div, "(decimal / ident) <divOp> ExpressionDecl" do
-    [x,y] ->  Tree.new("div") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:div) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   define :mul, "(decimal / ident) <mulOp> ExpressionDecl" do
-    [x,y] ->  Tree.new("mul") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:mul) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   define :rem, "(decimal / ident) <remOp> ExpressionDecl" do
-    [x,y] ->  Tree.new("rem") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:rem) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
   # Expressoes Booleanas
@@ -119,33 +119,33 @@ defmodule GeorgeCompiler.Parser do
   define :boolExp, "negExp / equals / greaterEquals / lessEquals / greater / less / notEquals / ExpressionDecl"
 
   define :notEquals, "(decimal / ident) <notEqualsOp> PredicateDecl" do
-    [x,y] ->  Tree.new("neq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:neq) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :equals, "(decimal / ident) <equalsOp> PredicateDecl" do
-    [x,y] ->  Tree.new("eq") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:eq) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :greater, "(decimal / ident) <greaterOp> PredicateDecl" do
-    [x,y] ->  Tree.new("gt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:gt) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :less, "(decimal / ident) <lessOp> PredicateDecl" do
-    [x,y] ->  Tree.new("lt") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:lt) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :greaterEquals, "(decimal / ident) <greaterEqualsOp> PredicateDecl" do
-    [x,y] ->  Tree.new("ge") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:ge) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :lessEquals, "(decimal / ident) <lessEqualsOp> PredicateDecl" do
-    [x,y] ->  Tree.new("le") |> Tree.add_leaf(x) |> Tree.add_leaf(y)
+    [x,y] ->  Tree.new(:le) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
   define :negExp, "<negOp> PredicateDecl" do
-    [x] ->  Tree.new("neg") |> Tree.add_leaf(x)
+    [x] ->  Tree.new(:neg) |> Tree.add_leaf(x)
   end
 
   define :or, "boolExp <orOP> PredicateDecl" do
-    [x, predicate] -> Tree.new("or") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
+    [x, predicate] -> Tree.new(:or) |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
   end
 
   define :and, "boolExp <andOP> PredicateDecl" do
-    [x, predicate] -> Tree.new("and") |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
+    [x, predicate] -> Tree.new(:and) |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
   end
 
   # Comandos
@@ -159,7 +159,7 @@ defmodule GeorgeCompiler.Parser do
   define :cmd, "attrib / if / while / print / exit / call"
 
   define :attrib, "ident <assOp> Expression" do
-    [var , exp] -> Tree.new("attrib") |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
+    [var , exp] -> Tree.new(:attrib) |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
   end
 
   define :else, "<elseOp> (CommandDecl / BlockCommandDecl)" do
@@ -167,12 +167,12 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :if, "<ifOp> PredicateDecl (CommandDecl / BlockCommandDecl) else?" do
-    [predicate, block, else_block] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(else_block)
-    [predicate, block, nil] ->  Tree.new("if") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil)
+    [predicate, block, else_block] ->  Tree.new(:if) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(else_block)
+    [predicate, block, nil] ->  Tree.new(:if) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block) |> Tree.add_leaf(nil)
   end
 
   define :while, "<whileOp> PredicateDecl <doOP> BlockCommandDecl" do
-    [predicate, [block]] -> Tree.new("while") |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
+    [predicate, [block]] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 
   define :print, "printOp <lp> Expression <rp>"
@@ -182,30 +182,30 @@ defmodule GeorgeCompiler.Parser do
   define :call, "ident <lp> Expression* <rp> "
 
   define :seq, "cmd <seqOp> CommandDecl" do
-    [cmd, commandDecl] -> Tree.new("seq") |> Tree.add_leaf(cmd) |> Tree.add_leaf(commandDecl)
+    [cmd, commandDecl] -> Tree.new(:seq) |> Tree.add_leaf(cmd) |> Tree.add_leaf(commandDecl)
   end
 
   define :choice, "cmd choOp CommandDecl"
-  
+
   # Declarações
-  
+
   define :simpleDeclaration, "simpleVarDecl / simpleConstDecl"
-  
+
   define :composedVarDecl, "<comOp> ident composedVarDecl?" do
-    [ident, composedVarDecl_ident] -> Tree.new("ref") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedVarDecl_ident)
+    [ident, composedVarDecl_ident] -> Tree.new(:ref) |> Tree.add_leaf(ident) |> Tree.add_leaf(composedVarDecl_ident)
   end
-  
+
   define :composedConstDecl, "<comOp> ident composedConstDecl?" do
-    [ident, composedConstDecl_ident] -> Tree.new("cns") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
+    [ident, composedConstDecl_ident] -> Tree.new(:cns) |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
   end
-  
+
   define :simpleVarDecl, "<varOp> ident composedVarDecl?" do
-    [ident, composedVarDecl_ident] -> Tree.new("ref") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedVarDecl_ident)
+    [ident, composedVarDecl_ident] -> Tree.new(:ref) |> Tree.add_leaf(ident) |> Tree.add_leaf(composedVarDecl_ident)
   end
-  
+
   define :simpleConstDecl, "<constOp> ident composedConstDecl?" do
-    [ident, composedConstDecl_ident] -> Tree.new("cns") |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
+    [ident, composedConstDecl_ident] -> Tree.new(:cns) |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
   end
-  
-  
+
+
 end

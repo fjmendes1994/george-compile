@@ -1,13 +1,13 @@
 defmodule GeorgeCompiler.SMC.Bool do
     @operations %{
-        "eq" => &GeorgeCompiler.SMC.Bool.equals/1,
-        "neg" => &GeorgeCompiler.SMC.Bool.nt/1,
-        "gt" => &GeorgeCompiler.SMC.Bool.greater_than/1,
-        "lt" => &GeorgeCompiler.SMC.Bool.lesser_than/1,
-        "ge" => &GeorgeCompiler.SMC.Bool.greater_than/1,
-        "le" => &GeorgeCompiler.SMC.Bool.lesser_than/1,
-        "or" => &GeorgeCompiler.SMC.Bool.bool_or/1,
-        "and" => &GeorgeCompiler.SMC.Bool.bool_or/1
+        :eq => &GeorgeCompiler.SMC.Bool.equals/1,
+        :neg => &GeorgeCompiler.SMC.Bool.nt/1,
+        :gt => &GeorgeCompiler.SMC.Bool.greater_than/1,
+        :lt => &GeorgeCompiler.SMC.Bool.lesser_than/1,
+        :ge => &GeorgeCompiler.SMC.Bool.greater_than/1,
+        :le => &GeorgeCompiler.SMC.Bool.lesser_than/1,
+        :or => &GeorgeCompiler.SMC.Bool.bool_or/1,
+        :and => &GeorgeCompiler.SMC.Bool.bool_or/1
     }
 
     @doc """

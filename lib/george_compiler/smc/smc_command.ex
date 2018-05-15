@@ -1,8 +1,8 @@
 defmodule GeorgeCompiler.SMC.Command do
     @operations %{
-        "if" => &GeorgeCompiler.SMC.Command.if_command/3,
-        "while" => &GeorgeCompiler.SMC.Command.while/3,
-        "seq" => nil
+        :if => &GeorgeCompiler.SMC.Command.if_command/3,
+        :while => &GeorgeCompiler.SMC.Command.while/3,
+        :seq => nil
     }
     
     @doc """
@@ -40,7 +40,7 @@ defmodule GeorgeCompiler.SMC.Command do
         if condition do
             #constroi o while de novo
             #1
-            tree = Tree.new("while")
+            tree = Tree.new(:while)
                     |> Tree.add_leaf(bool_exp)
                     |> Tree.add_leaf(code)
             #coloca o comando no topo da pilha c e o while em seguida
@@ -57,9 +57,9 @@ defmodule GeorgeCompiler.SMC.Command do
         c = c
             |> StackUtils.push_as_tree(tree.value)
         case tree.value do
-            "if" -> if_decompose(tree, s, m, c)
-            "while" -> while_decompose(tree, s, m, c)
-            "seq" -> sequence_decompose(tree, s, m, c)
+            :if -> if_decompose(tree, s, m, c)
+            :while -> while_decompose(tree, s, m, c)
+            :seq -> sequence_decompose(tree, s, m, c)
         end
     end
 

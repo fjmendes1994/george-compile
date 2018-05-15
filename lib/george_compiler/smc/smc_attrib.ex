@@ -40,5 +40,5 @@ defmodule GeorgeCompiler.SMC.Attribution do
     @doc """
     Retorna true caso a operação seja attrib.
     """
-    def is_attribution(operation), do: operation == "attrib"
+    def is_attribution(operation), do: operation == :attrib
 end

@@ -1,10 +1,10 @@
 defmodule GeorgeCompiler.SMC.Arit do
     @operations %{  
-        "add" => &GeorgeCompiler.SMC.Arit.add/1, 
-        "sub" => &GeorgeCompiler.SMC.Arit.sub/1,
-        "mul"=> &GeorgeCompiler.SMC.Arit.mul/1,
-        "div"=> &GeorgeCompiler.SMC.Arit.div/1,
-        "rem" => &GeorgeCompiler.SMC.Arit.rem_arit/1
+        :add => &GeorgeCompiler.SMC.Arit.add/1,
+        :sub => &GeorgeCompiler.SMC.Arit.sub/1,
+        :mul=> &GeorgeCompiler.SMC.Arit.mul/1,
+        :div=> &GeorgeCompiler.SMC.Arit.div/1,
+        :rem => &GeorgeCompiler.SMC.Arit.rem_arit/1
     }
 
     @doc """
