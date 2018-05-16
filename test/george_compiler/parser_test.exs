@@ -501,7 +501,41 @@ defmodule ParserTest do
   value: :cns
 }
   end
+  
+  test "declaracao de variavel com atribuicao" do
+	assert GeorgeCompiler.Parser.parse!("var x := 2 + 3") == %Tree{
+  leafs: [
+    %Tree{leafs: [], value: "x"},
+    %Tree{
+      leafs: [],
+      value: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 3}],
+          value: :add
+        }
+      ]
+    }
+  ],
+  value: :ref
+}
+  end
 
-
+  test "declaracao de constante com atribuicao" do 
+  assert GeorgeCompiler.Parser.parse!("const x := 5 >= 2") == %Tree{
+  leafs: [
+    %Tree{leafs: [], value: "x"},
+    %Tree{
+      leafs: [],
+      value: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: 5}, %Tree{leafs: [], value: 2}],
+          value: :ge
+        }
+      ]
+    }
+  ],
+  value: :cns
+}
+  end
 
 end
