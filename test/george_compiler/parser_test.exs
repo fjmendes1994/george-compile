@@ -462,23 +462,49 @@ defmodule ParserTest do
   end
 
   test "declaração de variáveis" do
-  assert GeorgeCompiler.Parser.parse!("var x") == %Tree{
-  leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: nil}],
+  assert GeorgeCompiler.Parser.parse!("var x = 2") == %Tree{
+  leafs: [
+    %Tree{
+      leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: nil}],
+      value: "x"
+    }
+  ],
   value: :ref
 }
 
-  assert GeorgeCompiler.Parser.parse!("var x, y, z") == %Tree{
+  assert GeorgeCompiler.Parser.parse!("var x = 2 + 5, y = 8, z = 7") == %Tree{
   leafs: [
-    %Tree{leafs: [], value: "x"},
     %Tree{
       leafs: [
-        %Tree{leafs: [], value: "y"},
         %Tree{
-          leafs: [%Tree{leafs: [], value: "z"}, %Tree{leafs: [], value: nil}],
-          value: :ref
+          leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 5}],
+          value: :add
+        },
+        %Tree{
+          leafs: [],
+          value: [
+            %Tree{
+              leafs: [
+                %Tree{leafs: [], value: 8},
+                %Tree{
+                  leafs: [],
+                  value: [
+                    %Tree{
+                      leafs: [
+                        %Tree{leafs: [], value: 7},
+                        %Tree{leafs: [], value: nil}
+                      ],
+                      value: "z"
+                    }
+                  ]
+                }
+              ],
+              value: "y"
+            }
+          ]
         }
       ],
-      value: :ref
+      value: "x"
     }
   ],
   value: :ref
@@ -502,24 +528,6 @@ defmodule ParserTest do
 }
   end
   
-  test "declaracao de variavel com atribuicao" do
-	assert GeorgeCompiler.Parser.parse!("var x := 2 + 3") == %Tree{
-  leafs: [
-    %Tree{leafs: [], value: "x"},
-    %Tree{
-      leafs: [],
-      value: [
-        %Tree{
-          leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 3}],
-          value: :add
-        }
-      ]
-    }
-  ],
-  value: :ref
-}
-  end
-
   test "declaracao de constante com atribuicao" do 
   assert GeorgeCompiler.Parser.parse!("const x := 5 >= 2") == %Tree{
   leafs: [
