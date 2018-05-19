@@ -511,39 +511,48 @@ defmodule ParserTest do
 }
 
 
-  assert GeorgeCompiler.Parser.parse!("const x") == %Tree{
-  leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: nil}],
+  assert GeorgeCompiler.Parser.parse!("const x = 6") == %Tree{
+  leafs: [
+    %Tree{
+      leafs: [%Tree{leafs: [], value: 6}, %Tree{leafs: [], value: nil}],
+      value: "x"
+    }
+  ],
   value: :cns
 }
 
-  assert GeorgeCompiler.Parser.parse!("const x, y") == %Tree{
+  assert GeorgeCompiler.Parser.parse!("const x = 6 >= 5, y = 8 < 17") == %Tree{
   leafs: [
-    %Tree{leafs: [], value: "x"},
     %Tree{
-      leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: nil}],
-      value: :cns
+      leafs: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: 6}, %Tree{leafs: [], value: 5}],
+          value: :ge
+        },
+        %Tree{
+          leafs: [],
+          value: [
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [
+                    %Tree{leafs: [], value: 8},
+                    %Tree{leafs: [], value: 17}
+                  ],
+                  value: :lt
+                },
+                %Tree{leafs: [], value: nil}
+              ],
+              value: "y"
+            }
+          ]
+        }
+      ],
+      value: "x"
     }
   ],
   value: :cns
 }
   end
   
-  test "declaracao de constante com atribuicao" do 
-  assert GeorgeCompiler.Parser.parse!("const x := 5 >= 2") == %Tree{
-  leafs: [
-    %Tree{leafs: [], value: "x"},
-    %Tree{
-      leafs: [],
-      value: [
-        %Tree{
-          leafs: [%Tree{leafs: [], value: 5}, %Tree{leafs: [], value: 2}],
-          value: :ge
-        }
-      ]
-    }
-  ],
-  value: :cns
-}
-  end
-
 end
