@@ -43,9 +43,18 @@ defmodule GeorgeCompiler.Parser do
 
   # Operadores de Declaração
 
-  define :varOp, "<space?> 'var' <space?>"
-  define :constOp, "<space?> 'const' <space?>"
-
+  define :declOp, "(varOp / constOp)"
+  
+  define :varOp, "<space?> 'var' <space?>" do
+	[ref] -> :ref 
+  end
+  
+  define :constOp, "<space?> 'const' <space?>" do
+    [cns] -> :cns
+  end
+  
+ 
+  
   # Numeros
 
   define :digit, "[0-9]"
@@ -154,7 +163,7 @@ defmodule GeorgeCompiler.Parser do
   end
 
   @root true
-  define :CommandDecl, "choice / seq / cmd / simpleDeclaration"
+  define :CommandDecl, "choice / seq / cmd / declSeq"
 
   define :cmd, "attrib / if / while / print / exit / call"
 
@@ -189,22 +198,14 @@ defmodule GeorgeCompiler.Parser do
 
   # Declarações
 
-  define :simpleDeclaration, "simpleVarDecl / simpleConstDecl"
-
-  define :composedVarDecl, "<comOp> ident composedVarDecl?" do
-    [ident, composedVarDecl_ident] -> Tree.new(:ref) |> Tree.add_leaf(ident) |> Tree.add_leaf(composedVarDecl_ident)
+  define :declSeq, "decl / decl <seqOp> declSeq"
+  
+  define :decl, "declOp iniSeq" do
+	[decl, iniSeq] -> Tree.new(decl) |> Tree.add_leaf(iniSeq)
   end
-
-  define :composedConstDecl, "<comOp> ident composedConstDecl?" do
-    [ident, composedConstDecl_ident] -> Tree.new(:cns) |> Tree.add_leaf(ident) |> Tree.add_leaf(composedConstDecl_ident)
-  end
-
-  define :simpleVarDecl, "<varOp> ident (<assOp> Expression / composedVarDecl)?" do
-    [ident, y] -> Tree.new(:ref) |> Tree.add_leaf(ident) |> Tree.add_leaf(y)
-  end
-
-  define :simpleConstDecl, "<constOp> ident (<assOp> Expression / composedConstDecl)?" do
-    [ident, y] -> Tree.new(:cns) |> Tree.add_leaf(ident) |> Tree.add_leaf(y)
+  
+  define :iniSeq, "ident <iniOp> Expression (<comOp> iniSeq)?" do
+	[ident, exp, iniSeq] -> Tree.new(ident) |> Tree.add_leaf(exp) |> Tree.add_leaf(iniSeq)
   end
   
 
