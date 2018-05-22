@@ -159,13 +159,16 @@ defmodule GeorgeCompiler.Parser do
     [x, predicate] -> Tree.new(:and) |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
   end
 
+
   # Comandos
-  define :BlockCommandDecl, "<lk> CommandDecl+ <rk> " do
-    [cmd] -> cmd
+  @root true
+  define :BlockCommandDecl, "<lk> declSeq? CommandDecl+ <rk> " do
+    [nil, [cmd]] -> cmd
+    [[decl_seq],[cmd]] -> Tree.new(:blk) |> Tree.add_leaf(decl_seq) |> Tree.add_leaf(cmd)
   end
 
-  @root true
-  define :CommandDecl, "choice / seq / cmd / declSeq"
+  
+  define :CommandDecl, "choice / seq / cmd"
 
   define :cmd, "attrib / if / while / print / exit / call"
 
@@ -183,7 +186,9 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :while, "<whileOp> PredicateDecl <doOP> BlockCommandDecl" do
-    [predicate, [block]] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
+    [predicate, [cmd]] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(cmd)
+    [predicate, block] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
+
   end
 
   define :print, "printOp <lp> Expression <rp>"
@@ -203,11 +208,13 @@ defmodule GeorgeCompiler.Parser do
   define :declSeq, "decl / decl <seqOp> declSeq"
   
   define :decl, "declOp iniSeq" do
-	[decl, iniSeq] -> Tree.new(decl) |> Tree.add_leaf(iniSeq)
+	  [decl, iniSeq] -> Tree.new(decl) |> Tree.add_leaf(iniSeq)
   end
   
   define :iniSeq, "ident <iniOp> Expression (<comOp> iniSeq)?" do
-	[ident, exp, iniSeq] -> Tree.new(ident) |> Tree.add_leaf(exp) |> Tree.add_leaf(iniSeq)
+    [ident, exp, nil] -> Tree.new(ident) |> Tree.add_leaf(exp)
+	  [ident, exp, iniSeq] -> Tree.new(ident) |> Tree.add_leaf(exp) |> Tree.add_leaf(iniSeq)
+
   end
   
 
