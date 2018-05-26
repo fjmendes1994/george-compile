@@ -29,6 +29,15 @@ defmodule SMCTest do
                                     }}
   end
 
+  test "Remoção dupla de S" do
+    smc = SMC.new |> SMC.add_value(5) |> SMC.add_value(6)
+    assert SMC.pop_twice_value(smc) == {6, 5, %SMC{
+                                      c: %Stack{elements: []},
+                                      m: %{},
+                                      s: %Stack{elements: []}
+                                    }}
+  end
+
   test "Inserção em C" do
     smc = SMC.new |> SMC.add_control(5)
     assert smc == %SMC{
