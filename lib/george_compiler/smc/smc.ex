@@ -25,7 +25,12 @@ defmodule GeorgeCompiler.SMC do
 	end
 
 	@doc "Adiciona valor na pilha de controle em forma de árvore"
-	def add_control(smc, value) do
+	def add_control(smc, value) when is_map(value) do
+		%{smc | c: Stack.push(smc.c, value)}
+	end
+
+	@doc "Adiciona valor na pilha de controle em forma de árvore"
+	def add_control(smc, value) when not is_map(value) do
 		%{smc | c: StackUtils.push_as_tree(smc.c, value)}
 	end
 
