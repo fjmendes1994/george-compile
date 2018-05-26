@@ -1,18 +1,18 @@
-defmodule SMCTest do
+defmodule CompilerTest do
   @moduledoc false
 
   use ExUnit.Case
 
   @doc "testes da pilha C"
   test "Verifica pilhas" do
-    assert GeorgeCompiler.SMC.evaluate(Stack.new, Stack.new, Stack.new) == {Stack.new, Stack.new, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new, Stack.new, Stack.new) == {Stack.new, Stack.new, Stack.new}
   end
 
   test "Esvazia pilha c e para" do
     c = Stack.new
         |> Stack.push((Tree.new(5)))
         |> Stack.push((Tree.new(6)))
-    assert elem(GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c),2) == Stack.new
+    assert elem(GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c),2) == Stack.new
   end
 
   test "Esvazia pilha c e verifica s" do
@@ -22,7 +22,7 @@ defmodule SMCTest do
     s = Stack.new
         |> Stack.push(6)
         |> Stack.push(5)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   @doc "Testes aritiméticos"
@@ -33,7 +33,7 @@ defmodule SMCTest do
         |> Stack.push((Tree.new(6)))
     s = Stack.new
         |> Stack.push(11)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   test "Esvazia pilha c e faz subtração utilzando s" do
@@ -43,7 +43,7 @@ defmodule SMCTest do
         |> Stack.push((Tree.new(6)))
     s = Stack.new
         |> Stack.push(1)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   test "Esvazia pilha c e faz multiplicação utilzando s" do
@@ -53,7 +53,7 @@ defmodule SMCTest do
         |> Stack.push((Tree.new(6)))
     s = Stack.new
         |> Stack.push(30)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   test "Esvazia pilha c e faz divisão utilzando s" do
@@ -63,7 +63,7 @@ defmodule SMCTest do
         |> Stack.push((Tree.new(2)))
     s = Stack.new
         |> Stack.push(2)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   #Expressão: 1+2
@@ -74,7 +74,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(2))
     s = Stack.new
       |> Stack.push(3)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   #Expressão: 1-2
@@ -85,7 +85,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(2))
     s = Stack.new
         |> Stack.push(-1)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   #Expressão: 1*2
@@ -96,7 +96,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(2))
     s = Stack.new
         |> Stack.push(2)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   #Expressão: 2/1
@@ -107,7 +107,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(1))
     s = Stack.new
         |> Stack.push(2)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   #Expressão: x+y, x=1 e y=2
@@ -119,7 +119,7 @@ defmodule SMCTest do
     s = Stack.new
       |> Stack.push(3)
     m = %{"x" => 1, "y" => 2}
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   #Expressão: x,y, x=1 e y=2
@@ -131,7 +131,7 @@ defmodule SMCTest do
     s = Stack.new
         |> Stack.push(-1)
     m = %{"x" => 1, "y" => 2}
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   #Expressão: x*y, x=1 e y=2
@@ -143,7 +143,7 @@ defmodule SMCTest do
     s = Stack.new
         |> Stack.push(2)
     m = %{"x" => 1, "y" => 2}
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   #Expressão: x/y, x=2 e y=1
@@ -155,7 +155,7 @@ defmodule SMCTest do
     s = Stack.new
         |> Stack.push(2)
     m = %{"x" => 2, "y" => 1}
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   #Expressão: 5 + 5 - 2
@@ -169,7 +169,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(tree))
     s = Stack.new
         |> Stack.push(8)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   #Expressão: 3 * 5 + 2
@@ -183,7 +183,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(2))
     s = Stack.new
         |> Stack.push(17)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   #Expressão: 2 * 10 - 3 * 1
@@ -200,7 +200,7 @@ defmodule SMCTest do
     s = Stack.new
         |> Stack.push(17)
 
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
 
@@ -213,7 +213,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(5))
     s = Stack.new
         |> Stack.push(true)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   test "Igualdade booleana com variaveis" do
@@ -224,7 +224,7 @@ defmodule SMCTest do
     s = Stack.new
         |> Stack.push(true)
     m = %{"x" => 5, "y" => 5}
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   test "Maior que" do
@@ -234,7 +234,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(5))
     s = Stack.new
         |> Stack.push(true)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   test "Maior que com variaveis" do
@@ -245,7 +245,7 @@ defmodule SMCTest do
     s = Stack.new
         |> Stack.push(true)
     m = %{"x" => 3, "y" => 2}
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   test "Menor que" do
@@ -255,7 +255,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(6))
     s = Stack.new
         |> Stack.push(true)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   test "Menor que com variaveis" do
@@ -266,7 +266,7 @@ defmodule SMCTest do
     s = Stack.new
         |> Stack.push(true)
     m = %{"x" => 1, "y" => 2}
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   test "Negação booleana" do
@@ -275,7 +275,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(false))
     s = Stack.new
         |> Stack.push(true)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , %{}, c) == {s, %{}, Stack.new}
   end
 
   test "Negação booleana com variavel" do
@@ -285,7 +285,7 @@ defmodule SMCTest do
     s = Stack.new
         |> Stack.push(true)
     m = %{"x" => false}
-    assert GeorgeCompiler.SMC.evaluate(Stack.new , m, c) == {s, m, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new , m, c) == {s, m, Stack.new}
   end
 
   @doc "Atribuição e desvios"
@@ -295,7 +295,7 @@ defmodule SMCTest do
                       |> Tree.add_leaf(:var)
                       |> Tree.add_leaf(5))
     m = %{:var => 5}
-    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, m, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new, %{}, c) == {Stack.new, m, Stack.new}
   end
 
   test "if com else entrando no if" do
@@ -317,7 +317,7 @@ defmodule SMCTest do
         |> Stack.push(if_tree)
     s = Stack.new
         |> Stack.push(4)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
   end
 
   test "if com else entrando no else" do
@@ -338,7 +338,7 @@ defmodule SMCTest do
         |> Stack.push(if_tree)
     s = Stack.new
         |> Stack.push(0)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
   end
 
   test "if sem else entrando no else" do
@@ -354,7 +354,7 @@ defmodule SMCTest do
 							|> Tree.add_leaf(nil)
     c = Stack.new
         |> Stack.push(if_tree)
-    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new, %{}, c) == {Stack.new, %{}, Stack.new}
   end
 
 	test "Sequencia" do
@@ -372,7 +372,7 @@ defmodule SMCTest do
 		s = Stack.new
 				|> Stack.push(9)
 				|> Stack.push(5)
-		assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
+		assert GeorgeCompiler.Compiler.evaluate(Stack.new, %{}, c) == {s, %{}, Stack.new}
   end
 
   test "While não executando" do
@@ -387,7 +387,7 @@ defmodule SMCTest do
     c = Stack.new
         |> Stack.push(while)
 
-    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{}, c) == {Stack.new, %{}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new, %{}, c) == {Stack.new, %{}, Stack.new}
   end
 
   test "While executando" do
@@ -407,6 +407,6 @@ defmodule SMCTest do
      c = Stack.new
         |> Stack.push(while)
 
-    assert GeorgeCompiler.SMC.evaluate(Stack.new, %{"i" => 1}, c) == {Stack.new, %{"i" => 5}, Stack.new}
+    assert GeorgeCompiler.Compiler.evaluate(Stack.new, %{"i" => 1}, c) == {Stack.new, %{"i" => 5}, Stack.new}
   end
 end

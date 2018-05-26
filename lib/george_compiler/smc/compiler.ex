@@ -1,4 +1,4 @@
-defmodule GeorgeCompiler.SMC do
+defmodule GeorgeCompiler.Compiler do
     import GeorgeCompiler.SMC.Arit
     import GeorgeCompiler.SMC.Attribution
     import GeorgeCompiler.SMC.Bool
