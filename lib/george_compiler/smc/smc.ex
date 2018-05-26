@@ -5,7 +5,7 @@ defmodule GeorgeCompiler.SMC do
 	defstruct s: Stack.new, m: %{}, c: Stack.new
 
 	@doc "Gera uma tripla SMC com duas stacks(valores e controle) e um map(memória)"
-	def new() , do: %GeorgeCompiler.SMC{}
+	def new(), do: %GeorgeCompiler.SMC{}
 
 	@doc "Adiciona valor na pilha de valores"
 	def add_value(smc, value) do
@@ -27,5 +27,15 @@ defmodule GeorgeCompiler.SMC do
 	def pop_control(smc) do
 		{value, new_c} = Stack.pop(smc.c)
 		{value, %{smc | c: new_c}}
+	end
+
+	@doc "Adiciona um elemento na estrutura de memória ou sobrescreve valores de uma variável"
+	def add_store(smc, key, value) do
+		%{smc | m: Map.put(smc.m, key, value)}
+	end
+
+	@doc "Limpa a memória"
+	def clean_store(smc) do
+		%{smc | m: %{}}
 	end
 end

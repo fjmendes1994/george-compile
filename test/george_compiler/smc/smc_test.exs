@@ -46,4 +46,31 @@ defmodule SMCTest do
                                       s: %Stack{elements: []}
                                     }}
   end
+
+  test "Inserção em M" do
+    smc = SMC.new |> SMC.add_store("var", 5)
+    assert smc == %SMC{
+                    c: %Stack{elements: []},
+                    m: %{"var" => 5},
+                    s: %Stack{elements: []}
+                  }
+  end
+
+  test "Inserção dupla em M" do
+    smc = SMC.new |> SMC.add_store("var", 5) |> SMC.add_store("var", 6)
+    assert smc == %SMC{
+                    c: %Stack{elements: []},
+                    m: %{"var" => 6},
+                    s: %Stack{elements: []}
+                  }
+  end
+                  
+  test "Limpeza da memoria" do
+    smc = SMC.new |> SMC.add_store("var", 5) |> SMC.add_store("var", 6) |> SMC.clean_store
+    assert smc == %SMC{
+                    c: %Stack{elements: []},
+                    m: %{},
+                    s: %Stack{elements: []}
+                  }
+  end
 end
