@@ -18,6 +18,12 @@ defmodule GeorgeCompiler.SMC do
 		{value, %{smc | s: new_s}}
 	end
 
+	@doc "Retira dois elementos da pilha de valores e retorna os valores e a estrutura SMC sem eles"
+	def pop_twice_value(smc) do
+		{value_a, value_b, new_s} = StackUtils.pop_twice(smc.s)
+		{value_a, value_b, %{smc | s: new_s}}
+	end
+
 	@doc "Adiciona valor na pilha de controle em forma de árvore"
 	def add_control(smc, value) do
 		%{smc | c: StackUtils.push_as_tree(smc.c, value)}
