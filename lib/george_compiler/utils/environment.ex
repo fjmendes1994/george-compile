@@ -1,7 +1,7 @@
-defmodule Ambient do
+defmodule Environment do
     defstruct refs: []
 
-    def new(), do: %Ambient{}
+    def new(), do: %Environment{}
 
     def add_ref(ambient, ref) do
         %{ambient | refs: [{String.to_atom(ref), SecureRandom.uuid} | ambient.refs]}
