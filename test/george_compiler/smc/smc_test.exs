@@ -64,6 +64,11 @@ defmodule SMCTest do
                     s: %Stack{elements: []}
                   }
   end
+
+  test "Recuperação de valor" do
+    smc = SMC.new |> SMC.add_store("var", 5)
+    assert SMC.get_stored_value(smc, "var") == 5
+  end
                   
   test "Limpeza da memoria" do
     smc = SMC.new |> SMC.add_store("var", 5) |> SMC.add_store("var", 6) |> SMC.clean_store

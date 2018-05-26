@@ -30,8 +30,13 @@ defmodule GeorgeCompiler.SMC do
 	end
 
 	@doc "Adiciona um elemento na estrutura de memória ou sobrescreve valores de uma variável"
-	def add_store(smc, key, value) do
-		%{smc | m: Map.put(smc.m, key, value)}
+	def add_store(smc, id, value) do
+		%{smc | m: Map.put(smc.m, id, value)}
+	end
+
+	@doc "Recupera um valor na memória"
+	def get_stored_value(smc, id) do
+		smc.m[id]
 	end
 
 	@doc "Limpa a memória"
