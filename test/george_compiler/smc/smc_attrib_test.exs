@@ -5,11 +5,10 @@ defmodule SMCAttribTest do
     use ExUnit.Case
 
     test "Atribuição simples" do
-        s = Stack.new
-            |> Stack.push("var")
-            |> Stack.push(5)
-        m = %{"var" => 5}
-        assert attrib(nil, s, %{}, Stack.new) == {Stack.new, m, Stack.new}
+			smc = SMC.new
+						|> SMC.add_value("var")
+						|> SMC.add_value(5)
+        assert attrib(nil, smc) == SMC.new |> SMC.add_store("var", 5)
     end
 
     test "Recupera valor de variavel dado o mapa" do

@@ -1,4 +1,6 @@
 defmodule GeorgeCompiler.Compiler do
+    alias GeorgeCompiler.SMC, as: SMC
+
     import GeorgeCompiler.SMC.Arit
     import GeorgeCompiler.SMC.Attribution
     import GeorgeCompiler.SMC.Bool
@@ -7,13 +9,13 @@ defmodule GeorgeCompiler.Compiler do
     @doc """
     Operação que consome a pilha C para aplicação das regras
     """
-    def evaluate(s, m, c) do
-        if Stack.depth(c) > 0 do
-            {node, c} = Stack.pop(c)
-            {s, m, c} = do_operation(node, s, m, c)
-            evaluate(s, m, c)
+    def evaluate(smc) do
+        if Stack.depth(smc.c) > 0 do
+            SMC.pop_control(smc)
+            |> do_operation
+            |> evaluate
         else
-            {s, m, c}
+            smc
         end
     end
 
@@ -23,33 +25,33 @@ defmodule GeorgeCompiler.Compiler do
 
     C nil \< S, M, nil C \> ⇒ \< S, M, C \>
     """
-    def do_operation(node, s, m, c) do
+    def do_operation({node, smc}) do
         if Tree.is_leaf node do 
             unless TreeUtils.is_nil(node) do
-                modify_s(node, s, m, c)
+                modify_s(node, smc)
             else
-                {s, m, c}
+                smc
             end
         else
-            decompose_tree(node, s, m, c)
+            decompose_tree(node, smc)
         end
     end
 
-    defp decompose_tree(tree, s, m, c) do
+    defp decompose_tree(tree, smc) do
         cond do
-            is_arit_exp(tree.value) -> arit_decompose_tree(tree, s, m, c)
-            is_attribution(tree.value) -> attribution_decompose_tree(tree, s, m, c)
-            is_bool_exp(tree.value) -> bool_decompose_tree(tree, s, m, c)
-            is_command(tree.value) -> command_decompose_tree(tree, s, m, c) 
+            is_arit_exp(tree.value) -> arit_decompose_tree(tree, smc)
+            is_attribution(tree.value) -> attribution_decompose_tree(tree, smc)
+            is_bool_exp(tree.value) -> bool_decompose_tree(tree, smc)
+            is_command(tree.value) -> command_decompose_tree(tree, smc) 
         end
     end
 
-    defp modify_s(node, s, m, c) do
+    defp modify_s(node, smc) do
         if is_value node.value do
-            push_value(node, s, m, c)
+            push_value(node, smc)
         else
             get_operation(node.value)
-            |> apply_operation(node.value, s, m, c)
+            |> apply_operation(node.value, smc)
         end
     end
 
@@ -64,14 +66,13 @@ defmodule GeorgeCompiler.Compiler do
     Bt \< S, M, t C \> ⇒ \< t S, M, C \>
     """
 
-    def push_value(node, s, m, c) do
+    def push_value(node, smc) do
         value = node.value
-        s = 
+        smc = 
           cond do
-              is_binary value -> Stack.push(s, get_variable_value(node.value,m))
-              true -> Stack.push(s, node.value)
+              is_binary value -> SMC.add_value(smc, SMC.get_stored_value(smc, value))
+              true -> SMC.add_value(smc, value)
           end
-        {s, m, c}
     end
 
     defp get_operation(operation) do
@@ -83,7 +84,7 @@ defmodule GeorgeCompiler.Compiler do
         end
     end
 
-    defp apply_operation(function, operation, s, m, c) do
-        function.(operation, s, m, c)
+    defp apply_operation(function, operation, smc) do
+        function.(operation, smc)
     end
 end
