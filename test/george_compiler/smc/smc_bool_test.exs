@@ -1,132 +1,140 @@
 defmodule SMCBoolTest do
-    @moduledoc false
+	@moduledoc false
 
-    use ExUnit.Case
+	alias GeorgeCompiler.SMC, as: SMC
 
-    import GeorgeCompiler.SMC.Bool
+	use ExUnit.Case
 
-    test "igualdade" do
-        s = Stack.new 
-            |> Stack.push(5) 
-            |> Stack.push(5) 
-        assert equals(s) == Stack.new |> Stack.push(true)
-    end
-    
-    test "negação" do
-        s = Stack.new 
-            |> Stack.push(true) 
-        assert nt(s) == Stack.new |> Stack.push(false)
-    end
+	import GeorgeCompiler.SMC.Bool
 
-    #Expressão: !(5==5)
-    test "negação e igualdade" do
-        s = Stack.new 
-            |> Stack.push(5) 
-            |> Stack.push(5)
-        assert equals(s) |> nt == Stack.new |> Stack.push(false)
-    end
+	test "igualdade" do
+		smc = SMC.new
+				  |> SMC.add_value(5)
+				  |> SMC.add_value(5)
+	   
+		assert equals(smc) == SMC.new |> SMC.add_value(true)
+	end
+	
+	test "negação" do
+		smc = SMC.new
+        |> SMC.add_value(true) 
+        
+		assert nt(smc) == SMC.new |> SMC.add_value(false)
+	end
 
-    @doc "Testes para > e <"
-    test "maior que verdadeiro" do
-        s = Stack.new 
-            |> Stack.push(5) 
-            |> Stack.push(3) 
-        assert greater_than(s) == Stack.new |> Stack.push(true)
-    end
+	#Expressão: !(5==5)
+	test "negação e igualdade" do
+    smc = SMC.new
+          |> SMC.add_value(5)
+          |> SMC.add_value(5)
 
-    test "menor que verdadeiro" do
-        s = Stack.new 
-            |> Stack.push(3) 
-            |> Stack.push(5) 
-        assert lesser_than(s) == Stack.new |> Stack.push(true)
-    end
+		assert equals(smc) |> nt == SMC.new |> SMC.add_value(false)
+	end
 
-    test "maior que falso" do
-        s = Stack.new 
-            |> Stack.push(3) 
-            |> Stack.push(5) 
-        assert greater_than(s) == Stack.new |> Stack.push(false)
-    end
+	@doc "Testes para > e <"
+	test "maior que verdadeiro" do
+		smc = SMC.new
+          |> SMC.add_value(5)
+          |> SMC.add_value(3)
 
-    test "menor que falso" do
-        s = Stack.new 
-            |> Stack.push(5) 
-            |> Stack.push(3) 
-        assert lesser_than(s) == Stack.new |> Stack.push(false)
-    end
+		assert greater_than(smc) == SMC.new |> SMC.add_value(true)
+	end
 
-    @doc "testes para >= e <="
-    # MAIOR OU IGUAL
-    test "maior igual que verdadeiro" do
-        s = Stack.new 
-            |> Stack.push(5) 
-            |> Stack.push(5) 
-        assert greater_equals_than(s) == Stack.new |> Stack.push(true)
-    end
+	test "menor que verdadeiro" do
+		smc = SMC.new
+          |> SMC.add_value(3)
+          |> SMC.add_value(5)
+      
+		assert lesser_than(smc) == SMC.new |> SMC.add_value(true)
+	end
 
-    test "maior igual que verdadeiro 2" do
-        s = Stack.new 
-            |> Stack.push(6) 
-            |> Stack.push(5) 
-        assert greater_equals_than(s) == Stack.new |> Stack.push(true)
-    end
+	test "maior que falso" do
+		smc = SMC.new 
+			|> SMC.add_value(3) 
+			|> SMC.add_value(5) 
+		assert greater_than(smc) == SMC.new |> SMC.add_value(false)
+	end
 
-    test "maior igual que falso" do
-        s = Stack.new 
-            |> Stack.push(6) 
-            |> Stack.push(7) 
-        assert greater_equals_than(s) == Stack.new |> Stack.push(false)
-    end
+	test "menor que falso" do
+		smc = SMC.new 
+			|> SMC.add_value(5) 
+			|> SMC.add_value(3) 
+		assert lesser_than(smc) == SMC.new |> SMC.add_value(false)
+	end
 
-    #MENOR OU IGUAL
-    test "menor igual que verdadeiro" do
-        s = Stack.new 
-            |> Stack.push(5) 
-            |> Stack.push(5) 
-        assert lesser_equals_than(s) == Stack.new |> Stack.push(true)
-    end
+	@doc "testes para >= e <="
+	# MAIOR OU IGUAL
+	test "maior igual que verdadeiro" do
+		smc = SMC.new 
+			|> SMC.add_value(5) 
+			|> SMC.add_value(5) 
+		assert greater_equals_than(smc) == SMC.new |> SMC.add_value(true)
+	end
 
-    test "menor igual que verdadeiro 2" do
-        s = Stack.new 
-            |> Stack.push(3) 
-            |> Stack.push(5) 
-        assert lesser_equals_than(s) == Stack.new |> Stack.push(true)
-    end
+	test "maior igual que verdadeiro 2" do
+		smc = SMC.new 
+			|> SMC.add_value(6) 
+			|> SMC.add_value(5) 
+		assert greater_equals_than(smc) == SMC.new |> SMC.add_value(true)
+	end
 
-    test "menor igual que falso" do
-        s = Stack.new 
-            |> Stack.push(5) 
-            |> Stack.push(4) 
-        assert lesser_equals_than(s) == Stack.new |> Stack.push(false)
-    end
+	test "maior igual que falso" do
+		smc = SMC.new 
+			|> SMC.add_value(6) 
+			|> SMC.add_value(7) 
+		assert greater_equals_than(smc) == SMC.new |> SMC.add_value(false)
+	end
+
+	#MENOR OU IGUAL
+	test "menor igual que verdadeiro" do
+		smc = SMC.new 
+			|> SMC.add_value(5) 
+			|> SMC.add_value(5) 
+		assert lesser_equals_than(smc) == SMC.new |> SMC.add_value(true)
+	end
+
+	test "menor igual que verdadeiro 2" do
+		smc = SMC.new 
+			|> SMC.add_value(3) 
+			|> SMC.add_value(5) 
+		assert lesser_equals_than(smc) == SMC.new |> SMC.add_value(true)
+	end
+
+	test "menor igual que falso" do
+		smc = SMC.new 
+			|> SMC.add_value(5) 
+      |> SMC.add_value(4) 
+      
+		assert lesser_equals_than(smc) == SMC.new |> SMC.add_value(false)
+	end
 
 
-    @doc "AND e OR"
-    test "teste de and verdadeiro" do
-        s = Stack.new 
-            |> Stack.push(true) 
-            |> Stack.push(true) 
-        assert bool_and(s) == Stack.new |> Stack.push(true)
-    end
+	@doc "AND e OR"
+	test "teste de and verdadeiro" do
+		smc = SMC.new 
+			|> SMC.add_value(true) 
+			|> SMC.add_value(true) 
+		assert bool_and(smc) == SMC.new |> SMC.add_value(true)
+	end
 
-    test "teste de and falso" do
-        s = Stack.new 
-            |> Stack.push(true)
-            |> Stack.push(false) 
-        assert bool_and(s) == Stack.new |> Stack.push(false)
-    end
+	test "teste de and falso" do
+		smc = SMC.new 
+			|> SMC.add_value(true)
+			|> SMC.add_value(false) 
+		assert bool_and(smc) == SMC.new |> SMC.add_value(false)
+	end
 
-    test "teste de or verdadeiro" do
-        s = Stack.new 
-            |> Stack.push(true)
-            |> Stack.push(false) 
-        assert bool_or(s) == Stack.new |> Stack.push(true)
-    end
+	test "teste de or verdadeiro" do
+		smc = SMC.new 
+			|> SMC.add_value(true)
+			|> SMC.add_value(false) 
+		assert bool_or(smc) == SMC.new |> SMC.add_value(true)
+	end
 
-    test "teste de or falso" do
-        s = Stack.new 
-            |> Stack.push(false) 
-            |> Stack.push(false) 
-        assert bool_or(s) == Stack.new |> Stack.push(false)
-    end
+	test "teste de or falso" do
+		smc = SMC.new 
+			|> SMC.add_value(false) 
+			|> SMC.add_value(false) 
+		assert bool_or(smc) == SMC.new |> SMC.add_value(false)
+	end
 end

@@ -1,15 +1,16 @@
 defmodule SMCAttribTest do
     @moduledoc false
 
+    alias GeorgeCompiler.SMC, as: SMC
     import GeorgeCompiler.SMC.Attribution
     use ExUnit.Case
 
     test "Atribuição simples" do
-        s = Stack.new
-            |> Stack.push("var")
-            |> Stack.push(5)
-        m = %{"var" => 5}
-        assert attrib(nil, s, %{}, Stack.new) == {Stack.new, m, Stack.new}
+			smc = SMC.new
+						|> SMC.add_value("var")
+						|> SMC.add_value(5)
+        assert attrib(nil, smc) == SMC.new 
+                                   |> SMC.add_store("var", 5)
     end
 
     test "Recupera valor de variavel dado o mapa" do
@@ -21,13 +22,12 @@ defmodule SMCAttribTest do
         tree = Tree.new("attrib")
                 |> Tree.add_leaf("var")
                 |> Tree.add_leaf(5)
-    
-        s = Stack.new
-            |> Stack.push("var")
 
-        c = Stack.new
-            |> Stack.push(Tree.new("attrib"))
-            |> Stack.push(Tree.new(5))
-        assert attribution_decompose_tree(tree, Stack.new, %{}, Stack.new) == {s, %{}, c}
+        smc = SMC.new
+              |> SMC.add_value("var")
+              |> SMC.add_control("attrib")
+              |> SMC.add_control(5)
+    
+        assert attribution_decompose_tree(tree, SMC.new) == smc
     end
 end

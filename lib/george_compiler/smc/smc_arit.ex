@@ -1,4 +1,7 @@
 defmodule GeorgeCompiler.SMC.Arit do
+    
+    alias GeorgeCompiler.SMC,as: SMC
+
     @operations %{  
         :add => &GeorgeCompiler.SMC.Arit.add/1,
         :sub => &GeorgeCompiler.SMC.Arit.sub/1,
@@ -12,40 +15,40 @@ defmodule GeorgeCompiler.SMC.Arit do
     
     E − E < m m' S, M, +/-/* C > ⇒ < n S, M, C >
     """
-    def artit_exp(operation, s, m, c) do
+    def artit_exp(operation, smc) do
         expression = @operations[operation]
-        {expression.(s), m, c}
+        expression.(smc)
     end
 
     @doc false
-    def add(s) do
-        {x,y,s} = StackUtils.pop_twice(s)
-        Stack.push(s, x + y)
+    def add(smc) do
+        {x, y, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, x+y)
     end
 
     @doc false
-    def mul(s)do
-        {x, y, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x * y)
+    def mul(smc)do
+        {x, y, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, x*y)
     end
 
     @doc false
     #Subtração e divisão sendo feitas ao contrário para compensar ordem da pilha
-    def sub(s) do
-        {x,y,s} = StackUtils.pop_twice(s)
-        Stack.push(s, y - x)
+    def sub(smc) do
+        {x, y, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, y-x)
     end
 
     @doc false
-    def div(s) do
-        {x,y,s} = StackUtils.pop_twice(s)
-        Stack.push(s, y / x)
+    def div(smc) do
+        {x, y, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, y/x)
     end
 
     @doc false
-    def rem_arit(s) do
-        {x,y,s} = StackUtils.pop_twice(s)
-        Stack.push(s, rem(x, y))
+    def rem_arit(smc) do
+        {x, y, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, y/x)
     end
 
     @doc "Verifica se a operação está mapeada no módulo"
@@ -56,22 +59,21 @@ defmodule GeorgeCompiler.SMC.Arit do
         
     E − I < S, M, e + / - / * e' 0 C> ⇒ < S, M, e e' +/-/ * C>
     """
-
-    def arit_decompose_tree(tree, s, m, c) do
-       {s, m, tree 
-                |> push_values(StackUtils.push_as_tree(c, tree.value))}
+    def arit_decompose_tree(tree, smc) do
+        smc
+        |> SMC.add_control(tree.value)
+        |> push_values(tree)
     end
 
-    defp push_values(tree, c) do
+    defp push_values(smc, tree) do
         elem = Enum.at(tree.leafs,0)
         if length(tree.leafs) > 1 do
-            tree
-            |> TreeUtils.remove_first_leaf
-            |> push_values(c) 
-            |> Stack.push(elem)
+            smc
+            |> push_values(TreeUtils.remove_first_leaf(tree)) 
+            |> SMC.add_control(elem)
         else
-            c 
-            |> Stack.push(elem)
+            smc 
+            |> SMC.add_control(elem)
         end
     end
 end

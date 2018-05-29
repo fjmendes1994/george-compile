@@ -1,4 +1,7 @@
 defmodule GeorgeCompiler.SMC.Bool do
+
+    alias GeorgeCompiler.SMC,as: SMC
+
     @operations %{
         :eq => &GeorgeCompiler.SMC.Bool.equals/1,
         :neg => &GeorgeCompiler.SMC.Bool.nt/1,
@@ -13,63 +16,64 @@ defmodule GeorgeCompiler.SMC.Bool do
     @doc """
     Função que chama a aplicação das regras booleanas.\n
     """
-    def bool_exp(exp, s, m, c) do
+    def bool_exp(exp, smc) do
         operation = @operations[exp]
-        {operation.(s), m, c}
+        operation.(smc)
     end
 
     @doc """
     B ∼ E \< t S, M, ∼ C \> ⇒ \< t' S, M, C \>
     """
-    def nt(s) do
-        {x, s} = Stack.pop(s)
-        Stack.push(s, not x)
+    def nt(smc) do
+        {x, smc} = SMC.pop_value(smc)
+        SMC.add_value(smc, not x)
     end
 
     @doc """
     B = E \< m' m S, M, = C \> ⇒ \< t S, M, C \>
     """
-    def equals(s) do
-        {x, y, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x == y)
+    def equals(smc) do
+        {x, y, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, x==y)
+    end
+
+    @doc false  
+    def greater_than(smc) do
+        {y, x, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, x>y)
     end
 
     @doc false
-    def greater_than(s) do
-        {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x > y)
+    def lesser_than(smc) do
+        {y, x, smc} = SMC.pop_twice_value(smc)
+        IO.puts "#{x} and #{y}"
+        IO.inspect SMC.add_value(smc, x<y)
     end
 
     @doc false
-    def lesser_than(s) do
-        {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x < y)
+    def greater_equals_than(smc) do
+        {y, x, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, x>=y)
     end
 
     @doc false
-    def greater_equals_than(s) do
-        {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x >= y)
+    def lesser_equals_than(smc) do
+        {y, x, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, x<=y)
     end
 
     @doc false
-    def lesser_equals_than(s) do
-        {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x <= y)
-    end
-
-    @doc false
-    def bool_and(s) do
-        {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x and y)
+    def bool_and(smc) do
+        {x, y, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, x and y)
     end
 
     @doc """
     B or E \< t' t S, M, or C \> ⇒ \< t'' S, M, C \>
     """
-    def bool_or(s) do
-        {y, x, s} = StackUtils.pop_twice(s)
-        Stack.push(s, x or y)
+    def bool_or(smc) do
+        {x, y, smc} = SMC.pop_twice_value(smc)
+        SMC.add_value(smc, x or y)
     end
 
     @doc "Verifica se a operação está mapeada no módulo"
@@ -81,21 +85,21 @@ defmodule GeorgeCompiler.SMC.Bool do
     B or I \< S, M, b or b' C \> ⇒ \< S, M, b b' or C \> \n
     B ∼ I \< S, M, ∼ b C \> ⇒ \< S, M, b ∼ C \>
     """
-    def bool_decompose_tree(tree, s, m, c) do
-        {s, m, tree 
-                |> push_values(StackUtils.push_as_tree(c, tree.value))}
+    def bool_decompose_tree(tree, smc) do
+        smc
+        |> SMC.add_control(tree.value)
+        |> push_values(tree)
     end
 
-    @doc false
-    def push_values(tree, c) do
-        elem = Enum.at(tree.leafs, 0)
+    defp push_values(smc, tree) do
+        elem = Enum.at(tree.leafs,0)
         if length(tree.leafs) > 1 do
-            tree
-            |> TreeUtils.remove_first_leaf
-            |> push_values(c) 
-            |> Stack.push(elem)
+            smc
+            |> push_values(TreeUtils.remove_first_leaf(tree)) 
+            |> SMC.add_control(elem)
         else
-            c |> Stack.push(elem)
+            smc 
+            |> SMC.add_control(elem)
         end
     end
 end

@@ -1,89 +1,57 @@
 defmodule GeorgeCompiler.SMC do
-    import GeorgeCompiler.SMC.Arit
-    import GeorgeCompiler.SMC.Attribution
-    import GeorgeCompiler.SMC.Bool
-    import GeorgeCompiler.SMC.Command
+	@moduledoc """
+	Estrutura que representa a tripla SMC
+	"""
+	defstruct s: Stack.new, m: %{}, c: Stack.new
 
-    @doc """
-    Operação que consome a pilha C para aplicação das regras
-    """
-    def evaluate(s, m, c) do
-        if Stack.depth(c) > 0 do
-            {node, c} = Stack.pop(c)
-            {s, m, c} = do_operation(node, s, m, c)
-            evaluate(s, m, c)
-        else
-            {s, m, c}
-        end
-    end
+	@doc "Gera uma tripla SMC com duas stacks(valores e controle) e um map(memória)"
+	def new(), do: %GeorgeCompiler.SMC{}
 
-    @doc """
-    Função usada para avaliar o elemento retirado do topo da pilha C.\n
-    Avalia se é valor(incluindo nulo) ou uma árvore e chama a função que cuida da aplicação da regra correspondente.\n
+	@doc "Adiciona valor na pilha de valores"
+	def add_value(smc, value) do
+		%{smc | s: Stack.push(smc.s, value)}
+	end
 
-    C nil \< S, M, nil C \> ⇒ \< S, M, C \>
-    """
-    def do_operation(node, s, m, c) do
-        if Tree.is_leaf node do 
-            unless TreeUtils.is_nil(node) do
-                modify_s(node, s, m, c)
-            else
-                {s, m, c}
-            end
-        else
-            decompose_tree(node, s, m, c)
-        end
-    end
+	@doc "Retira um elemento da pilha de valores e retorna o valor e a estrutura SMC sem ele"
+	def pop_value(smc) do
+		{value, new_s} = Stack.pop(smc.s)
+		{value, %{smc | s: new_s}}
+	end
 
-    defp decompose_tree(tree, s, m, c) do
-        cond do
-            is_arit_exp(tree.value) -> arit_decompose_tree(tree, s, m, c)
-            is_attribution(tree.value) -> attribution_decompose_tree(tree, s, m, c)
-            is_bool_exp(tree.value) -> bool_decompose_tree(tree, s, m, c)
-            is_command(tree.value) -> command_decompose_tree(tree, s, m, c) 
-        end
-    end
+	@doc "Retira dois elementos da pilha de valores e retorna os valores e a estrutura SMC sem eles"
+	def pop_twice_value(smc) do
+		{value_a, value_b, new_s} = StackUtils.pop_twice(smc.s)
+		{value_a, value_b, %{smc | s: new_s}}
+	end
 
-    defp modify_s(node, s, m, c) do
-        if is_value node.value do
-            push_value(node, s, m, c)
-        else
-            get_operation(node.value)
-            |> apply_operation(node.value, s, m, c)
-        end
-    end
+	@doc "Adiciona valor na pilha de controle em forma de árvore"
+	def add_control(smc, value) when is_map(value) do
+		%{smc | c: Stack.push(smc.c, value)}
+	end
 
-    defp is_value(value) do
-        not (is_arit_exp(value) or is_bool_exp(value) or is_command(value) or is_attribution(value))
-    end
+	@doc "Adiciona valor na pilha de controle em forma de árvore"
+	def add_control(smc, value) when not is_map(value) do
+		%{smc | c: StackUtils.push_as_tree(smc.c, value)}
+	end
 
-    @doc """
-    Aplica operação no topo da pilha\n
-    Ev < S, M, v C > ⇒ < M (v) S, M, C > \n
-    En \< S, M, t C \> ⇒ \< n S, M, C \>\n
-    Bt \< S, M, t C \> ⇒ \< t S, M, C \>
-    """
+	@doc "Retira um elemento da pilha de controle e retorna o elemento e a estrutura SMC sem ele"
+	def pop_control(smc) do
+		{value, new_c} = Stack.pop(smc.c)
+		{value, %{smc | c: new_c}}
+	end
 
-    def push_value(node, s, m, c) do
-        value = node.value
-        s = 
-          cond do
-              is_binary value -> Stack.push(s, get_variable_value(node.value,m))
-              true -> Stack.push(s, node.value)
-          end
-        {s, m, c}
-    end
+	@doc "Adiciona um elemento na estrutura de memória ou sobrescreve valores de uma variável"
+	def add_store(smc, id, value) do
+		%{smc | m: Map.put(smc.m, id, value)}
+	end
 
-    defp get_operation(operation) do
-        cond do
-            is_arit_exp(operation) -> &artit_exp/4
-            is_attribution(operation) -> &attrib/4
-            is_bool_exp(operation) -> &bool_exp/4
-            is_command(operation) -> &command/4
-        end
-    end
+	@doc "Recupera um valor na memória"
+	def get_stored_value(smc, id) do
+		smc.m[id]
+	end
 
-    defp apply_operation(function, operation, s, m, c) do
-        function.(operation, s, m, c)
-    end
+	@doc "Limpa a memória"
+	def clean_store(smc) do
+		%{smc | m: %{}}
+	end
 end
