@@ -1,5 +1,8 @@
 # GeorgeCompiler
-  
+
+  [![Build Status](https://travis-ci.com/fjmendes1994/george-compiler.svg?branch=master)](https://travis-ci.com/fjmendes1994/george-compiler)
+  [![Coverage Status](https://coveralls.io/repos/github/fjmendes1994/george-compiler/badge.svg?branch=master)](https://coveralls.io/github/fjmendes1994/george-compiler?branch=master)
+
   Trabalho da disciplina de compiladores do curso de ciencia da computação.
   Universidade Federal Fluminense, Nitéroi, 2018.
 
