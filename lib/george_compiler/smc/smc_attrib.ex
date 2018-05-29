@@ -7,7 +7,7 @@ defmodule GeorgeCompiler.SMC.Attribution do
     C := E < m v S, M, := C > ⇒ < S, M [m/v], C >
     """
     def attrib(_, smc) do
-        {value, var, smc} = SMC.pop_twice_value(s)
+        {value, var, smc} = SMC.pop_twice_value(smc)
         SMC.add_store(smc, var, value)
     end
 

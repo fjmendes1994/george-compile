@@ -1,29 +1,22 @@
 defmodule SMCCommandTest do
     @moduledoc false
 
+    alias GeorgeCompiler.SMC, as: SMC
     import GeorgeCompiler.SMC.Command
     use ExUnit.Case
-
-    # test "Atribuição com pilha s" do
-    #     s = Stack.new
-    #         |> Stack.push("var")
-    #         |> Stack.push(5)
-    #     m = %{"var" => 5}
-
-    #     assert atrib(s, %{}, Stack.new) == {Stack.new, m, Stack.new}
-    # end
 
     test "if sem else" do
         sum = Tree.new("add")
                 |> Tree.add_leaf(2)
                 |> Tree.add_leaf(2)
 
-        s = Stack.new
-            |> Stack.push(nil)    
-            |> Stack.push(sum)
-            |> Stack.push(true)
+        smc = SMC.new
+              |> SMC.add_value(nil)
+              |> SMC.add_value(sum)
+              |> SMC.add_value(sum)
             
-        assert if_command(s, %{}, Stack.new) == {Stack.new, %{}, Stack.new |> Stack.push(sum) }
+        assert if_command(smc) == SMC.new 
+                                  |> SMC.add_control(sum)
     end
 
     test "if com else" do
@@ -35,11 +28,14 @@ defmodule SMCCommandTest do
                 |> Tree.add_leaf(2)
                 |> Tree.add_leaf(2)
 
-        s = Stack.new
-            |> Stack.push(sub)
-            |> Stack.push(sum)    
-            |> Stack.push(false)
+        smc = SMC.new
+              |> SMC.add_value(sub)
+              |> SMC.add_value(sum)
+              |> SMC.add_value(false)
+        
+        result = SMC.new
+                 |> SMC.add_control(sub)
             
-        assert if_command(s, %{}, Stack.new) == {Stack.new, %{}, Stack.new |> Stack.push(sub)}
+        assert if_command smc == result
     end
 end

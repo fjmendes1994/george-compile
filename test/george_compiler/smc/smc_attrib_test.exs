@@ -1,6 +1,7 @@
 defmodule SMCAttribTest do
     @moduledoc false
 
+    alias GeorgeCompiler.SMC, as: SMC
     import GeorgeCompiler.SMC.Attribution
     use ExUnit.Case
 
@@ -20,13 +21,12 @@ defmodule SMCAttribTest do
         tree = Tree.new("attrib")
                 |> Tree.add_leaf("var")
                 |> Tree.add_leaf(5)
-    
-        s = Stack.new
-            |> Stack.push("var")
 
-        c = Stack.new
-            |> Stack.push(Tree.new("attrib"))
-            |> Stack.push(Tree.new(5))
-        assert attribution_decompose_tree(tree, Stack.new, %{}, Stack.new) == {s, %{}, c}
+        smc = SMC.new
+              |> SMC.add_value("var")
+              |> SMC.add_control("attrib")
+              |> SMC.add_control(5)
+    
+        assert attribution_decompose_tree(tree, SMC.new) == smc
     end
 end

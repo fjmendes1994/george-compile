@@ -1,4 +1,7 @@
 defmodule GeorgeCompiler.SMC.Command do
+
+    alias GeorgeCompiler.SMC,as: SMC
+    
     @operations %{
         :if => &GeorgeCompiler.SMC.Command.if_command/3,
         :while => &GeorgeCompiler.SMC.Command.while/3,
@@ -53,7 +56,7 @@ defmodule GeorgeCompiler.SMC.Command do
         end
     end
 
-    def command_decompose_tree(tree, s, m, c) do
+    def command_decompose_tree(tree, smc) do
         smc = smc
               |>  SMC.add_control(tree.value)
         case tree.value do

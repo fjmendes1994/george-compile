@@ -77,10 +77,10 @@ defmodule GeorgeCompiler.Compiler do
 
     defp get_operation(operation) do
         cond do
-            is_arit_exp(operation) -> &artit_exp/4
-            is_attribution(operation) -> &attrib/4
-            is_bool_exp(operation) -> &bool_exp/4
-            is_command(operation) -> &command/4
+            is_arit_exp(operation) -> &artit_exp/2
+            is_attribution(operation) -> &attrib/2
+            is_bool_exp(operation) -> &bool_exp/2
+            is_command(operation) -> &command/2
         end
     end
 

@@ -1,5 +1,7 @@
 defmodule GeorgeCompiler.SMC.Arit do
+    
     alias GeorgeCompiler.SMC,as: SMC
+
     @operations %{  
         :add => &GeorgeCompiler.SMC.Arit.add/1,
         :sub => &GeorgeCompiler.SMC.Arit.sub/1,
@@ -13,7 +15,7 @@ defmodule GeorgeCompiler.SMC.Arit do
     
     E − E < m m' S, M, +/-/* C > ⇒ < n S, M, C >
     """
-    def artit_exp(operation, smc, a, b) do
+    def artit_exp(operation, smc) do
         expression = @operations[operation]
         smc 
         |> expression.(smc)
@@ -59,16 +61,16 @@ defmodule GeorgeCompiler.SMC.Arit do
     E − I < S, M, e + / - / * e' 0 C> ⇒ < S, M, e e' +/-/ * C>
     """
     def arit_decompose_tree(tree, smc) do
-        SMC.add_control(tree.value)
-        |> push_values(smc)
+        smc
+        |> SMC.add_control(tree.value)
+        |> push_values(tree)
     end
 
-    defp push_values(tree, smc) do
+    defp push_values(smc, tree) do
         elem = Enum.at(tree.leafs,0)
         if length(tree.leafs) > 1 do
-            tree
-            |> TreeUtils.remove_first_leaf
-            |> push_values(smc) 
+            smc
+            |> push_values(TreeUtils.remove_first_leaf(tree)) 
             |> SMC.add_control(elem)
         else
             smc 

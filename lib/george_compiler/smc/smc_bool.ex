@@ -1,4 +1,7 @@
 defmodule GeorgeCompiler.SMC.Bool do
+
+    alias GeorgeCompiler.SMC,as: SMC
+
     @operations %{
         :eq => &GeorgeCompiler.SMC.Bool.equals/1,
         :neg => &GeorgeCompiler.SMC.Bool.nt/1,
@@ -81,18 +84,17 @@ defmodule GeorgeCompiler.SMC.Bool do
     B or I \< S, M, b or b' C \> ⇒ \< S, M, b b' or C \> \n
     B ∼ I \< S, M, ∼ b C \> ⇒ \< S, M, b ∼ C \>
     """
-    def bool_decompose_tree(tree, s, m, c) do
-        SMC.add_control(tree.value)
-        |> push_values(smc)
+    def bool_decompose_tree(tree, smc) do
+        smc
+        |> SMC.add_control(tree.value)
+        |> push_values(tree)
     end
 
-    @doc false
-    defp push_values(tree, smc) do
+    defp push_values(smc, tree) do
         elem = Enum.at(tree.leafs,0)
         if length(tree.leafs) > 1 do
-            tree
-            |> TreeUtils.remove_first_leaf
-            |> push_values(smc) 
+            smc
+            |> push_values(TreeUtils.remove_first_leaf(tree)) 
             |> SMC.add_control(elem)
         else
             smc 
