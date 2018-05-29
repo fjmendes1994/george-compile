@@ -58,7 +58,7 @@ defmodule GeorgeCompiler.SMC.Bool do
 
     @doc false
     def lesser_equals_than(smc) do
-        {x, y, smc} = SMC.pop_twice_value(smc)
+        {y, x, smc} = SMC.pop_twice_value(smc)
         SMC.add_value(smc, x<=y)
     end
 

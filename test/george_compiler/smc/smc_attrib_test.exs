@@ -9,7 +9,8 @@ defmodule SMCAttribTest do
 			smc = SMC.new
 						|> SMC.add_value("var")
 						|> SMC.add_value(5)
-        assert attrib(nil, smc) == SMC.new |> SMC.add_store("var", 5)
+        assert attrib(nil, smc) == SMC.new 
+                                   |> SMC.add_store("var", 5)
     end
 
     test "Recupera valor de variavel dado o mapa" do
