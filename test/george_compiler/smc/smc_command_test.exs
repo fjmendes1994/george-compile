@@ -36,6 +36,6 @@ defmodule SMCCommandTest do
         result = SMC.new
                  |> SMC.add_control(sub)
             
-        assert if_command smc == result
+        assert if_command(smc) == result
     end
 end
