@@ -17,8 +17,7 @@ defmodule GeorgeCompiler.SMC.Arit do
     """
     def artit_exp(operation, smc) do
         expression = @operations[operation]
-        smc 
-        |> expression.(smc)
+        expression.(smc)
     end
 
     @doc false

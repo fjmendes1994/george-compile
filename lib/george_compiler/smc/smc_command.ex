@@ -1,10 +1,10 @@
 defmodule GeorgeCompiler.SMC.Command do
 
     alias GeorgeCompiler.SMC,as: SMC
-    
+
     @operations %{
-        :if => &GeorgeCompiler.SMC.Command.if_command/3,
-        :while => &GeorgeCompiler.SMC.Command.while/3,
+        :if => &GeorgeCompiler.SMC.Command.if_command/1,
+        :while => &GeorgeCompiler.SMC.Command.while/1,
         :seq => nil
     }
     
