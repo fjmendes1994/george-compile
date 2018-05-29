@@ -58,9 +58,9 @@ defmodule GeorgeCompiler.SMC.Arit do
         
     E − I < S, M, e + / - / * e' 0 C> ⇒ < S, M, e e' +/-/ * C>
     """
-		def arit_decompose_tree(tree, smc) do
-			SMC.add_control(tree.value)
-			|> push_values(smc)
+    def arit_decompose_tree(tree, smc) do
+        SMC.add_control(tree.value)
+        |> push_values(smc)
     end
 
     defp push_values(tree, smc) do
