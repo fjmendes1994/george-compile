@@ -318,93 +318,88 @@ defmodule ParserTest do
   end
 
   test "declaração de variáveis" do
-    assert GeorgeCompiler.Parser.parse!("{ var x = 2 }") == %Tree{
-             leafs: [
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: 2}],
-                 value: "x"
-               }
-             ],
-             value: :ref
-           }
+    assert GeorgeCompiler.Parser.parse!("var x = 2 + 3") == [
+  [
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "x"},
+            %Tree{
+              leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 3}],
+              value: :add
+            }
+          ],
+          value: :ref
+        },
+        %Tree{leafs: [], value: nil}
+      ],
+      value: :decl
+    }
+  ],
+  nil
+]
 
-    assert GeorgeCompiler.Parser.parse!("{ var x = 2 + 5, y = 8, z = 7 }") == %Tree{
-             leafs: [
-               %Tree{
-                 leafs: [
-                   %Tree{
-                     leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 5}],
-                     value: :add
-                   },
-                   %Tree{
-                     leafs: [],
-                     value: [
-                       %Tree{
-                         leafs: [
-                           %Tree{leafs: [], value: 8},
-                           %Tree{
-                             leafs: [],
-                             value: [
-                               %Tree{
-                                 leafs: [
-                                   %Tree{leafs: [], value: 7}
-                                 ],
-                                 value: "z"
-                               }
-                             ]
-                           }
-                         ],
-                         value: "y"
-                       }
-                     ]
-                   }
-                 ],
-                 value: "x"
-               }
-             ],
-             value: :ref
-           }
+    assert GeorgeCompiler.Parser.parse!("const x = 2 <= 3") == [
+  [
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "x"},
+            %Tree{
+              leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 3}],
+              value: :le
+            }
+          ],
+          value: :cns
+        },
+        %Tree{leafs: [], value: nil}
+      ],
+      value: :decl
+    }
+  ],
+  nil
+]
 
-    assert GeorgeCompiler.Parser.parse!("{ const x = 6 }") == %Tree{
-             leafs: [
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: 6}],
-                 value: "x"
-               }
-             ],
-             value: :cns
-           }
+    assert GeorgeCompiler.Parser.parse!("var x = 2 + 3; const y = 8") == [
+  [
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "x"},
+            %Tree{
+              leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 3}],
+              value: :add
+            }
+          ],
+          value: :ref
+        },
+        %Tree{leafs: [], value: nil}
+      ],
+      value: :decl
+    }
+  ],
+  [
+    [
+      [
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: 8}],
+              value: :cns
+            },
+            %Tree{leafs: [], value: nil}
+          ],
+          value: :decl
+        }
+      ],
+      nil
+    ]
+  ]
+]
 
-    assert GeorgeCompiler.Parser.parse!("{ const x = 6 >= 5, y = 8 < 17 }") == %Tree{
-             leafs: [
-               %Tree{
-                 leafs: [
-                   %Tree{
-                     leafs: [%Tree{leafs: [], value: 6}, %Tree{leafs: [], value: 5}],
-                     value: :ge
-                   },
-                   %Tree{
-                     leafs: [],
-                     value: [
-                       %Tree{
-                         leafs: [
-                           %Tree{
-                             leafs: [
-                               %Tree{leafs: [], value: 8},
-                               %Tree{leafs: [], value: 17}
-                             ],
-                             value: :lt
-                           }
-                         ],
-                         value: "y"
-                       }
-                     ]
-                   }
-                 ],
-                 value: "x"
-               }
-             ],
-             value: :cns
-           }
+    
   end
 end
