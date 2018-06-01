@@ -38,20 +38,12 @@ defmodule GeorgeCompiler.Parser do
   define :doOP, "<space?> 'do' <space?>"
   define :printOp, "<space?> 'print' <space?>"
   define :exitOp, "<space?> 'exit' <space?>"
-  define :seqOp, "<space?> ';' <space?>"
   define :choOp, "<space?> '|' <space?>"
 
   # Operadores de Declaração
 
-  define :declOp, "(varOp / constOp)"
-  
-  define :varOp, "<space?> 'var' <space?>" do
-	[ref] -> :ref 
-  end
-  
-  define :constOp, "<space?> 'const' <space?>" do
-    [cns] -> :cns
-  end
+  define :declVarOp, "<space?> 'var' <space?>"
+  define :declConstOp, "<space?> 'const' <space?>"
   
  
   
@@ -92,31 +84,29 @@ defmodule GeorgeCompiler.Parser do
     [exp] -> exp
   end
 
-  define :ExpressionDecl, "additiveExp"
+  define :ExpressionDecl, "multitiveExp / decimal / ident"
 
-  define :additiveExp, "sum / sub / multitiveExp"
+  define :additiveExp, "sum / sub"
 
-  define :multitiveExp, "mul / rem / div / primary"
+  define :multitiveExp, "mul / rem / div / additiveExp"
 
-  define :primary, "decimal / ident"    
-
-  define :sum, "multitiveExp <sumOp> additiveExp" do
+  define :sum, "(decimal / ident) <sumOp> ExpressionDecl" do
     [x,y] ->  Tree.new(:add) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
-  define :sub, "multitiveExp <subOp> additiveExp" do
+  define :sub, "(decimal / ident) <subOp> ExpressionDecl" do
     [x,y] ->  Tree.new(:sub) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
-  define :div, "primary <divOp> multitiveExp" do
+  define :div, "(decimal / ident) <divOp> ExpressionDecl" do
     [x,y] ->  Tree.new(:div) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
-  define :mul, "primary <mulOp> multitiveExp" do
+  define :mul, "(decimal / ident) <mulOp> ExpressionDecl" do
     [x,y] ->  Tree.new(:mul) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
-  define :rem, "primary <remOp> multitiveExp" do
+  define :rem, "(decimal / ident) <remOp> ExpressionDecl" do
     [x,y] ->  Tree.new(:rem) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
@@ -159,16 +149,13 @@ defmodule GeorgeCompiler.Parser do
     [x, predicate] -> Tree.new(:and) |> Tree.add_leaf(x) |> Tree.add_leaf(predicate)
   end
 
-
   # Comandos
-  @root true
-  define :BlockCommandDecl, "<lk> declSeq? CommandDecl+ <rk> " do
-    [nil, [cmd]] -> cmd
-    [[decl_seq],[cmd]] -> Tree.new(:blk) |> Tree.add_leaf(decl_seq) |> Tree.add_leaf(cmd)
+  define :BlockCommandDecl, "<lk> CommandDecl+ <rk> " do
+    [cmd] -> cmd
   end
 
-  
-  define :CommandDecl, "choice / seq / cmd"
+  @root true
+  define :CommandDecl, "choice / seq / cmd / declSeq"
 
   define :cmd, "attrib / if / while / print / exit / call"
 
@@ -186,9 +173,7 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :while, "<whileOp> PredicateDecl <doOP> BlockCommandDecl" do
-    [predicate, [cmd]] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(cmd)
-    [predicate, block] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
-
+    [predicate, [block]] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 
   define :print, "printOp <lp> Expression <rp>"
@@ -205,17 +190,28 @@ defmodule GeorgeCompiler.Parser do
 
   # Declarações
 
-  define :declSeq, "decl / decl <seqOp> declSeq"
+  define :declSeq, "decl (<seqOp> declSeq)?"
   
-  define :decl, "declOp iniSeq" do
-	  [decl, iniSeq] -> Tree.new(decl) |> Tree.add_leaf(iniSeq)
+  define :decl, "<declVarOp> iniVarSeq / <declConstOp> iniConstSeq"
+  
+  define :iniVarSeq, "iniVar (<comOp> iniVarSeq)?" do
+	[iniVar, iniVarSeq] -> Tree.new(:decl) |> Tree.add_leaf(iniVar) |> Tree.add_leaf(iniVarSeq)
   end
   
-  define :iniSeq, "ident <iniOp> Expression (<comOp> iniSeq)?" do
-    [ident, exp, nil] -> Tree.new(ident) |> Tree.add_leaf(exp)
-	  [ident, exp, iniSeq] -> Tree.new(ident) |> Tree.add_leaf(exp) |> Tree.add_leaf(iniSeq)
-
+  define :iniVar, "ident <iniOp> Expression" do
+	[ident, exp] -> Tree.new(:ref) |> Tree.add_leaf(ident) |> Tree.add_leaf(exp)
   end
+  
+  
+  define :iniConstSeq, "iniConst (<comOp> iniConstSeq)?" do
+	[iniConst, iniConstSeq] -> Tree.new(:decl) |> Tree.add_leaf(iniConst) |> Tree.add_leaf(iniConstSeq)
+  end
+  
+  define :iniConst, "ident <iniOp> Expression" do
+	[ident, exp] -> Tree.new(:cns) |> Tree.add_leaf(ident) |> Tree.add_leaf(exp)
+  end
+  
+  
   
 
 
