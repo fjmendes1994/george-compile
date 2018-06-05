@@ -318,7 +318,7 @@ defmodule ParserTest do
   end
 
   test "declaração de variáveis" do
-    assert GeorgeCompiler.Parser.parse!("var x = 2 + 3") == [
+    assert GeorgeCompiler.Parser.parse!("{ var x = 2 + 3 }") == [
   [
     %Tree{
       leafs: [
@@ -340,7 +340,7 @@ defmodule ParserTest do
   nil
 ]
 
-    assert GeorgeCompiler.Parser.parse!("const x = 2 <= 3") == [
+    assert GeorgeCompiler.Parser.parse!("{ const x = 2 <= 3 }") == [
   [
     %Tree{
       leafs: [
@@ -362,7 +362,7 @@ defmodule ParserTest do
   nil
 ]
 
-    assert GeorgeCompiler.Parser.parse!("var x = 2 + 3; const y = 8") == [
+    assert GeorgeCompiler.Parser.parse!("{ var x = 2 + 3; const y = 8 }") == [
   [
     %Tree{
       leafs: [
