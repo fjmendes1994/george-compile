@@ -84,29 +84,31 @@ defmodule GeorgeCompiler.Parser do
     [exp] -> exp
   end
 
-  define :ExpressionDecl, "multitiveExp / decimal / ident"
+  define :ExpressionDecl, "additiveExp"
 
-  define :additiveExp, "sum / sub"
+  define :additiveExp, "sum / sub / multitiveExp"
 
-  define :multitiveExp, "mul / rem / div / additiveExp"
+  define :multitiveExp, "mul / rem / div / primary"
+  
+  define :primary, "decimal / ident" 
 
-  define :sum, "(decimal / ident) <sumOp> ExpressionDecl" do
+  define :sum, "multitiveExp <sumOp> additiveExp" do
     [x,y] ->  Tree.new(:add) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
-  define :sub, "(decimal / ident) <subOp> ExpressionDecl" do
+  define :sub, "multitiveExp <subOp> additiveExp" do
     [x,y] ->  Tree.new(:sub) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
-  define :div, "(decimal / ident) <divOp> ExpressionDecl" do
+  define :div, "primary <divOp> multitiveExp" do
     [x,y] ->  Tree.new(:div) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
-  define :mul, "(decimal / ident) <mulOp> ExpressionDecl" do
+  define :mul, "primary <mulOp> multitiveExp" do
     [x,y] ->  Tree.new(:mul) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
-  define :rem, "(decimal / ident) <remOp> ExpressionDecl" do
+  define :rem, "primary <remOp> multitiveExp" do
     [x,y] ->  Tree.new(:rem) |> Tree.add_leaf(x) |> Tree.add_leaf(y)
   end
 
@@ -150,12 +152,13 @@ defmodule GeorgeCompiler.Parser do
   end
 
   # Comandos
-  define :BlockCommandDecl, "<lk> CommandDecl+ <rk> " do
-    [cmd] -> cmd
+  @root true
+  define :BlockCommandDecl, "<lk> declSeq? CommandDecl+ <rk> " do
+    [nil, [cmd]] -> cmd
+    [[decl_seq],[cmd]] -> Tree.new(:blk) |> Tree.add_leaf(decl_seq) |> Tree.add_leaf(cmd)
   end
 
-  @root true
-  define :CommandDecl, "choice / seq / cmd / declSeq"
+  define :CommandDecl, "choice / seq / cmd"
 
   define :cmd, "attrib / if / while / print / exit / call"
 
@@ -173,7 +176,8 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :while, "<whileOp> PredicateDecl <doOP> BlockCommandDecl" do
-    [predicate, [block]] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
+    [predicate, [cmd]] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(cmd)
+    [predicate, block] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 
   define :print, "printOp <lp> Expression <rp>"
