@@ -1,6 +1,6 @@
 defmodule GeorgeCompiler.SMC.Decl do
     @operations %{
-        # :dec => GeorgeCompiler.SMC.Decl.dec/2
+        :dec => &GeorgeCompiler.SMC.Decl.dec/1
     }
     alias GeorgeCompiler.SMC, as: SMC
 
@@ -8,6 +8,11 @@ defmodule GeorgeCompiler.SMC.Decl do
         smc    
     end
 
+    def dec(smc) do
+        
+    end
+
+    def is_declaration(operation), do: Map.has_key? @operations, operation
 
     def decl_decompose_tree(tree, smc) do
         cond do
@@ -15,7 +20,6 @@ defmodule GeorgeCompiler.SMC.Decl do
             :true -> env_decompose_tree(tree, smc)
         end
     end
-
 
     defp dec_decompose_tree(tree, smc) do
         smc
