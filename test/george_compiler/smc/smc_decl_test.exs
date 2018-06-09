@@ -41,6 +41,9 @@ defmodule SMCDeclTest do
               |> SMC.add_value("var")
               |> SMC.add_value(5)
 
-        assert %SMC{e: %Environment{refs: [var: _]}} = Decl.ref(smc)
+        ref = Decl.ref(smc)
+
+        assert %SMC{e: %Environment{refs: [var: x]}} = ref
+        assert %SMC{m: %{^x => 5}} = ref
     end
 end

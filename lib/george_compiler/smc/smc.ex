@@ -57,6 +57,9 @@ defmodule GeorgeCompiler.SMC do
 
 	def add_reference(smc) do
 		{value, var, smc} = pop_twice_value(smc)
-		%{smc | e: Environment.add_ref(smc.e, var)}
+		smc = %{smc | e: Environment.add_ref(smc.e, var)}
+		smc
+		|> add_store(Environment.get_address(smc.e, var), value)
+		#|>Falta adicionar o loc
 	end
 end
