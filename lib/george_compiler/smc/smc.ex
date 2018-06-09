@@ -2,7 +2,7 @@ defmodule GeorgeCompiler.SMC do
 	@moduledoc """
 	Estrutura que representa a tripla SMC
 	"""
-	defstruct s: Stack.new, m: %{}, c: Stack.new
+	defstruct s: Stack.new, m: %{}, c: Stack.new, e: Environment.new
 
 	@doc "Gera uma tripla SMC com duas stacks(valores e controle) e um map(memória)"
 	def new(), do: %GeorgeCompiler.SMC{}
