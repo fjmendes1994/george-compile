@@ -54,4 +54,9 @@ defmodule GeorgeCompiler.SMC do
 	def clean_store(smc) do
 		%{smc | m: %{}}
 	end
+
+	def add_reference(smc) do
+		{value, var, smc} = pop_twice_value(smc)
+		%{smc | e: Environment.add_ref(smc.e, var)}
+	end
 end

@@ -35,4 +35,12 @@ defmodule SMCDeclTest do
                 |> Tree.add_leaf(5)   
         assert Decl.decl_decompose_tree(tree, SMC.new) == smc
     end
+
+    test "Aplicação de ref" do
+        smc = SMC.new
+              |> SMC.add_value("var")
+              |> SMC.add_value(5)
+
+        assert %SMC{e: %Environment{refs: [var: _]}} = Decl.ref(smc)
+    end
 end

@@ -1,15 +1,12 @@
 defmodule GeorgeCompiler.SMC.Decl do
     @operations %{
-        :dec => &GeorgeCompiler.SMC.Decl.dec/1
+        :dec => nil,
+        :ref => &GeorgeCompiler.SMC.Decl.ref/1
     }
     alias GeorgeCompiler.SMC, as: SMC
 
     def decl(operation, smc) do
         smc    
-    end
-
-    def dec(smc) do
-        
     end
 
     def is_declaration(operation), do: Map.has_key? @operations, operation
@@ -19,6 +16,11 @@ defmodule GeorgeCompiler.SMC.Decl do
             tree.value == :decl -> dec_decompose_tree(tree, smc)
             :true -> env_decompose_tree(tree, smc)
         end
+    end
+
+    def ref(smc) do
+        smc
+        |> SMC.add_reference
     end
 
     defp dec_decompose_tree(tree, smc) do
