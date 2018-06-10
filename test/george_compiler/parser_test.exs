@@ -356,76 +356,58 @@ defmodule ParserTest do
       value: :blk,
       leafs: [
         %Tree{
-          leafs: [],
-          value: [
-            [
-              %Tree{
-                leafs: [
-                  %Tree{
-                    leafs: [
-                      %Tree{
-                        leafs: [],
-                        value: "x"},
-                      %Tree{
-                        leafs: [],
-                        value: 2}],
-                    value: :ref}],
-                  value: :decl}],
-                  [
-                    [
-                      %Tree{
-                        leafs: [
-                          %Tree{
-                            leafs: [
-                              %Tree{
-                                leafs: [],
-                                value: "k"},
-                              %Tree{
-                                leafs: [],
-                                value: 3}],
-                            value: :ref}],
-                        value: :decl}],
-                    [
-                      [
-                        %Tree{
-                          leafs: [
-                            %Tree{
-                              leafs: [
-                                %Tree{
-                                  leafs: [],
-                                  value: "u"},
-                                %Tree{
-                                  leafs: [],
-                                  value: 3}],
-                              value: :cns}],
-                          value: :decl}],
-                      [
-                        %Tree{
-                          leafs: [
-                            %Tree{
-                              leafs: [
-                                %Tree{
-                                  leafs: [],
-                                  value: "x"},
-                                %Tree{
-                                  leafs: [],
-                                  value: 1}],
-                              value: :ref}],
-                          value: :decl}]]]]},
+          value: :decl,
+          leafs: [
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [],
+                  value: "x"},
+                %Tree{
+                  leafs: [],
+                  value: 2}],
+              value: :ref},
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [],
+                  value: "k"},
+                %Tree{
+                  leafs: [],
+                  value: 3}],
+              value: :ref},
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [],
+                  value: "u"},
+                %Tree{
+                  leafs: [],
+                  value: 3}],
+              value: :cns},
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [],
+                  value: "x"},
+                %Tree{
+                  leafs: [],
+                  value: 1}],
+              value: :ref}]},
         %Tree{
           leafs: [
-                  %Tree{
-                    leafs: [],
-                    value: "true"},
-                  %Tree{
-                    leafs: [
-                      %Tree{
-                        leafs: [],
-                        value: "x"},
-                      %Tree{
-                        leafs: [],
-                        value: 2}],
-                    value: :attrib}],
+            %Tree{
+              leafs: [],
+              value: "true"},
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [],
+                  value: "x"},
+                %Tree{
+                  leafs: [],
+                  value: 2}],
+              value: :attrib}],
           value: :if}]}
 
   end

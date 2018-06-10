@@ -155,7 +155,7 @@ defmodule GeorgeCompiler.Parser do
   @root true
   define :BlockCommandDecl, "<lk> declSeq? CommandDecl+ <rk> " do
     [nil, [cmd]] -> cmd
-    [decls,[cmd]] -> Tree.new(:blk) |> Tree.add_leaf(decls) |> Tree.add_leaf(cmd)
+    [decls,[cmd]] -> Tree.new(:blk) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls) ) |> Tree.add_leaf(cmd)
   end
 
   define :CommandDecl, "choice / seq / cmd"
@@ -196,7 +196,7 @@ defmodule GeorgeCompiler.Parser do
 
   define :declSeq, "decl <seqOp> declSeq?" do
     [decl, nil] -> decl
-    decl -> decl
+    [decl, declSeq] -> decl ++ declSeq
   end
 
   define :decl, "VariablesDecls / ConstantsDecls"
@@ -206,23 +206,23 @@ defmodule GeorgeCompiler.Parser do
   define :ConstantsDecls, "<declConstOp> iniConstSeq"
 
   define :iniVarSeq, "iniVar (<comOp> iniVarSeq)?" do
-  [iniVar, nil] -> Tree.new(:decl) |> Tree.add_leaf(iniVar)
-	[iniVar, iniVarSeq] -> Tree.new(:decl) |> Tree.add_leaf(iniVar) |> Tree.add_leaf(iniVarSeq)
+    [iniVar, nil] -> iniVar
+    [iniVar] -> iniVar
   end
 
   define :iniVar, "ident <iniOp> Expression" do
-	[ident, exp] -> Tree.new(:ref) |> Tree.add_leaf(ident) |> Tree.add_leaf(exp)
+	   [ident, exp] -> Tree.new(:ref) |> Tree.add_leaf(ident) |> Tree.add_leaf(exp)
   end
 
 
   define :iniConstSeq, "iniConst (<comOp> iniConstSeq)?" do
-  [iniConst, nil] -> Tree.new(:decl) |> Tree.add_leaf(iniConst)
-	[iniConst, iniConstSeq] -> Tree.new(:decl) |> Tree.add_leaf(iniConst) |> Tree.add_leaf(iniConstSeq)
+    [iniConst, nil] -> iniConst
+	  [iniConst] -> iniConst
 
   end
 
   define :iniConst, "ident <iniOp> Expression" do
-	[ident, exp] -> Tree.new(:cns) |> Tree.add_leaf(ident) |> Tree.add_leaf(exp)
+	   [ident, exp] -> Tree.new(:cns) |> Tree.add_leaf(ident) |> Tree.add_leaf(exp)
   end
 
 
