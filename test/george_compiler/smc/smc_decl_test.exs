@@ -46,4 +46,14 @@ defmodule SMCDeclTest do
         assert %SMC{e: %Environment{refs: [var: x]}} = ref
         assert %SMC{m: %{^x => 5}} = ref
     end
+
+    test "Aplicação de const" do
+        smc = SMC.new
+              |> SMC.add_value("var")
+              |> SMC.add_value(5)
+
+        ref = Decl.const(smc)
+
+        assert %SMC{e: %Environment{refs: [var: 5]}} == ref
+    end
 end
