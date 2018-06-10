@@ -197,6 +197,8 @@ defmodule GeorgeCompiler.Parser do
   define :declSeq, "decl <seqOp> declSeq?" do
     [decl, nil] -> decl
     [decl, declSeq] -> decl ++ declSeq
+
+
   end
 
   define :decl, "VariablesDecls / ConstantsDecls"
@@ -207,7 +209,7 @@ defmodule GeorgeCompiler.Parser do
 
   define :iniVarSeq, "iniVar (<comOp> iniVarSeq)?" do
     [iniVar, nil] -> iniVar
-    [iniVar] -> iniVar
+    [iniVar,iniVarSeq] ->  iniVarSeq ++  iniVar
   end
 
   define :iniVar, "ident <iniOp> Expression" do
@@ -217,7 +219,7 @@ defmodule GeorgeCompiler.Parser do
 
   define :iniConstSeq, "iniConst (<comOp> iniConstSeq)?" do
     [iniConst, nil] -> iniConst
-	  [iniConst] -> iniConst
+	  [iniConst, iniConstSeq] -> iniConst ++ iniConstSeq
 
   end
 
