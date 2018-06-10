@@ -208,7 +208,7 @@ defmodule GeorgeCompiler.Parser do
 	   [ident, exp] -> Tree.new(:ref) |> Tree.add_leaf(ident) |> Tree.add_leaf(exp)
   end
 
-  define :iniConst, "ident <iniOp> Expression" do
+  define :iniConst, "ident <iniOp> Expression <comOp?>" do
 	   [ident, exp] -> Tree.new(:cns) |> Tree.add_leaf(ident) |> Tree.add_leaf(exp)
   end
 
