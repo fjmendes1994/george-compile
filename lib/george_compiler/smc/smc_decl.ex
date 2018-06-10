@@ -2,21 +2,13 @@ defmodule GeorgeCompiler.SMC.Decl do
     @operations %{
         :dec => nil,
         :ref => &GeorgeCompiler.SMC.Decl.ref/1,
-        :cons => &GeorgeCompiler.SMC.Decl.cons/1
+        :cons => &GeorgeCompiler.SMC.Decl.cons/1,
+        :blk => &GeorgeCompiler.SMC.Decl.blk/1
     }
     alias GeorgeCompiler.SMC, as: SMC
 
     def decl(_, smc) do
         smc    
-    end
-
-    def is_declaration(operation), do: Map.has_key? @operations, operation
-
-    def decl_decompose_tree(tree, smc) do
-        cond do
-            tree.value == :decl -> dec_decompose_tree(tree, smc)
-            :true -> env_decompose_tree(tree, smc)
-        end
     end
 
     def ref(smc) do
@@ -29,8 +21,31 @@ defmodule GeorgeCompiler.SMC.Decl do
         |> SMC.add_const
     end
 
+    def blk(smc) do
+        {env, smc} = SMC.pop_value(smc)
+        %{smc | e: env}
+        |> SMC.clean_store
+    end
+
+    def is_declaration(operation), do: Map.has_key? @operations, operation
+
+    def decl_decompose_tree(tree, smc) do
+        cond do
+            tree.value == :decl -> dec_decompose_tree(tree, smc)
+            tree.value == :blk -> blk_decompose_tree(tree, smc)
+            :true -> env_decompose_tree(tree, smc)
+        end
+    end
+
     defp dec_decompose_tree(tree, smc) do
         smc
+        |> push_values(tree)
+    end
+
+    defp blk_decompose_tree(tree, smc) do
+        smc
+        |> SMC.add_control(tree.value)
+        |> SMC.add_value(smc.e)
         |> push_values(tree)
     end
 

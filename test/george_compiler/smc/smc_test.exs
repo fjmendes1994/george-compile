@@ -80,11 +80,12 @@ defmodule SMCTest do
   end
                   
   test "Limpeza da memoria" do
-    smc = SMC.new |> SMC.add_store("var", 5) |> SMC.add_store("var", 6) |> SMC.clean_store
-    assert smc == %SMC{
-                    c: %Stack{elements: []},
-                    m: %{},
-                    s: %Stack{elements: []}
-                  }
+    smc = SMC.new 
+          |> SMC.add_value("var")
+          |> SMC.add_value(5)
+          |> SMC.add_reference
+          |> SMC.clean_store
+    %SMC{e: %Environment{refs: [var: x]}} = smc
+    assert %SMC{m: %{x => 5}, e: %Environment{refs: [var: x]}}
   end
 end

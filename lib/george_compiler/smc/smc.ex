@@ -52,7 +52,13 @@ defmodule GeorgeCompiler.SMC do
 
 	@doc "Limpa a memória"
 	def clean_store(smc) do
-		%{smc | m: %{}}
+		%{smc | m: clean(smc.e, smc.m)}
+	end
+
+	defp clean(env, store) do
+		keys = Enum.filter(env.refs, fn x -> Map.has_key?(store, elem(x,1)) end)
+		|> Enum.map(fn x -> elem x, 1 end)
+		Map.take(store, keys)
 	end
 
 	def add_reference(smc) do
