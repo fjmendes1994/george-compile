@@ -352,35 +352,51 @@ defmodule ParserTest do
   end
 
   test "declaração de variáveis" do
-    assert GeorgeCompiler.Parser.parse!("{ var x = 2 if(true) x := 2 }") == %Tree{
+    assert GeorgeCompiler.Parser.parse!("{ var x = 2 const x = 3  if(true) x := 2 }") == %Tree{
+      value: :blk,
+      leafs: [
+        %Tree{
+          leafs: [],
+          value: [
+            %Tree{
               leafs: [
                 %Tree{
                   leafs: [
                     %Tree{
-                      leafs: [
-                        %Tree{leafs: [], value: "x"},
-                        %Tree{leafs: [], value: 2}
-                      ],
-                      value: :ref
-                    }
-                  ],
-                  value: :decl
-                },
+                      leafs: [],
+                      value: "x"},
+                    %Tree{
+                      leafs: [],
+                      value: 2}],
+                  value: :ref}],
+              value: :decl},
+            %Tree{
+              leafs: [
                 %Tree{
                   leafs: [
-                    %Tree{leafs: [], value: "true"},
                     %Tree{
-                      leafs: [
-                        %Tree{leafs: [], value: "x"},
-                        %Tree{leafs: [], value: 2}
-                      ],
-                      value: :attrib
-                    }
-                  ],
-                  value: :if
-                }
-              ],
-              value: :blk
-            }
+                      leafs: [],
+                      value: "x"},
+                    %Tree{
+                      leafs: [],
+                      value: 3}],
+                  value: :cns}],
+              value: :decl}]},
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [],
+                  value: "true"},
+                 %Tree{
+                   leafs: [
+                     %Tree{
+                       leafs: [],
+                       value: "x"},
+                     %Tree{
+                       leafs: [],
+                       value: 2}],
+                   value: :attrib}],
+                value: :if}]}
+
   end
 end

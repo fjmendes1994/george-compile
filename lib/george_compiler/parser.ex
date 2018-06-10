@@ -193,7 +193,7 @@ defmodule GeorgeCompiler.Parser do
 
   define :choice, "cmd choOp CommandDecl"
 
-  define :Decls, "VariablesDecls? ConstantsDecls? / ConstantsDecls? VariablesDecls?" do
+  define :Decls, "VariablesDecls ConstantsDecls / ConstantsDecls VariablesDecls / ConstantsDecls? VariablesDecls? " do
     [nil, nil] -> nil
     [decl, nil] -> decl
     [nil, decl] -> decl
