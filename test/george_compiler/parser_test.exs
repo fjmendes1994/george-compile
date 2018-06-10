@@ -168,33 +168,51 @@ defmodule ParserTest do
 
   test "if sem bloco" do
     assert GeorgeCompiler.Parser.parse!("{ if (2==2) ab := 1 }") == %Tree{
-             leafs: [
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
-                 value: :eq
-               },
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 1}],
-                 value: :attrib
-               },
-               %Tree{leafs: [], value: nil}
-             ],
-             value: :if
-           }
+      value: :if,
+      leafs: [
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [],
+              value: 2},
+            %Tree{
+              leafs: [],
+              value: 2}],
+          value: :eq},
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [],
+              value: "ab"},
+            %Tree{
+              leafs: [],
+              value: 1}],
+          value: :attrib}]}
   end
 
   test "if com bloco" do
     assert GeorgeCompiler.Parser.parse!("{ if (2==2) {ab := 1} }") == %Tree{
-             value: :if,
-             leafs: [
-               %Tree{leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}], value: :eq},
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 1}],
-                 value: :attrib
-               },
-               %Tree{leafs: [], value: nil}
-             ]
-           }
+      value: :if,
+      leafs: [
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [],
+              value: 2},
+             %Tree{
+               leafs: [],
+               value: 2}],
+          value: :eq},
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [],
+              value: "ab"},
+            %Tree{
+              leafs: [],
+              value: 1}],
+          value: :attrib}]}
+
   end
 
   test "else" do
@@ -247,34 +265,50 @@ defmodule ParserTest do
 
   test "bloco com sequencia" do
     assert GeorgeCompiler.Parser.parse!("{ if(2==2) {ab := 2; bc := 3 ; de := 4 } }") == %Tree{
-             value: :if,
+      value: :if,
+      leafs: [
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [],
+              value: 2},
+            %Tree{
+              leafs: [],
+              value: 2}],
+          value: :eq},
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [],
+                  value: "ab"},
+                %Tree{
+                  leafs: [],
+                  value: 2}],
+              value: :attrib},
+           %Tree{
              leafs: [
-               %Tree{leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}], value: :eq},
                %Tree{
                  leafs: [
                    %Tree{
-                     leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
-                     value: :attrib
-                   },
+                     leafs: [],
+                     value: "bc"},
                    %Tree{
-                     leafs: [
-                       %Tree{
-                         leafs: [%Tree{leafs: [], value: "bc"}, %Tree{leafs: [], value: 3}],
-                         value: :attrib
-                       },
-                       %Tree{
-                         leafs: [%Tree{leafs: [], value: "de"}, %Tree{leafs: [], value: 4}],
-                         value: :attrib
-                       }
-                     ],
-                     value: :seq
-                   }
-                 ],
-                 value: :seq
-               },
-               %Tree{leafs: [], value: nil}
-             ]
-           }
+                     leafs: [],
+                     value: 3}],
+                value: :attrib},
+              %Tree{
+                leafs: [
+                  %Tree{
+                    leafs: [],
+                    value: "de"},
+                  %Tree{
+                    leafs: [],
+                    value: 4}],
+                value: :attrib}],
+            value: :seq}],
+        value: :seq}]}
   end
 
   test "expressoes prioritarias a direita do operadores or / and" do
@@ -318,88 +352,35 @@ defmodule ParserTest do
   end
 
   test "declaração de variáveis" do
-    assert GeorgeCompiler.Parser.parse!("{ var x = 2 + 3 }") == [
-  [
-    %Tree{
-      leafs: [
-        %Tree{
-          leafs: [
-            %Tree{leafs: [], value: "x"},
-            %Tree{
-              leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 3}],
-              value: :add
+    assert GeorgeCompiler.Parser.parse!("{ var x = 2 if(true) x := 2 }") == %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [
+                    %Tree{
+                      leafs: [
+                        %Tree{leafs: [], value: "x"},
+                        %Tree{leafs: [], value: 2}
+                      ],
+                      value: :ref
+                    }
+                  ],
+                  value: :decl
+                },
+                %Tree{
+                  leafs: [
+                    %Tree{leafs: [], value: "true"},
+                    %Tree{
+                      leafs: [
+                        %Tree{leafs: [], value: "x"},
+                        %Tree{leafs: [], value: 2}
+                      ],
+                      value: :attrib
+                    }
+                  ],
+                  value: :if
+                }
+              ],
+              value: :blk
             }
-          ],
-          value: :ref
-        },
-        %Tree{leafs: [], value: nil}
-      ],
-      value: :decl
-    }
-  ],
-  nil
-]
-
-    assert GeorgeCompiler.Parser.parse!("{ const x = 2 <= 3 }") == [
-  [
-    %Tree{
-      leafs: [
-        %Tree{
-          leafs: [
-            %Tree{leafs: [], value: "x"},
-            %Tree{
-              leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 3}],
-              value: :le
-            }
-          ],
-          value: :cns
-        },
-        %Tree{leafs: [], value: nil}
-      ],
-      value: :decl
-    }
-  ],
-  nil
-]
-
-    assert GeorgeCompiler.Parser.parse!("{ var x = 2 + 3; const y = 8 }") == [
-  [
-    %Tree{
-      leafs: [
-        %Tree{
-          leafs: [
-            %Tree{leafs: [], value: "x"},
-            %Tree{
-              leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 3}],
-              value: :add
-            }
-          ],
-          value: :ref
-        },
-        %Tree{leafs: [], value: nil}
-      ],
-      value: :decl
-    }
-  ],
-  [
-    [
-      [
-        %Tree{
-          leafs: [
-            %Tree{
-              leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: 8}],
-              value: :cns
-            },
-            %Tree{leafs: [], value: nil}
-          ],
-          value: :decl
-        }
-      ],
-      nil
-    ]
-  ]
-]
-
-    
   end
 end

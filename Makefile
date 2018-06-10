@@ -1,6 +1,6 @@
 EXECS=george_compiler
 path=examples
-file=fact.imp
+file=fast_code.imp
 
 all:
 	@echo "George make: compiling..."
