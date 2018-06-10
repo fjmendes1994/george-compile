@@ -3,15 +3,21 @@ defmodule Environment do
 
     def new(), do: %Environment{}
 
-    def add_ref(ambient, ref) do
-        %{ambient | refs: [{String.to_atom(ref), SecureRandom.uuid} | ambient.refs]}
+    def new(env), do: env
+
+    def add_ref(environment, ref) do
+        %{environment | refs: [{String.to_atom(ref), SecureRandom.uuid} | environment.refs]}
     end
 
-    def get_address(ambient, ref) do
-        Keyword.get(ambient.refs, String.to_atom(ref))
+    def add_const(environment, id, value) do
+        %{environment | refs: [{String.to_atom(id), value} | environment.refs]}
     end
 
-    def get_length(ambient) do
-        Enum.count(ambient.refs)
+    def get_address(environment, ref) do
+        Keyword.get(environment.refs, String.to_atom(ref))
+    end
+
+    def get_length(environment) do
+        Enum.count(environment.refs)
     end
 end

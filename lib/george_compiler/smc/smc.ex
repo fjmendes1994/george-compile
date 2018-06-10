@@ -2,7 +2,7 @@ defmodule GeorgeCompiler.SMC do
 	@moduledoc """
 	Estrutura que representa a tripla SMC
 	"""
-	defstruct s: Stack.new, m: %{}, c: Stack.new
+	defstruct s: Stack.new, m: %{}, c: Stack.new, e: Environment.new
 
 	@doc "Gera uma tripla SMC com duas stacks(valores e controle) e um map(memória)"
 	def new(), do: %GeorgeCompiler.SMC{}
@@ -52,6 +52,26 @@ defmodule GeorgeCompiler.SMC do
 
 	@doc "Limpa a memória"
 	def clean_store(smc) do
-		%{smc | m: %{}}
+		%{smc | m: clean(smc.e, smc.m)}
+	end
+
+	defp clean(env, store) do
+		keys = Enum.filter(env.refs, fn x -> Map.has_key?(store, elem(x,1)) end)
+			   |> Enum.map(fn x -> elem x, 1 end)
+		Map.take(store, keys)
+	end
+
+	def add_reference(smc) do
+		{value, var, smc} = pop_twice_value(smc)
+		smc = %{smc | e: Environment.add_ref(smc.e, var)}
+		
+		#Insere o location no store
+		smc
+		|> add_store(Environment.get_address(smc.e, var), value)
+	end
+
+	def add_const(smc) do
+		{value, var, smc} = pop_twice_value(smc)
+		%{smc | e: Environment.add_const(smc.e, var, value)}
 	end
 end

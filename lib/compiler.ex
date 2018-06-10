@@ -5,6 +5,7 @@ defmodule GeorgeCompiler.Compiler do
     import GeorgeCompiler.SMC.Attribution
     import GeorgeCompiler.SMC.Bool
     import GeorgeCompiler.SMC.Command
+    import GeorgeCompiler.SMC.Decl
 
     @doc """
     Operação que consome a pilha C para aplicação das regras
@@ -43,6 +44,7 @@ defmodule GeorgeCompiler.Compiler do
             is_attribution(tree.value) -> attribution_decompose_tree(tree, smc)
             is_bool_exp(tree.value) -> bool_decompose_tree(tree, smc)
             is_command(tree.value) -> command_decompose_tree(tree, smc) 
+            is_declaration(tree.value) -> decl_decompose_tree(tree, smc)
         end
     end
 
@@ -68,7 +70,6 @@ defmodule GeorgeCompiler.Compiler do
 
     def push_value(node, smc) do
         value = node.value
-        smc = 
           cond do
               is_binary value -> SMC.add_value(smc, SMC.get_stored_value(smc, value))
               true -> SMC.add_value(smc, value)
