@@ -56,4 +56,12 @@ defmodule SMCDeclTest do
 
         assert %SMC{e: %Environment{refs: [var: 5]}} == ref
     end
+
+    test "Aplicação do fechamento do bloco" do
+        smc = SMC.new
+              |> SMC.add_store("var", 5)
+              |> SMC.add_value(%Environment{})
+
+        assert Decl.blk(smc) == SMC.new
+    end
 end
