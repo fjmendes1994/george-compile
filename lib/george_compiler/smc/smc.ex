@@ -57,7 +57,7 @@ defmodule GeorgeCompiler.SMC do
 
 	defp clean(env, store) do
 		keys = Enum.filter(env.refs, fn x -> Map.has_key?(store, elem(x,1)) end)
-		|> Enum.map(fn x -> elem x, 1 end)
+			   |> Enum.map(fn x -> elem x, 1 end)
 		Map.take(store, keys)
 	end
 
