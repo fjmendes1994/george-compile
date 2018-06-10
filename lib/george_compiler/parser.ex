@@ -153,7 +153,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Comandos
   @root true
-  define :BlockCommandDecl, "<lk> DeclSeq? CommandDecl+ <rk> " do
+  define :BlockCommandDecl, "<lk> declSeq? CommandDecl+ <rk> " do
     [nil, [cmd]] -> cmd
     [decls,[cmd]] -> Tree.new(:blk) |> Tree.add_leaf(decls) |> Tree.add_leaf(cmd)
   end
@@ -194,12 +194,12 @@ defmodule GeorgeCompiler.Parser do
   define :choice, "cmd choOp CommandDecl"
 
 
-  define :DeclSeq, "Decl <seqOp> DeclSeq?" do
+  define :declSeq, "decl <seqOp> declSeq?" do
     [decl, nil] -> decl
-    decl -> decl 
+    decl -> decl
   end
 
-  define :Decl, "VariablesDecls / ConstantsDecls"
+  define :decl, "VariablesDecls / ConstantsDecls"
 
   define :VariablesDecls, "<declVarOp> iniVarSeq"
 
