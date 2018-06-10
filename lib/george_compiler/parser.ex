@@ -196,7 +196,6 @@ defmodule GeorgeCompiler.Parser do
 
   define :declSeq, "decl <seqOp> declSeq?" do
     [decl, nil] -> decl
-    [[decl], declSeq] when is_list(decl) -> decl ++ declSeq
     [decl, declSeq] -> decl ++ declSeq
 
 
@@ -210,8 +209,8 @@ defmodule GeorgeCompiler.Parser do
 
   define :iniVarSeq, "iniVar (<comOp> iniVarSeq)?" do
     [iniVar, nil] -> iniVar
-    iniVar when is_map(iniVar) -> iniVar
-    [iniVar | [tail]] -> [iniVar] ++ tail
+    [iniVar, iniVarSeq] when not is_list(iniVar) -> [iniVar] ++ iniVarSeq
+    [iniVar, iniVarSeq] -> iniVar ++ iniVarSeq
   end
 
   define :iniVar, "ident <iniOp> Expression" do
@@ -221,7 +220,8 @@ defmodule GeorgeCompiler.Parser do
 
   define :iniConstSeq, "iniConst (<comOp> iniConstSeq)?" do
     [iniConst, nil] -> iniConst
-	  iniConst -> iniConst
+    [iniConst, iniConstSeq] when not is_list(iniConst)-> [iniConst] ++ iniConstSeq
+	  [iniConst, iniConstSeq] -> iniConst ++ iniConstSeq
 
   end
 

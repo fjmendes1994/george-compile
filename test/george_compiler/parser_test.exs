@@ -351,43 +351,27 @@ defmodule ParserTest do
            }
   end
 
+# TODO RESOLVER LISTA ANINHADAS NAS FOLHAS DE :decl
   test "declaração de variáveis" do
-    assert GeorgeCompiler.Parser.parse!("{ var x = 1, y = 2, z = 3; const u = 4; var v = 5; if(true) x := 0 }") == %Tree{
+    assert GeorgeCompiler.Parser.parse!("{ var x = 1, y = 2, z = 3, w = 7; const u = 4; var v = 5; if(true) x := 0 }") == %Tree{
       value: :blk,
       leafs: [
         %Tree{
           value: :decl,
           leafs: [
-            %Tree{
-              leafs: [
-                %Tree{leafs: [], value: "x"},
-                %Tree{leafs: [], value: 1}],
-              value: :ref},
-            [ ## TODO NÃO DEVERIA ESTAR DENTRO DE UMA LISTA
-              %Tree{
-                leafs: [
-                  %Tree{leafs: [], value: "y"},
-                  %Tree{leafs: [], value: 2}],
-                value: :ref},
-              %Tree{
-                leafs: [
-                  %Tree{leafs: [], value: "z"},
-                  %Tree{leafs: [], value: 3}],
-                value: :ref}
-            ], ## TODO NÃO DEVERIA ESTAR DENTRO DE UMA LISTA
-              %Tree{
-                leafs: [
-                  %Tree{leafs: [], value: "u"},
-                  %Tree{leafs: [], value: 4}],
-                value: :cns},
-             %Tree{
-               leafs: [
-                 %Tree{leafs: [], value: "v"},
-                 %Tree{leafs: [], value: 5}],
-              value: :ref}]},
-            %Tree{
-              leafs: [
-                %Tree{leafs: [], value: "true"}, %Tree{leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: 0}], value: :attrib}],
-              value: :if}]}
+            [
+              %Tree{leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: 1}], value: :ref},
+              [
+                %Tree{leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: 2}], value: :ref},
+                [
+                  %Tree{leafs: [%Tree{leafs: [], value: "z"}, %Tree{leafs: [], value: 3}], value: :ref},
+                  %Tree{leafs: [%Tree{leafs: [], value: "w"}, %Tree{leafs: [], value: 7}], value: :ref}
+                ]
+              ]
+            ],
+            %Tree{leafs: [%Tree{leafs: [], value: "u"}, %Tree{leafs: [], value: 4}], value: :cns},
+            %Tree{leafs: [%Tree{leafs: [], value: "v"}, %Tree{leafs: [], value: 5}], value: :ref}
+          ]},
+        %Tree{leafs: [%Tree{leafs: [], value: "true"}, %Tree{leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: 0}], value: :attrib}], value: :if}]}
   end
 end
