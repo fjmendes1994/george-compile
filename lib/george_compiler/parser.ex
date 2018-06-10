@@ -193,36 +193,19 @@ defmodule GeorgeCompiler.Parser do
 
   define :choice, "cmd choOp CommandDecl"
 
-
   define :declSeq, "decl <seqOp> declSeq?" do
-    [decl, nil] -> decl
-    [decl, declSeq] -> decl ++ declSeq
-
-
+    [[decl], nil] -> decl
+    [[decl], declSeq] -> decl ++ declSeq
   end
 
   define :decl, "VariablesDecls / ConstantsDecls"
 
-  define :VariablesDecls, "<declVarOp> iniVarSeq"
+  define :VariablesDecls, "<declVarOp> iniVar+"
 
-  define :ConstantsDecls, "<declConstOp> iniConstSeq"
+  define :ConstantsDecls, "<declConstOp> iniConst+"
 
-  define :iniVarSeq, "iniVar (<comOp> iniVarSeq)?" do
-    [iniVar, nil] -> iniVar
-    [iniVar, iniVarSeq] when not is_list(iniVar) -> [iniVar] ++ iniVarSeq
-    [iniVar, iniVarSeq] -> iniVar ++ iniVarSeq
-  end
-
-  define :iniVar, "ident <iniOp> Expression" do
+  define :iniVar, "ident <iniOp> Expression <comOp?>" do
 	   [ident, exp] -> Tree.new(:ref) |> Tree.add_leaf(ident) |> Tree.add_leaf(exp)
-  end
-
-
-  define :iniConstSeq, "iniConst (<comOp> iniConstSeq)?" do
-    [iniConst, nil] -> iniConst
-    [iniConst, iniConstSeq] when not is_list(iniConst)-> [iniConst] ++ iniConstSeq
-	  [iniConst, iniConstSeq] -> iniConst ++ iniConstSeq
-
   end
 
   define :iniConst, "ident <iniOp> Expression" do
