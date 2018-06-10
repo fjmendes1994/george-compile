@@ -5,6 +5,7 @@
 
   Trabalho da disciplina de compiladores do curso de ciencia da computação.
   Universidade Federal Fluminense, Nitéroi, 2018.
+  Para maiores informações consulte a [documentação](https://fjmendes1994.github.io/george-compiler/api-reference.html).
 
 ## Install
 
