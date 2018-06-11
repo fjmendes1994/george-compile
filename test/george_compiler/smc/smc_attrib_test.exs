@@ -14,8 +14,17 @@ defmodule SMCAttribTest do
     end
 
     test "Recupera valor de variavel dado o mapa" do
-        m = %{"var" => 5}
-        assert get_variable_value("var", m) == 5
+        smc = SMC.new
+              |> SMC.add_value("var")
+              |> SMC.add_value(5)
+              |> SMC.add_const
+        assert get_variable_value("var", smc) == 5
+
+        smc = SMC.new
+              |> SMC.add_value("var")
+              |> SMC.add_value(5)
+              |> SMC.add_reference
+        assert get_variable_value("var", smc) == 5
     end
 
     test "Decompoe arvore de atribuição" do
