@@ -2,7 +2,7 @@ defmodule GeorgeCompiler.SMC.Decl do
     @operations %{
         :decl => nil,
         :ref => &GeorgeCompiler.SMC.Decl.ref/1,
-        :cons => &GeorgeCompiler.SMC.Decl.cons/1,
+        :cns => &GeorgeCompiler.SMC.Decl.cns/1,
         :blk => &GeorgeCompiler.SMC.Decl.blk/1
     }
     alias GeorgeCompiler.SMC, as: SMC
@@ -17,7 +17,7 @@ defmodule GeorgeCompiler.SMC.Decl do
         |> SMC.add_reference
     end
 
-    def const(smc) do
+    def cns(smc) do
         smc
         |> SMC.add_const
     end
