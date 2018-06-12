@@ -1,6 +1,7 @@
 defmodule GeorgeCompiler.SMC.Arit do
     
     alias GeorgeCompiler.SMC,as: SMC
+    import GeorgeCompiler.SMC.Attribution, only: [get_variable_value: 2]
 
     @operations %{  
         :add => &GeorgeCompiler.SMC.Arit.add/1,
@@ -23,26 +24,26 @@ defmodule GeorgeCompiler.SMC.Arit do
     @doc false
     def add(smc) do
         {x, y, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, x+y)
+        SMC.add_value(smc, get_variable_value(x, smc)+get_variable_value(y, smc))
     end
 
     @doc false
     def mul(smc)do
         {x, y, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, x*y)
+        SMC.add_value(smc, get_variable_value(x, smc)*get_variable_value(y, smc))
     end
 
     @doc false
     #Subtração e divisão sendo feitas ao contrário para compensar ordem da pilha
     def sub(smc) do
         {x, y, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, y-x)
+        SMC.add_value(smc, get_variable_value(y, smc)-get_variable_value(x, smc))
     end
 
     @doc false
     def div(smc) do
         {x, y, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, y/x)
+        SMC.add_value(smc, div(get_variable_value(y, smc), get_variable_value(x, smc)))
     end
 
     @doc false
