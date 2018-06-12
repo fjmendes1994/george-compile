@@ -82,6 +82,7 @@ defmodule GeorgeCompiler.Compiler do
             is_attribution(operation) -> &attrib/2
             is_bool_exp(operation) -> &bool_exp/2
             is_command(operation) -> &command/2
+            is_declaration(operation) -> &decl/2
         end
     end
 
