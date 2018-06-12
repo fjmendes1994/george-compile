@@ -58,7 +58,7 @@ defmodule GeorgeCompiler.Compiler do
     end
 
     defp is_value(value) do
-        not (is_arit_exp(value) or is_bool_exp(value) or is_command(value) or is_attribution(value))
+        not (is_arit_exp(value) or is_bool_exp(value) or is_command(value) or is_attribution(value) or is_declaration(value))
     end
 
     @doc """
@@ -71,7 +71,7 @@ defmodule GeorgeCompiler.Compiler do
     def push_value(node, smc) do
         value = node.value
           cond do
-              is_binary value -> SMC.add_value(smc, SMC.get_stored_value(smc, value))
+              is_binary value -> SMC.add_value(smc, value)
               true -> SMC.add_value(smc, value)
           end
     end

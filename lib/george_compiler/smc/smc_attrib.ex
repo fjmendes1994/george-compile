@@ -8,7 +8,10 @@ defmodule GeorgeCompiler.SMC.Attribution do
     """
     def attrib(_, smc) do
         {value, var, smc} = SMC.pop_twice_value(smc)
-        SMC.add_store(smc, var, value)
+        x = Environment.get_address(smc.e, var)
+        if Map.has_key? smc.m, x do
+            SMC.add_store(smc, x, value)
+        end
     end
 
     @doc """

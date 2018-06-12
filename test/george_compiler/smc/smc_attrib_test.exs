@@ -5,14 +5,6 @@ defmodule SMCAttribTest do
     import GeorgeCompiler.SMC.Attribution
     use ExUnit.Case
 
-    test "Atribuição simples" do
-			smc = SMC.new
-						|> SMC.add_value("var")
-						|> SMC.add_value(5)
-        assert attrib(nil, smc) == SMC.new 
-                                   |> SMC.add_store("var", 5)
-    end
-
     test "Recupera valor de variavel dado o mapa" do
         smc = SMC.new
               |> SMC.add_value("var")
@@ -24,7 +16,7 @@ defmodule SMCAttribTest do
               |> SMC.add_value("var")
               |> SMC.add_value(5)
               |> SMC.add_reference
-        assert get_variable_value("var", smc) == 5
+              assert get_variable_value("var", smc) == 5
     end
 
     test "Decompoe arvore de atribuição" do
