@@ -1,14 +1,15 @@
 defmodule GeorgeCompiler.SMC.Decl do
     @operations %{
-        :dec => nil,
+        :decl => nil,
         :ref => &GeorgeCompiler.SMC.Decl.ref/1,
         :cons => &GeorgeCompiler.SMC.Decl.cons/1,
         :blk => &GeorgeCompiler.SMC.Decl.blk/1
     }
     alias GeorgeCompiler.SMC, as: SMC
 
-    def decl(_, smc) do
-        smc    
+    def decl(operation, smc) do
+        function = @operations[operation]    
+        function.(smc)
     end
 
     def ref(smc) do
@@ -27,7 +28,9 @@ defmodule GeorgeCompiler.SMC.Decl do
         |> SMC.clean_store
     end
 
-    def is_declaration(operation), do: Map.has_key? @operations, operation
+    def is_declaration(operation) do 
+        Map.has_key? @operations, operation
+    end
 
     def decl_decompose_tree(tree, smc) do
         cond do
