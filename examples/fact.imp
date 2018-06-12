@@ -1,9 +1,8 @@
 {
-  i := 100;
-  fact := 1;
+  var i = 100, fact = 1;
   while (i > 1) do
   {
-      fact := fact * i;
-      i := i - 1
+    fact := fact * i;
+    i := i - 1;
   }
 }
