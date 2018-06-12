@@ -1,6 +1,7 @@
 defmodule GeorgeCompiler.SMC.Bool do
 
     alias GeorgeCompiler.SMC,as: SMC
+    import GeorgeCompiler.SMC.Attribution, only: [get_variable_value: 2]
 
     @operations %{
         :eq => &GeorgeCompiler.SMC.Bool.equals/1,
@@ -26,7 +27,7 @@ defmodule GeorgeCompiler.SMC.Bool do
     """
     def nt(smc) do
         {x, smc} = SMC.pop_value(smc)
-        SMC.add_value(smc, not x)
+        SMC.add_value(smc, not get_variable_value(x, smc))
     end
 
     @doc """
@@ -34,37 +35,37 @@ defmodule GeorgeCompiler.SMC.Bool do
     """
     def equals(smc) do
         {x, y, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, x==y)
+        SMC.add_value(smc, get_variable_value(x, smc)==get_variable_value(y, smc))
     end
 
     @doc false  
     def greater_than(smc) do
         {y, x, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, x>y)
+        SMC.add_value(smc, get_variable_value(x, smc)>get_variable_value(y, smc))
     end
 
     @doc false
     def lesser_than(smc) do
         {y, x, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, x<y)
+        SMC.add_value(smc, get_variable_value(x, smc)<get_variable_value(y, smc))
     end
 
     @doc false
     def greater_equals_than(smc) do
         {y, x, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, x>=y)
+        SMC.add_value(smc, get_variable_value(x, smc)>=get_variable_value(y, smc))
     end
 
     @doc false
     def lesser_equals_than(smc) do
         {y, x, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, x<=y)
+        SMC.add_value(smc, get_variable_value(x, smc)<=get_variable_value(y, smc))
     end
 
     @doc false
     def bool_and(smc) do
         {x, y, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, x and y)
+        SMC.add_value(smc, get_variable_value(x, smc) and get_variable_value(y, smc))
     end
 
     @doc """
@@ -72,7 +73,7 @@ defmodule GeorgeCompiler.SMC.Bool do
     """
     def bool_or(smc) do
         {x, y, smc} = SMC.pop_twice_value(smc)
-        SMC.add_value(smc, x or y)
+        SMC.add_value(smc, get_variable_value(x, smc) or get_variable_value(y, smc))
     end
 
     @doc "Verifica se a operação está mapeada no módulo"
