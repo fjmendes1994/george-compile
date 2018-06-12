@@ -14,6 +14,7 @@ defmodule GeorgeCompiler.Compiler do
         if Stack.depth(smc.c) > 0 do
             SMC.pop_control(smc)
             |> do_operation
+            |> IO.inspect
             |> evaluate
         else
             smc
