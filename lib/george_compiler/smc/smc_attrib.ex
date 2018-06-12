@@ -10,7 +10,7 @@ defmodule GeorgeCompiler.SMC.Attribution do
         {value, var, smc} = SMC.pop_twice_value(smc)
         x = Environment.get_address(smc.e, var)
         if Map.has_key? smc.m, x do
-            SMC.add_store(smc, x, value)
+            SMC.add_store(smc, x, get_variable_value(value, smc))
         else
             raise "Variável nao encontrada"
         end
