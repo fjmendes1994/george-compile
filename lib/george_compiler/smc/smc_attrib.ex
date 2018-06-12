@@ -11,6 +11,8 @@ defmodule GeorgeCompiler.SMC.Attribution do
         x = Environment.get_address(smc.e, var)
         if Map.has_key? smc.m, x do
             SMC.add_store(smc, x, value)
+        else
+            raise "Variável nao encontrada"
         end
     end
 
@@ -33,7 +35,7 @@ defmodule GeorgeCompiler.SMC.Attribution do
     @doc """
     Recupera o valor de uma variavel dado um mapa M
     """
-    def get_variable_value(var, smc) when not is_binary(var) do
+    def get_variable_value(var, _) when not is_binary(var) do
         var
     end
 

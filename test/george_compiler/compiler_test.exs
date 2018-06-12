@@ -151,7 +151,7 @@ defmodule CompilerTest do
     result = smc
              |> SMC.add_value(3)
             
-    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(3)) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree)) == result
   end
 
   #Expressão: x,y, x=1 e y=2
