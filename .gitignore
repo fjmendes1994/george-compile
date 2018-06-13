@@ -19,9 +19,10 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 george_compiler-*.tar
 
+# Ignore binaries
+george_compiler
+
 # Ignore Idea
 /.idea/
 
 /.elixir_ls/
-
-george_compiler

@@ -1,6 +1,17 @@
 EXECS=george_compiler
 path=examples
-file=fact.imp
+file=fast_code.imp
+
+all:
+	@echo "George make: compiling..."
+	@$(MAKE) build
+	@echo "George make: runing..."
+	@$(MAKE) run
+	@echo "George make: cleaning..."
+	@$(MAKE) clean
+	@echo "George make: Done."
+
+
 
 manjaro-install:
 	sudo pacman -S elixir
