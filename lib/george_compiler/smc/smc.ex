@@ -2,7 +2,7 @@ defmodule GeorgeCompiler.SMC do
 	@moduledoc """
 	Estrutura que representa a tripla SMC
 	"""
-	defstruct s: Stack.new, m: %{}, c: Stack.new, e: Environment.new
+	defstruct s: Stack.new, m: Memory.new, c: Stack.new, e: Environment.new
 
 	@doc "Gera uma tripla SMC com duas stacks(valores e controle) e um map(memória)"
 	def new(), do: %GeorgeCompiler.SMC{}
@@ -41,13 +41,18 @@ defmodule GeorgeCompiler.SMC do
 	end
 
 	@doc "Adiciona um elemento na estrutura de memória ou sobrescreve valores de uma variável"
-	def add_store(smc, id, value) do
-		%{smc | m: Map.put(smc.m, id, value)}
+	def add_store(smc, value) do
+		{id, memory} =  Memory.add(smc.m, value)
+		{id, %{smc | m: memory}}
+	end
+
+	def set_var(smc, var, value) do
+		%{smc | m: Memory.set(smc.m, var,value)}
 	end
 
 	@doc "Recupera um valor na memória"
 	def get_stored_value(smc, id) do
-		smc.m[id]
+		Memory.get_value(smc.m, id)
 	end
 
 	@doc "Limpa a memória"
@@ -63,15 +68,12 @@ defmodule GeorgeCompiler.SMC do
 
 	def add_reference(smc) do
 		{value, var, smc} = pop_twice_value(smc)
-		smc = %{smc | e: Environment.add_ref(smc.e, var)}
-		
-		#Insere o location no store
-		smc
-		|> add_store(Environment.get_address(smc.e, var), value)
+		{id, smc} = add_store(smc, value)
+		smc = %{smc | e: Environment.add(smc.e, var, id)}
 	end
 
 	def add_const(smc) do
 		{value, var, smc} = pop_twice_value(smc)
-		%{smc | e: Environment.add_const(smc.e, var, value)}
+		%{smc | e: Environment.add(smc.e, var, value)}
 	end
 end

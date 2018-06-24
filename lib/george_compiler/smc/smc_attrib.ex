@@ -9,8 +9,8 @@ defmodule GeorgeCompiler.SMC.Attribution do
     def attrib(_, smc) do
         {value, var, smc} = SMC.pop_twice_value(smc)
         x = Environment.get_address(smc.e, var)
-        if Map.has_key? smc.m, x do
-            SMC.add_store(smc, x, get_variable_value(value, smc))
+        if Memory.has_key smc.m, x do
+            SMC.set_var(smc, x, get_variable_value(value, smc))
         else
             if Environment.get_address(smc.e, var) == nil do
                 raise "Variável nao encontrada"  
@@ -45,7 +45,7 @@ defmodule GeorgeCompiler.SMC.Attribution do
     def get_variable_value(var, smc) when is_binary(var) do
         x = Environment.get_address(smc.e, var)
         if x do
-            if Map.has_key? smc.m, x do
+            if Memory.has_key smc.m, x do
                 SMC.get_stored_value smc, x
             else
                 x
