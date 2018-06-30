@@ -351,6 +351,7 @@ defmodule ParserTest do
            }
   end
 
+
   test "declaração de variáveis" do
     assert GeorgeCompiler.Parser.parse!("{ var x = 1, y = 2, z = 3, w = 7; const u = 4; var v = 5; if(true) x := 0 }") == %Tree{
       value: :blk,
@@ -366,6 +367,12 @@ defmodule ParserTest do
             %Tree{leafs: [%Tree{leafs: [], value: "v"}, %Tree{leafs: [], value: 5}], value: :ref}
           ]},
         %Tree{leafs: [%Tree{leafs: [], value: "true"}, %Tree{leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: 0}], value: :attrib}], value: :if}]}
+
+  end
+
+  @tag :wip
+  test "module" do
+    GeorgeCompiler.Parser.parse!("module Foo var x = 0; const y = 1; proc bar(x,y){x:=1} proc foo(y,x){}") |> IO.inspect
 
   end
 end
