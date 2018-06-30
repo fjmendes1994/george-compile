@@ -372,7 +372,56 @@ defmodule ParserTest do
 
   @tag :wip
   test "module" do
-    GeorgeCompiler.Parser.parse!("module Foo var x = 0; const y = 1; proc bar(x,y){x:=1} proc foo(y,x){}") |> IO.inspect
+    assert GeorgeCompiler.Parser.parse!("module Foo var x = 0; const y = 1; proc bar(x,y){x:=y} proc foo(x){bar.(1)}") == %Tree{
+  leafs: [
+    %Tree{leafs: [], value: "Foo"},
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: 0}],
+          value: :ref
+        },
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: 1}],
+          value: :cns
+        }
+      ],
+      value: :decl
+    },
+    %Tree{
+      leafs: [
+        %Tree{leafs: [], value: "bar"},
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: ["x"]},
+            %Tree{leafs: [], value: ["y"]}
+          ],
+          value: :for
+        },
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: "y"}],
+          value: :attrib
+        }
+      ],
+      value: :prc
+    },
+    %Tree{
+      leafs: [
+        %Tree{leafs: [], value: "foo"},
+        %Tree{leafs: [%Tree{leafs: [], value: ["x"]}], value: :for},
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "bar"},
+            %Tree{leafs: [%Tree{leafs: [], value: 1}], value: :act}
+          ],
+          value: :call
+        }
+      ],
+      value: :prc
+    }
+  ],
+  value: :mdl
+}
 
   end
 end

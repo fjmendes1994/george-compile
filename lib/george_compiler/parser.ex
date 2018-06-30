@@ -184,8 +184,6 @@ defmodule GeorgeCompiler.Parser do
 
   define :exit, "exitOp <lp> Expression <rp>"
 
-  define :call, "ident <lp> Expression* <rp> "
-
   define :seq, "cmd <seqOp> CommandDecl" do
     [cmd, commandDecl] -> Tree.new(:seq) |> Tree.add_leaf(cmd) |> Tree.add_leaf(commandDecl)
   end
@@ -215,16 +213,20 @@ defmodule GeorgeCompiler.Parser do
 
   define :moduleOp, "<space?> 'module' <space?>"
   define :procOp, "<space?> 'proc' <space?>"
+  define :dot, "."
 
   @root true
-  define :Program, "<space?> ModuleDecl <space?>"
+  define :Program, "<space?> ModuleDecl /  CommandDecl <space?>" do
+    [cmd] -> cmd
+    module -> module
+  end
 
   define :ModuleDecl, "<moduleOp> ident declSeq? ProcDecl+" do
-    [ident, decls, procs] -> Tree.new(:module) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |>Tree.add_leaf(procs)
+    [ident, decls, procs] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |>Tree.add_leaf(procs)
   end
 
   define :ProcDecl, "<procOp> ident FormalsDecl BlockCommandDecl" do
-    [ident, formals, blk] -> Tree.new(:proc) |> Tree.add_leaf(ident) |> Tree.add_leaf(formals) |> Tree.add_leaf(blk)
+    [ident, formals, blk] -> Tree.new(:prc) |> Tree.add_leaf(ident) |> Tree.add_leaf(formals) |> Tree.add_leaf(blk)
   end
 
   define :formal, "ident <comOp?>" do
@@ -232,7 +234,18 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :FormalsDecl, "<lp> formal+ <rp>" do
-    [formals] -> Tree.new(:formals) |> Tree.add_leaf(formals)
+    [formals] -> Tree.new(:for) |> Tree.add_leaf(formals)
+  end
+
+  define :call, "ident <dot> actuals" do
+    [ident, actuals] -> Tree.new(:call) |> Tree.add_leaf(ident) |> Tree.add_leaf(actuals)
+  end
+  define :actual, "(decimal / ident) <comOp?>" do
+    [actual] -> Tree.new(actual)
+  end
+
+  define :actuals, "<lp> actual+ <rp>" do
+    [actuals] -> Tree.new(:act) |> Tree.add_leaf(actuals)
   end
 
 
