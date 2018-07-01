@@ -241,11 +241,11 @@ defmodule GeorgeCompiler.Parser do
     [ident, actuals] -> Tree.new(:call) |> Tree.add_leaf(ident) |> Tree.add_leaf(actuals)
   end
   define :actual, "(decimal / ident) <comOp?>" do
-    [actual] -> Tree.new(actual)
+    [actual] -> actual
   end
 
   define :actuals, "<lp> actual+ <rp>" do
-    [actuals] -> Tree.new(:act) |> Tree.add_leaf(actuals)
+    [actuals] -> %Stack{elements: actuals}
   end
 
 
