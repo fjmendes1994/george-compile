@@ -76,4 +76,8 @@ defmodule GeorgeCompiler.SMC do
 		{value, var, smc} = pop_twice_value(smc)
 		%{smc | e: Environment.add(smc.e, var, value)}
 	end
+
+	def add_const(smc, id, value) do
+		%GeorgeCompiler.SMC{smc | e: Environment.add(smc.e, id, value)}
+	end
 end
