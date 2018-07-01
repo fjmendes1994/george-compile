@@ -10,7 +10,7 @@ defmodule ABS do
   end
 
   def add_dec(%ABS{formals: formals, block: blk} , values) do
-    leafs = add_references(formals, values, blk.leafs)
+    leafs = add_references(formals.items, values, blk.leafs)
     %Tree{leafs: leafs, value: :blk}
   end
 
@@ -27,7 +27,7 @@ defmodule ABS do
       decl
     else
       {value, values} = Stack.pop(values)
-      decl ++ [Tree.new(:ref) |> Tree.add_leaf(Enum.at(ids, 0)) |> Tree.add_leaf(value)]
+      decl ++ [Tree.new(:ref) |> Tree.add_leaf(Enum.at(ids, 0).id) |> Tree.add_leaf(value)]
       |> append_declarations(Enum.drop(ids, 1), values)
     end
   end
