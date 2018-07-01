@@ -238,7 +238,7 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :call, "ident <dot> actuals" do
-    [ident, actuals] -> Tree.new(:call) |> Tree.add_leaf(ident) |> Tree.add_leaf(actuals)
+    [ident, actuals] -> Tree.new(:cal) |> Tree.add_leaf(ident) |> Tree.add_leaf(actuals)
   end
   define :actual, "(decimal / ident) <comOp?>" do
     [actual] -> actual

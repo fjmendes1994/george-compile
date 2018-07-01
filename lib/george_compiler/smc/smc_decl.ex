@@ -4,6 +4,7 @@ defmodule GeorgeCompiler.SMC.Decl do
 			:ref => &GeorgeCompiler.SMC.Decl.ref/1,
 			:cns => &GeorgeCompiler.SMC.Decl.cns/1,
 			:blk => &GeorgeCompiler.SMC.Decl.blk/1,
+			:cal => &GeorgeCompiler.SMC.Decl.cal/1,
 			:prc => nil,
 			:mdl => nil
 	}
@@ -40,6 +41,7 @@ defmodule GeorgeCompiler.SMC.Decl do
 			tree.value == :blk -> blk_decompose_tree(tree, smc)
 			tree.value == :prc -> prc_decompose_tree(tree, smc)
 			tree.value == :mdl -> mdl_decompose_tree(tree, smc)
+			tree.value == :cal -> cal_decompose_tree(tree, smc)
 			:true -> env_decompose_tree(tree, smc)
 		end
 	end
