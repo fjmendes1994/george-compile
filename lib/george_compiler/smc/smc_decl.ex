@@ -51,11 +51,6 @@ defmodule GeorgeCompiler.SMC.Decl do
 		|> push_values(tree)
 	end
 
-	defp mdl_decompose_tree(tree, smc) do
-		smc
-		|> push_values(tree)
-	end
-
 	defp blk_decompose_tree(tree, smc) do
 		smc
 		|> SMC.add_control(tree.value)
@@ -63,6 +58,31 @@ defmodule GeorgeCompiler.SMC.Decl do
 		|> push_values(tree)
 	end
 
+
+	defp mdl_decompose_tree(tree, smc) do
+		smc
+		|> push_values(TreeUtils.remove_first_leaf(tree))
+	end
+
+
+	defp cal_decompose_tree(tree, smc) do
+		smc
+		|> SMC.add_control(tree.value)
+		|> SMC.add_value(call_push_values(tree))
+	end
+
+	defp call_push_values(value_stack, tree) do
+		elem = Enum.at(tree.leafs,0)
+		if length(tree.leafs) > 1 do
+			value_stack
+				|> call_push_values(TreeUtils.remove_first_leaf(tree)) 
+				|> Stack.push(elem)
+		else
+				smc 
+				|> Stack.push(elem)
+		end
+	end
+	
 	defp push_values(smc, tree) do
 		elem = Enum.at(tree.leafs,0)
 		if length(tree.leafs) > 1 do
