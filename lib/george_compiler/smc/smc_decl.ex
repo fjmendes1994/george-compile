@@ -67,8 +67,7 @@ defmodule GeorgeCompiler.SMC.Decl do
 	end
 
 	defp prc_decompose_tree(tree, smc) do
-		SMC.add_const(smc, Enum.at(tree.leafs, 0))
-		# |> SMC.add_const(smc, make_abs(TreeUtils.remove_first_leaf(tree)))
+		SMC.add_const(smc, Tree.get_leaf(tree, 0), make_abs(tree))
 	end
 
 	defp env_decompose_tree(tree, smc) do
@@ -77,5 +76,9 @@ defmodule GeorgeCompiler.SMC.Decl do
 		|> SMC.add_control(Tree.get_leaf(tree, 1))
 		#Extrai o valor da árvore
 		|> SMC.add_value(Tree.get_leaf(tree, 0).value)
+	end
+
+	defp make_abs(tree) do
+		ABS.new(Tree.get_leaf(tree, 1), Tree.get_leaf(tree, 2))
 	end
 end
