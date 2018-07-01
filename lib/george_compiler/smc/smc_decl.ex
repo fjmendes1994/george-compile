@@ -11,7 +11,7 @@ defmodule GeorgeCompiler.SMC.Decl do
 	alias GeorgeCompiler.SMC, as: SMC
 
 	def decl(operation, smc) do
-		function = @operations[operation]    
+		function = @operations[operation]
 		function.(smc)
 	end
 
@@ -31,7 +31,7 @@ defmodule GeorgeCompiler.SMC.Decl do
 		|> SMC.clean_store
 	end
 
-	def is_declaration(operation) do 
+	def is_declaration(operation) do
 		Map.has_key? @operations, operation
 	end
 
@@ -68,29 +68,29 @@ defmodule GeorgeCompiler.SMC.Decl do
 	defp cal_decompose_tree(tree, smc) do
 		smc
 		|> SMC.add_control(tree.value)
-		|> SMC.add_value(call_push_values(tree))
+		# |> SMC.add_value(call_push_values(tree))
 	end
 
 	defp call_push_values(value_stack, tree) do
 		elem = Enum.at(tree.leafs,0)
 		if length(tree.leafs) > 1 do
 			value_stack
-				|> call_push_values(TreeUtils.remove_first_leaf(tree)) 
+				|> call_push_values(TreeUtils.remove_first_leaf(tree))
 				|> Stack.push(elem)
 		else
-				smc 
+				smc
 				|> Stack.push(elem)
 		end
 	end
-	
+
 	defp push_values(smc, tree) do
 		elem = Enum.at(tree.leafs,0)
 		if length(tree.leafs) > 1 do
 				smc
-				|> push_values(TreeUtils.remove_first_leaf(tree)) 
+				|> push_values(TreeUtils.remove_first_leaf(tree))
 				|> SMC.add_control(elem)
 		else
-				smc 
+				smc
 				|> SMC.add_control(elem)
 		end
 	end
@@ -100,7 +100,7 @@ defmodule GeorgeCompiler.SMC.Decl do
 	end
 
 	defp env_decompose_tree(tree, smc) do
-		smc  
+		smc
 		|> SMC.add_control(tree.value)
 		|> SMC.add_control(Tree.get_leaf(tree, 1))
 		#Extrai o valor da árvore

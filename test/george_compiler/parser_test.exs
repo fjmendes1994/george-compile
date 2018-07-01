@@ -370,7 +370,7 @@ defmodule ParserTest do
 
   end
 
-  @tag :wip
+
   test "module" do
     assert GeorgeCompiler.Parser.parse!("module Foo var x = 0; const y = 1; proc bar(x,y){x:=y} proc foo(x){bar.(1)}") == %Tree{
   leafs: [
@@ -422,6 +422,22 @@ defmodule ParserTest do
   ],
   value: :mdl
 }
-
   end
+  @tag :wip
+  test "module_fact" do
+     GeorgeCompiler.Parser.parse!("
+  module Fact
+    var y = 1;
+    proc fact(x) {
+      while (x != 0) do {
+  		  y := y * x;
+        x := x - 1
+      };
+		print(y)
+	  }
+    fact(5)
+  end") |> IO.inspect
+  end
+
+
 end

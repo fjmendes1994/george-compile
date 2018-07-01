@@ -214,6 +214,7 @@ defmodule GeorgeCompiler.Parser do
   define :moduleOp, "<space?> 'module' <space?>"
   define :procOp, "<space?> 'proc' <space?>"
   define :dot, "."
+  define :end, "<space?> 'end' <space?>"
 
   @root true
   define :Program, "<space?> ModuleDecl /  CommandDecl <space?>" do
@@ -221,8 +222,15 @@ defmodule GeorgeCompiler.Parser do
     module -> module
   end
 
-  define :ModuleDecl, "<moduleOp> ident declSeq? ProcDecl+" do
-    [ident, decls, procs] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |>Tree.add_leaf(procs)
+  define :ModuleDecl, "<moduleOp> ident declSeq? ProcDecl+ CommandDecl? <end>" do
+    [ident, nil, nil, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident)
+    [ident, nil, procs, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |>Tree.add_leaf(procs)
+    [ident, decls, nil, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |>Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls))
+    [ident, nil, nil, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident)  |> Tree.add_leaf(cmd)
+    [ident, nil, procs, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |>Tree.add_leaf(procs) |> Tree.add_leaf(cmd)
+    [ident, decls, nil, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |> Tree.add_leaf(cmd)
+    [ident, decls, procs, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |>Tree.add_leaf(procs)
+    [ident, decls, procs, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |>Tree.add_leaf(procs) |> Tree.add_leaf(cmd)
   end
 
   define :ProcDecl, "<procOp> ident FormalsDecl BlockCommandDecl" do
@@ -237,7 +245,7 @@ defmodule GeorgeCompiler.Parser do
     [formals] -> %Formals{items: formals}
   end
 
-  define :call, "ident <dot> actuals" do
+  define :call, "ident actuals" do
     [ident, actuals] -> Tree.new(:cal) |> Tree.add_leaf(ident) |> Tree.add_leaf(actuals)
   end
   define :actual, "(decimal / ident) <comOp?>" do
