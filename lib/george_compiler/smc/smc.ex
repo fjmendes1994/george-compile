@@ -78,6 +78,6 @@ defmodule GeorgeCompiler.SMC do
 	end
 
 	def add_const(smc, id, value) do
-		%GeorgeCompiler.SMC{smc | e: Environment.add(smc.e, id, value)}
+		%GeorgeCompiler.SMC{smc | e: Environment.add(smc.e, id.value, value)}
 	end
 end

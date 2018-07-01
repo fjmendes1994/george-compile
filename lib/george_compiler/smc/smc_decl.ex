@@ -4,7 +4,8 @@ defmodule GeorgeCompiler.SMC.Decl do
 			:ref => &GeorgeCompiler.SMC.Decl.ref/1,
 			:cns => &GeorgeCompiler.SMC.Decl.cns/1,
 			:blk => &GeorgeCompiler.SMC.Decl.blk/1,
-			:prc => nil
+			:prc => nil,
+			:mdl => nil
 	}
 	alias GeorgeCompiler.SMC, as: SMC
 
@@ -38,11 +39,17 @@ defmodule GeorgeCompiler.SMC.Decl do
 			tree.value == :decl -> dec_decompose_tree(tree, smc)
 			tree.value == :blk -> blk_decompose_tree(tree, smc)
 			tree.value == :prc -> prc_decompose_tree(tree, smc)
+			tree.value == :mdl -> mdl_decompose_tree(tree, smc)
 			:true -> env_decompose_tree(tree, smc)
 		end
 	end
 
 	defp dec_decompose_tree(tree, smc) do
+		smc
+		|> push_values(tree)
+	end
+
+	defp mdl_decompose_tree(tree, smc) do
 		smc
 		|> push_values(tree)
 	end
@@ -79,6 +86,6 @@ defmodule GeorgeCompiler.SMC.Decl do
 	end
 
 	defp make_abs(tree) do
-		ABS.new(Tree.get_leaf(tree, 1), Tree.get_leaf(tree, 2))
+		ABS.new(Enum.drop(tree.leafs, 1))
 	end
 end

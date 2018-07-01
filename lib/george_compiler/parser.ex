@@ -230,11 +230,11 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :formal, "ident <comOp?>" do
-    formal -> Tree.new(formal)
+    [formal] -> Par.new(formal, :int)
   end
 
   define :FormalsDecl, "<lp> formal+ <rp>" do
-    [formals] -> Tree.new(:for) |> Tree.add_leaf(formals)
+    [formals] -> %Formals{items: formals}
   end
 
   define :call, "ident <dot> actuals" do
