@@ -351,6 +351,7 @@ defmodule ParserTest do
            }
   end
 
+
   test "declaração de variáveis" do
     assert GeorgeCompiler.Parser.parse!("{ var x = 1, y = 2, z = 3, w = 7; const u = 4; var v = 5; if(true) x := 0 }") == %Tree{
       value: :blk,
@@ -366,6 +367,61 @@ defmodule ParserTest do
             %Tree{leafs: [%Tree{leafs: [], value: "v"}, %Tree{leafs: [], value: 5}], value: :ref}
           ]},
         %Tree{leafs: [%Tree{leafs: [], value: "true"}, %Tree{leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: 0}], value: :attrib}], value: :if}]}
+
+  end
+
+  @tag :wip
+  test "module" do
+    assert GeorgeCompiler.Parser.parse!("module Foo var x = 0; const y = 1; proc bar(x,y){x:=y} proc foo(x){bar.(1)}") == %Tree{
+  leafs: [
+    %Tree{leafs: [], value: "Foo"},
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: 0}],
+          value: :ref
+        },
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: 1}],
+          value: :cns
+        }
+      ],
+      value: :decl
+    },
+    %Tree{
+      leafs: [
+        %Tree{leafs: [], value: "bar"},
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: ["x"]},
+            %Tree{leafs: [], value: ["y"]}
+          ],
+          value: :for
+        },
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: "y"}],
+          value: :attrib
+        }
+      ],
+      value: :prc
+    },
+    %Tree{
+      leafs: [
+        %Tree{leafs: [], value: "foo"},
+        %Tree{leafs: [%Tree{leafs: [], value: ["x"]}], value: :for},
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "bar"},
+            %Tree{leafs: [%Tree{leafs: [], value: 1}], value: :act}
+          ],
+          value: :call
+        }
+      ],
+      value: :prc
+    }
+  ],
+  value: :mdl
+}
 
   end
 end
