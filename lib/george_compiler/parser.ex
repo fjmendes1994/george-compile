@@ -77,7 +77,7 @@ defmodule GeorgeCompiler.Parser do
 
 
   # Expressoes
-  define :Expression, "PredicateDecl / ExpressionDecl"
+  define :Expression, "call / PredicateDecl / ExpressionDecl"
 
   # Expressoes aritmeticas
   define :PriorityExpressionDecl, "<lp> ExpressionDecl <rp>" do

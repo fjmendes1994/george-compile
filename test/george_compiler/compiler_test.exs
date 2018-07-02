@@ -20,7 +20,7 @@ defmodule CompilerTest do
     result = SMC.new
              |> SMC.add_value(5)
              |> SMC.add_value(6)
-    
+
     assert GeorgeCompiler.Compiler.evaluate(smc) == result
   end
 
@@ -30,10 +30,10 @@ defmodule CompilerTest do
         |> SMC.add_control(:add)
         |> SMC.add_control(5)
         |> SMC.add_control(6)
-    
+
     result = SMC.new
           |> SMC.add_value(11)
-    
+
     assert GeorgeCompiler.Compiler.evaluate(smc) == result
   end
 
@@ -84,7 +84,7 @@ defmodule CompilerTest do
 
     result = SMC.new
             |> SMC.add_value(3)
-    
+
     assert GeorgeCompiler.Compiler.evaluate(smc) == result
   end
 
@@ -129,7 +129,7 @@ defmodule CompilerTest do
 
     result = SMC.new
             |> SMC.add_value(2)
-            
+
     assert GeorgeCompiler.Compiler.evaluate(smc) ==result
   end
 
@@ -150,7 +150,7 @@ defmodule CompilerTest do
 
     result = smc
              |> SMC.add_value(3)
-            
+
     assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree)) == result
   end
 
@@ -217,7 +217,7 @@ defmodule CompilerTest do
     tree_sub = Tree.new(:sub)
           |> Tree.add_leaf(4)
           |> Tree.add_leaf(2)
-    
+
     tree_add = Tree.new(:add)
           |> Tree.add_leaf(3)
           |> Tree.add_leaf(tree_sub)
@@ -243,7 +243,7 @@ defmodule CompilerTest do
 
     smc = SMC.new
           |> SMC.add_control(tree_add)
-  
+
     result = SMC.new
              |> SMC.add_value(17)
 
@@ -256,16 +256,16 @@ defmodule CompilerTest do
             |> Tree.add_leaf(2)
             |> Tree.add_leaf(10)
 
-    tree_b = Tree.new(:mul) 
-            |> Tree.add_leaf(3) 
+    tree_b = Tree.new(:mul)
+            |> Tree.add_leaf(3)
             |> Tree.add_leaf(1)
-    
+
     tree_sub = Tree.new(:sub)
               |> Tree.add_leaf(tree_a)
               |> Tree.add_leaf(tree_b)
-    
+
     smc = SMC.new
-          |> SMC.add_control(tree_sub)  
+          |> SMC.add_control(tree_sub)
 
     result = SMC.new
           |> SMC.add_value(17)
@@ -290,6 +290,7 @@ defmodule CompilerTest do
     assert GeorgeCompiler.Compiler.evaluate(smc) == result
   end
 
+  @tag :skip
   test "Igualdade booleana com variaveis" do
     tree_eq = Tree.new(:eq)
               |> Tree.add_leaf("x")
@@ -334,13 +335,13 @@ defmodule CompilerTest do
           |> SMC.add_value("y")
           |> SMC.add_value(5)
           |> SMC.add_reference
-    
+
     result = smc
             |> SMC.add_value(true)
 
     assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree_gt)) == result
   end
-  
+
   test "Menor que" do
     tree_lt = Tree.new(:lt)
               |> Tree.add_leaf(5)
@@ -368,9 +369,9 @@ defmodule CompilerTest do
           |> SMC.add_value(6)
           |> SMC.add_reference
 
-    result = smc  
+    result = smc
              |> SMC.add_value(true)
-            
+
     assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree_lt)) == result
   end
 
@@ -380,7 +381,7 @@ defmodule CompilerTest do
 
     smc = SMC.new
           |> SMC.add_control(tree_neg)
-    
+
     result = SMC.new
             |> SMC.add_value(true)
 
@@ -394,14 +395,15 @@ defmodule CompilerTest do
     smc = SMC.new
           |> SMC.add_value("x")
           |> SMC.add_value(true)
-          |> SMC.add_reference     
-         
+          |> SMC.add_reference
+
     result = smc
              |> SMC.add_value(false)
 
     assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree_neg)) == result
   end
 
+  @tag :skip
   @doc "Atribuição e desvios"
   test "Atribuição com árvore" do
     tree_atrib = Tree.new(:attrib)
@@ -413,9 +415,9 @@ defmodule CompilerTest do
           |> SMC.add_value(1)
           |> SMC.add_reference
           |> SMC.add_control(tree_atrib)
-    
+
     %SMC{e: %Environment{refs: [var: x]}} = smc #recupera o valor da variavel na memoria
-    
+
     result = %SMC{e: %Environment{refs: [var: x]}, m: %{x => 5}}
 
     assert GeorgeCompiler.Compiler.evaluate(smc) == result
@@ -436,7 +438,7 @@ defmodule CompilerTest do
                 |> Tree.add_leaf(greater)
                 |> Tree.add_leaf(sum)
                 |> Tree.add_leaf(sub)
-    
+
     smc = SMC.new
           |> SMC.add_control(if_tree)
 
@@ -466,7 +468,7 @@ defmodule CompilerTest do
 
     smc = SMC.new
           |> SMC.add_control(if_tree)
-      
+
     result = SMC.new
             |> SMC.add_value(0)
 
@@ -531,6 +533,7 @@ defmodule CompilerTest do
     assert GeorgeCompiler.Compiler.evaluate(smc) == SMC.new
   end
 
+  @tag :skip
   test "While executando" do
     condition = Tree.new(:lt)
                 |> Tree.add_leaf("i")
@@ -553,7 +556,7 @@ defmodule CompilerTest do
           |> SMC.add_value(1)
           |> SMC.add_reference
           |> SMC.add_control(while)
-          
+
     result = GeorgeCompiler.Compiler.evaluate(smc)
 
     %SMC{e: %Environment{refs: [i: x]}} = result
