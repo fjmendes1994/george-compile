@@ -423,7 +423,7 @@ defmodule ParserTest do
   value: :mdl
 }
   end
-  @tag :wip
+
   test "module_fact" do
      GeorgeCompiler.Parser.parse!("
   module Fact
@@ -436,6 +436,22 @@ defmodule ParserTest do
 		print(y)
 	  };
     fact(5)
+  end") |> IO.inspect
+  end
+
+  @tag :wip
+  test "fun_fact" do
+     GeorgeCompiler.Parser.parse!("
+  module Fact
+    var y = 1;
+    fun fact(x) {
+      while (x != 0) do {
+  		  y := y * x;
+        x := x - 1
+      };
+		print(y)
+	  };
+    fact(x)
   end") |> IO.inspect
   end
 

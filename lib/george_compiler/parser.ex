@@ -159,7 +159,7 @@ defmodule GeorgeCompiler.Parser do
 
   define :CommandDecl, "choice / seq / cmd / BlockCommandDecl"
 
-  define :cmd, "attrib / if / while / print / exit / call / ProcDecl"
+  define :cmd, "attrib / if / while / print / exit / call / ProcDecl / FunDecl"
 
   define :attrib, "ident <assOp> Expression" do
     [var , exp] -> Tree.new(:attrib) |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
@@ -213,6 +213,7 @@ defmodule GeorgeCompiler.Parser do
 
   define :moduleOp, "<space?> 'module' <space?>"
   define :procOp, "<space?> 'proc' <space?>"
+  define :funOp, "<space?> 'fun' <space?>"
   define :dot, "."
   define :end, "<space?> 'end' <space?>"
 
@@ -233,6 +234,10 @@ defmodule GeorgeCompiler.Parser do
     [ident, formals, blk] -> Tree.new(:prc) |> Tree.add_leaf(ident) |> Tree.add_leaf(formals) |> Tree.add_leaf(blk)
   end
 
+  define :FunDecl, "<funOp> ident FormalsDecl BlockCommandDecl" do
+    [ident, formals, blk] -> Tree.new(:fun) |> Tree.add_leaf(ident) |> Tree.add_leaf(formals) |> Tree.add_leaf(blk)
+  end
+
   define :formal, "ident <comOp?>" do
     [formal] -> Par.new(formal, :int)
   end
@@ -244,6 +249,7 @@ defmodule GeorgeCompiler.Parser do
   define :call, "ident actuals" do
     [ident, actuals] -> Tree.new(:cal) |> Tree.add_leaf(ident) |> Tree.add_leaf(actuals)
   end
+
   define :actual, "(decimal / ident) <comOp?>" do
     [actual] -> actual
   end
