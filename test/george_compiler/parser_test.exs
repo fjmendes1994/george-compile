@@ -434,7 +434,7 @@ defmodule ParserTest do
         x := x - 1
       };
 		print(y)
-	  }
+	  };
     fact(5)
   end") |> IO.inspect
   end

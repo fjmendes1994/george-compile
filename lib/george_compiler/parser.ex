@@ -159,7 +159,7 @@ defmodule GeorgeCompiler.Parser do
 
   define :CommandDecl, "choice / seq / cmd / BlockCommandDecl"
 
-  define :cmd, "attrib / if / while / print / exit / call"
+  define :cmd, "attrib / if / while / print / exit / call / ProcDecl"
 
   define :attrib, "ident <assOp> Expression" do
     [var , exp] -> Tree.new(:attrib) |> Tree.add_leaf(var) |> Tree.add_leaf(exp)
@@ -222,15 +222,11 @@ defmodule GeorgeCompiler.Parser do
     module -> module
   end
 
-  define :ModuleDecl, "<moduleOp> ident declSeq? ProcDecl+ CommandDecl? <end>" do
-    [ident, nil, nil, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident)
-    [ident, nil, procs, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |>Tree.add_leaf(procs)
-    [ident, decls, nil, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |>Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls))
-    [ident, nil, nil, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident)  |> Tree.add_leaf(cmd)
-    [ident, nil, procs, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |>Tree.add_leaf(procs) |> Tree.add_leaf(cmd)
-    [ident, decls, nil, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |> Tree.add_leaf(cmd)
-    [ident, decls, procs, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |>Tree.add_leaf(procs)
-    [ident, decls, procs, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |>Tree.add_leaf(procs) |> Tree.add_leaf(cmd)
+  define :ModuleDecl, "<moduleOp> ident declSeq? CommandDecl? <end>" do
+    [ident, nil, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident)
+    [ident, nil, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(cmd)
+    [ident, decls, nil] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls))
+    [ident, decls, cmd] -> Tree.new(:mdl) |> Tree.add_leaf(ident) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls)) |> Tree.add_leaf(cmd)
   end
 
   define :ProcDecl, "<procOp> ident FormalsDecl BlockCommandDecl" do
