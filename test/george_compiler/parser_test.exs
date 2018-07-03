@@ -5,49 +5,60 @@ defmodule ParserTest do
 
   test "atribuicao de decimal" do
     assert GeorgeCompiler.Parser.parse!("{ ab := 2 }") == %Tree{
-             leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
-             value: :attrib
-           }
+  leafs: [
+    %Tree{
+      leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
+      value: :attrib
+    }
+  ],
+  value: :blk
+}
   end
 
   test "atribuicao de expressoes aritimeticas" do
     assert GeorgeCompiler.Parser.parse!("{ ab := 2 + 2 - -2 / 4 * 5 % 6 }") == %Tree{
-             leafs: [
-               %Tree{leafs: [], value: "ab"},
-               %Tree{
-                 leafs: [
-                   %Tree{leafs: [], value: 2},
-                   %Tree{
-                     leafs: [
-                       %Tree{leafs: [], value: 2},
-                       %Tree{
-                         leafs: [
-                           %Tree{leafs: [], value: -2},
-                           %Tree{
-                             leafs: [
-                               %Tree{leafs: [], value: 4},
-                               %Tree{
-                                 leafs: [
-                                   %Tree{leafs: [], value: 5},
-                                   %Tree{leafs: [], value: 6}
-                                 ],
-                                 value: :rem
-                               }
-                             ],
-                             value: :mul
-                           }
-                         ],
-                         value: :div
-                       }
-                     ],
-                     value: :sub
-                   }
-                 ],
-                 value: :add
-               }
-             ],
-             value: :attrib
-           }
+  leafs: [
+    %Tree{
+      leafs: [
+        %Tree{leafs: [], value: "ab"},
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: 2},
+            %Tree{
+              leafs: [
+                %Tree{leafs: [], value: 2},
+                %Tree{
+                  leafs: [
+                    %Tree{leafs: [], value: -2},
+                    %Tree{
+                      leafs: [
+                        %Tree{leafs: [], value: 4},
+                        %Tree{
+                          leafs: [
+                            %Tree{leafs: [], value: 5},
+                            %Tree{leafs: [], value: 6}
+                          ],
+                          value: :rem
+                        }
+                      ],
+                      value: :mul
+                    }
+                  ],
+                  value: :div
+                }
+              ],
+              value: :sub
+            }
+          ],
+          value: :add
+        }
+      ],
+      value: :attrib
+    }
+  ],
+  value: :blk
+}
+
   end
 
   test "atribuicao com expressoes booleanas" do
@@ -120,195 +131,257 @@ defmodule ParserTest do
 
   test "and e or" do
     assert GeorgeCompiler.Parser.parse!("{ ab := 2 != 2 or 2 == 2 }") == %Tree{
-             leafs: [
-               %Tree{leafs: [], value: "ab"},
-               %Tree{
-                 leafs: [
-                   %Tree{leafs: [], value: 2},
-                   %Tree{
-                     leafs: [
-                       %Tree{leafs: [], value: 2},
-                       %Tree{
-                         leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
-                         value: :eq
-                       }
-                     ],
-                     value: :or
-                   }
-                 ],
-                 value: :neq
-               }
-             ],
-             value: :attrib
-           }
+  leafs: [
+    %Tree{
+      leafs: [
+        %Tree{leafs: [], value: "ab"},
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: 2},
+            %Tree{
+              leafs: [
+                %Tree{leafs: [], value: 2},
+                %Tree{
+                  leafs: [
+                    %Tree{leafs: [], value: 2},
+                    %Tree{leafs: [], value: 2}
+                  ],
+                  value: :eq
+                }
+              ],
+              value: :or
+            }
+          ],
+          value: :neq
+        }
+      ],
+      value: :attrib
+    }
+  ],
+  value: :blk
+}
+
 
     assert GeorgeCompiler.Parser.parse!("{ ab := 2 != 2 and 2 == 2 }") == %Tree{
-             leafs: [
-               %Tree{leafs: [], value: "ab"},
-               %Tree{
-                 leafs: [
-                   %Tree{leafs: [], value: 2},
-                   %Tree{
-                     leafs: [
-                       %Tree{leafs: [], value: 2},
-                       %Tree{
-                         leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
-                         value: :eq
-                       }
-                     ],
-                     value: :and
-                   }
-                 ],
-                 value: :neq
-               }
-             ],
-             value: :attrib
-           }
+  leafs: [
+    %Tree{
+      leafs: [
+        %Tree{leafs: [], value: "ab"},
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: 2},
+            %Tree{
+              leafs: [
+                %Tree{leafs: [], value: 2},
+                %Tree{
+                  leafs: [
+                    %Tree{leafs: [], value: 2},
+                    %Tree{leafs: [], value: 2}
+                  ],
+                  value: :eq
+                }
+              ],
+              value: :and
+            }
+          ],
+          value: :neq
+        }
+      ],
+      value: :attrib
+    }
+  ],
+  value: :blk
+}
+
   end
 
   test "if sem bloco" do
     assert GeorgeCompiler.Parser.parse!("{ if (2==2) ab := 1 }") == %Tree{
-      value: :if,
+  leafs: [
+    %Tree{
       leafs: [
         %Tree{
-          leafs: [
-            %Tree{
-              leafs: [],
-              value: 2},
-            %Tree{
-              leafs: [],
-              value: 2}],
-          value: :eq},
+          leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
+          value: :eq
+        },
         %Tree{
-          leafs: [
-            %Tree{
-              leafs: [],
-              value: "ab"},
-            %Tree{
-              leafs: [],
-              value: 1}],
-          value: :attrib}]}
+          leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 1}],
+          value: :attrib
+        }
+      ],
+      value: :if
+    }
+  ],
+  value: :blk
+}
   end
 
   test "if com bloco" do
     assert GeorgeCompiler.Parser.parse!("{ if (2==2) {ab := 1} }") == %Tree{
-      value: :if,
+  leafs: [
+    %Tree{
       leafs: [
         %Tree{
-          leafs: [
-            %Tree{
-              leafs: [],
-              value: 2},
-             %Tree{
-               leafs: [],
-               value: 2}],
-          value: :eq},
+          leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
+          value: :eq
+        },
         %Tree{
           leafs: [
             %Tree{
-              leafs: [],
-              value: "ab"},
-            %Tree{
-              leafs: [],
-              value: 1}],
-          value: :attrib}]}
+              leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 1}],
+              value: :attrib
+            }
+          ],
+          value: :blk
+        }
+      ],
+      value: :if
+    }
+  ],
+  value: :blk
+}
 
   end
 
   test "else" do
     assert GeorgeCompiler.Parser.parse!("{ if (2==2) {ab := 1} else ab := 2 }") == %Tree{
-             value: :if,
-             leafs: [
-               %Tree{leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}], value: :eq},
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 1}],
-                 value: :attrib
-               },
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
-                 value: :attrib
-               }
-             ]
-           }
+  leafs: [
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
+          value: :eq
+        },
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 1}],
+              value: :attrib
+            }
+          ],
+          value: :blk
+        },
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
+          value: :attrib
+        }
+      ],
+      value: :if
+    }
+  ],
+  value: :blk
+}
+
 
     assert GeorgeCompiler.Parser.parse!("{ if (2==2) ab := 1 else { ab := 2 } }") == %Tree{
-             value: :if,
-             leafs: [
-               %Tree{leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}], value: :eq},
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 1}],
-                 value: :attrib
-               },
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
-                 value: :attrib
-               }
-             ]
-           }
+  leafs: [
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
+          value: :eq
+        },
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 1}],
+          value: :attrib
+        },
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
+              value: :attrib
+            }
+          ],
+          value: :blk
+        }
+      ],
+      value: :if
+    }
+  ],
+  value: :blk
+}
+
   end
 
   test "while" do
     assert GeorgeCompiler.Parser.parse!("{ while (2==2) do { ab := 2 } }") == %Tree{
-             leafs: [
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
-                 value: :eq
-               },
-               %Tree{
-                 leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
-                 value: :attrib
-               }
-             ],
-             value: :while
-           }
+  leafs: [
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
+          value: :eq
+        },
+        %Tree{
+          leafs: [
+            %Tree{
+              leafs: [%Tree{leafs: [], value: "ab"}, %Tree{leafs: [], value: 2}],
+              value: :attrib
+            }
+          ],
+          value: :blk
+        }
+      ],
+      value: :while
+    }
+  ],
+  value: :blk
+}
+
   end
 
   test "bloco com sequencia" do
     assert GeorgeCompiler.Parser.parse!("{ if(2==2) {ab := 2; bc := 3 ; de := 4 } }") == %Tree{
-      value: :if,
+  leafs: [
+    %Tree{
       leafs: [
         %Tree{
-          leafs: [
-            %Tree{
-              leafs: [],
-              value: 2},
-            %Tree{
-              leafs: [],
-              value: 2}],
-          value: :eq},
+          leafs: [%Tree{leafs: [], value: 2}, %Tree{leafs: [], value: 2}],
+          value: :eq
+        },
         %Tree{
           leafs: [
             %Tree{
               leafs: [
                 %Tree{
-                  leafs: [],
-                  value: "ab"},
+                  leafs: [
+                    %Tree{leafs: [], value: "ab"},
+                    %Tree{leafs: [], value: 2}
+                  ],
+                  value: :attrib
+                },
                 %Tree{
-                  leafs: [],
-                  value: 2}],
-              value: :attrib},
-           %Tree{
-             leafs: [
-               %Tree{
-                 leafs: [
-                   %Tree{
-                     leafs: [],
-                     value: "bc"},
-                   %Tree{
-                     leafs: [],
-                     value: 3}],
-                value: :attrib},
-              %Tree{
-                leafs: [
-                  %Tree{
-                    leafs: [],
-                    value: "de"},
-                  %Tree{
-                    leafs: [],
-                    value: 4}],
-                value: :attrib}],
-            value: :seq}],
-        value: :seq}]}
+                  leafs: [
+                    %Tree{
+                      leafs: [
+                        %Tree{leafs: [], value: "bc"},
+                        %Tree{leafs: [], value: 3}
+                      ],
+                      value: :attrib
+                    },
+                    %Tree{
+                      leafs: [
+                        %Tree{leafs: [], value: "de"},
+                        %Tree{leafs: [], value: 4}
+                      ],
+                      value: :attrib
+                    }
+                  ],
+                  value: :seq
+                }
+              ],
+              value: :seq
+            }
+          ],
+          value: :blk
+        }
+      ],
+      value: :if
+    }
+  ],
+  value: :blk
+}
+
   end
 
   test "expressoes prioritarias a direita do operadores or / and" do
@@ -408,10 +481,15 @@ defmodule ParserTest do
             },
             %Tree{
               leafs: [
-                %Tree{leafs: [], value: "x"},
-                %Tree{leafs: [], value: "y"}
+                %Tree{
+                  leafs: [
+                    %Tree{leafs: [], value: "x"},
+                    %Tree{leafs: [], value: "y"}
+                  ],
+                  value: :attrib
+                }
               ],
-              value: :attrib
+              value: :blk
             }
           ],
           value: :prc
@@ -421,8 +499,13 @@ defmodule ParserTest do
             %Tree{leafs: [], value: "foo"},
             %Formals{items: [%Par{id: "x", type: :int}]},
             %Tree{
-              leafs: [%Tree{leafs: [], value: "bar"},%Actuals{items: [1]}],
-              value: :cal
+              leafs: [
+                %Tree{
+                  leafs: [%Tree{leafs: [], value: "bar"}, %Actuals{items: [1]}],
+                  value: :cal
+                }
+              ],
+              value: :blk
             }
           ],
           value: :prc
@@ -433,6 +516,7 @@ defmodule ParserTest do
   ],
   value: :mdl
 }
+
   end
 
   test "module_fact" do
@@ -471,49 +555,59 @@ defmodule ParserTest do
                   leafs: [
                     %Tree{
                       leafs: [
-                        %Tree{leafs: [], value: "x"},
-                        %Tree{leafs: [], value: 0}
-                      ],
-                      value: :neq
-                    },
-                    %Tree{
-                      leafs: [
-                        %Tree{
-                          leafs: [
-                            %Tree{leafs: [], value: "y"},
-                            %Tree{
-                              leafs: [
-                                %Tree{leafs: [], value: "y"},
-                                %Tree{leafs: [], value: "x"}
-                              ],
-                              value: :mul
-                            }
-                          ],
-                          value: :attrib
-                        },
                         %Tree{
                           leafs: [
                             %Tree{leafs: [], value: "x"},
+                            %Tree{leafs: [], value: 0}
+                          ],
+                          value: :neq
+                        },
+                        %Tree{
+                          leafs: [
                             %Tree{
                               leafs: [
-                                %Tree{leafs: [], value: "x"},
-                                %Tree{leafs: [], value: 1}
+                                %Tree{
+                                  leafs: [
+                                    %Tree{leafs: [], value: "y"},
+                                    %Tree{
+                                      leafs: [
+                                        %Tree{leafs: [], value: "y"},
+                                        %Tree{leafs: [], value: "x"}
+                                      ],
+                                      value: :mul
+                                    }
+                                  ],
+                                  value: :attrib
+                                },
+                                %Tree{
+                                  leafs: [
+                                    %Tree{leafs: [], value: "x"},
+                                    %Tree{
+                                      leafs: [
+                                        %Tree{leafs: [], value: "x"},
+                                        %Tree{leafs: [], value: 1}
+                                      ],
+                                      value: :sub
+                                    }
+                                  ],
+                                  value: :attrib
+                                }
                               ],
-                              value: :sub
+                              value: :seq
                             }
                           ],
-                          value: :attrib
+                          value: :blk
                         }
                       ],
-                      value: :seq
-                    }
+                      value: :while
+                    },
+                    ["print"],
+                    "y"
                   ],
-                  value: :while
-                },
-                ["print"],
-                "y"
+                  value: :seq
+                }
               ],
-              value: :seq
+              value: :blk
             }
           ],
           value: :prc
@@ -528,6 +622,7 @@ defmodule ParserTest do
   ],
   value: :mdl
 }
+
   end
 
   @tag :wip
@@ -576,32 +671,37 @@ defmodule ParserTest do
                       leafs: [
                         %Tree{
                           leafs: [
-                            %Tree{leafs: [], value: "y"},
                             %Tree{
                               leafs: [
                                 %Tree{leafs: [], value: "y"},
-                                %Tree{leafs: [], value: "x"}
+                                %Tree{
+                                  leafs: [
+                                    %Tree{leafs: [], value: "y"},
+                                    %Tree{leafs: [], value: "x"}
+                                  ],
+                                  value: :mul
+                                }
                               ],
-                              value: :mul
-                            }
-                          ],
-                          value: :attrib
-                        },
-                        %Tree{
-                          leafs: [
-                            %Tree{leafs: [], value: "x"},
+                              value: :attrib
+                            },
                             %Tree{
                               leafs: [
                                 %Tree{leafs: [], value: "x"},
-                                %Tree{leafs: [], value: 1}
+                                %Tree{
+                                  leafs: [
+                                    %Tree{leafs: [], value: "x"},
+                                    %Tree{leafs: [], value: 1}
+                                  ],
+                                  value: :sub
+                                }
                               ],
-                              value: :sub
+                              value: :attrib
                             }
                           ],
-                          value: :attrib
+                          value: :seq
                         }
                       ],
-                      value: :seq
+                      value: :blk
                     }
                   ],
                   value: :while
@@ -629,6 +729,7 @@ defmodule ParserTest do
   ],
   value: :mdl
 }
+
 
   end
 

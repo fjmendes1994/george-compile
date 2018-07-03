@@ -52,10 +52,18 @@ defmodule GeorgeCompiler.SMC.Decl do
   end
 
   defp blk_decompose_tree(tree, smc) do
-    smc
-    |> SMC.add_control(tree.value)
-    |> SMC.add_value(smc.e)
-    |> push_values(tree)
+
+    case tree.leafs |> Enum.filter(fn(leaf) -> leaf.value == :decl end) do
+      true ->
+        smc
+        |> SMC.add_control(tree.value)
+        |> SMC.add_value(smc.e)
+        |> push_values(tree)
+
+      _ ->
+      smc
+      |> push_values(tree)
+    end
   end
 
 
