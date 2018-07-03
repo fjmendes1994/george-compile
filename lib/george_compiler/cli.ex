@@ -11,13 +11,13 @@ defmodule GeorgeCompiler.CLI do
 
   def process(options) do
       case GeorgeCompiler.FileReader.readFile(options[:path],options[:file]) do
-        {:ok, file_content} -> GeorgeCompiler.eval_file(file_content)
+        {:ok, file_content} -> GeorgeCompiler.eval_file(file_content,  options[:verbose])
         {:error, msg} -> IO.inspect msg
       end
   end
 
   defp parse_args(args) do
-   {options, _, _} = OptionParser.parse(args, switches: [file: :string, path: :string])
+   {options, _, _} = OptionParser.parse(args, switches: [file: :string, path: :string, verbose: :atom])
    options
   end
 

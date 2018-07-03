@@ -157,7 +157,7 @@ defmodule GeorgeCompiler.Parser do
     [decls,cmd] -> Tree.new(:blk) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls) ) |> Tree.add_leaf(cmd)
   end
 
-  define :CommandDecl, "choice / seq / cmd / BlockCommandDecl"
+  define :CommandDecl, "choice / seq / cmd"
 
   define :cmd, "attrib / if / while / print / exit / call / ProcDecl / FunDecl"
 
@@ -219,7 +219,7 @@ defmodule GeorgeCompiler.Parser do
   define :returnOp, "<space?> 'return' <space?>"
 
   @root true
-  define :Program, "<space?> ModuleDecl /  CommandDecl <space?>" do
+  define :Program, "<space?> ModuleDecl /  CommandDecl <space?> / BlockCommandDecl" do
     [cmd] -> cmd
     module -> module
   end
