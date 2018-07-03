@@ -216,6 +216,7 @@ defmodule GeorgeCompiler.Parser do
   define :funOp, "<space?> 'fun' <space?>"
   define :dot, "."
   define :end, "<space?> 'end' <space?>"
+  define :returnOp, "<space?> 'return' <space?>"
 
   @root true
   define :Program, "<space?> ModuleDecl /  CommandDecl <space?>" do
@@ -234,9 +235,19 @@ defmodule GeorgeCompiler.Parser do
     [ident, formals, blk] -> Tree.new(:prc) |> Tree.add_leaf(ident) |> Tree.add_leaf(formals) |> Tree.add_leaf(blk)
   end
 
-  define :FunDecl, "<funOp> ident FormalsDecl BlockCommandDecl" do
+  define :FunDecl, "<funOp> ident FormalsDecl ReturnBlockCommandDecl" do
     [ident, formals, blk] -> Tree.new(:fun) |> Tree.add_leaf(ident) |> Tree.add_leaf(formals) |> Tree.add_leaf(blk)
   end
+
+  define :return, "<returnOp> Expression" do
+    exp -> Tree.new(:return) |> Tree.add_leaf(exp)
+  end
+
+  define :ReturnBlockCommandDecl, "<lk> declSeq? CommandDecl? return <rk> " do
+    [nil, cmd, return] -> Tree.new(:blk) |> Tree.add_leaf(cmd) |> Tree.add_leaf(return)
+    [decls,cmd, return] -> Tree.new(:blk) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls) ) |> Tree.add_leaf(cmd) |> Tree.add_leaf(return)
+  end
+
 
   define :formal, "ident <comOp?>" do
     [formal] -> Par.new(formal, :int)
@@ -250,7 +261,7 @@ defmodule GeorgeCompiler.Parser do
     [ident, actuals] -> Tree.new(:cal) |> Tree.add_leaf(ident) |> Tree.add_leaf(actuals)
   end
 
-  define :actual, "(decimal / ident) <comOp?>" do
+  define :actual, "Expression <comOp?>" do
     [actual] -> actual
   end
 

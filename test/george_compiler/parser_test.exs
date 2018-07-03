@@ -539,8 +539,8 @@ defmodule ParserTest do
       while (x != 0) do {
   		  y := y * x;
         x := x - 1
-      };
-		print(y)
+      }
+		return y
 	  };
     result := fact(x)
   end") == %Tree{
@@ -606,10 +606,9 @@ defmodule ParserTest do
                   ],
                   value: :while
                 },
-                ["print"],
-                "y"
+                %Tree{leafs: ["y"], value: :return}
               ],
-              value: :seq
+              value: :blk
             }
           ],
           value: :fun
