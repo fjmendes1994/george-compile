@@ -33,7 +33,7 @@ build:
 	mix escript.build
 
 run:
-	./george_compiler --path=${path} --file=${file} --verbose=parser
+	./george_compiler --path=${path} --file=${file} --verbose=all
 
 clean:
 	rm -f george_compiler

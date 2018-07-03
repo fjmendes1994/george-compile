@@ -9,7 +9,7 @@ defmodule CompilerTest do
     smc = SMC.new
         |> SMC.add_control(5)
         |> SMC.add_control(6)
-    assert GeorgeCompiler.Compiler.evaluate(smc).c == Stack.new
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil).c == Stack.new
   end
 
   test "Esvazia pilha c e verifica s" do
@@ -21,7 +21,7 @@ defmodule CompilerTest do
              |> SMC.add_value(5)
              |> SMC.add_value(6)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   @doc "Testes aritiméticos"
@@ -34,7 +34,7 @@ defmodule CompilerTest do
     result = SMC.new
           |> SMC.add_value(11)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "Esvazia pilha c e faz subtração utilzando s" do
@@ -46,7 +46,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(1)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "Esvazia pilha c e faz multiplicação utilzando s" do
@@ -58,7 +58,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(30)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "Esvazia pilha c e faz divisão utilzando s" do
@@ -70,7 +70,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(2)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   #Expressão: 1+2
@@ -85,7 +85,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(3)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   #Expressão: 1-2
@@ -100,7 +100,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(-1)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) ==result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) ==result
   end
 
   #Expressão: 1*2
@@ -115,7 +115,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(2)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) ==result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) ==result
   end
 
   #Expressão: 2/1
@@ -130,7 +130,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(2)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) ==result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) ==result
   end
 
   #Expressão: x+y, x=1 e y=2
@@ -151,7 +151,7 @@ defmodule CompilerTest do
     result = smc
              |> SMC.add_value(3)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree)) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree), nil) == result
   end
 
   #Expressão: x,y, x=1 e y=2
@@ -171,7 +171,7 @@ defmodule CompilerTest do
     result = smc
              |> SMC.add_value(-1)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree)) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree), nil) == result
   end
 
   #Expressão: x*y, x=1 e y=2
@@ -188,7 +188,7 @@ defmodule CompilerTest do
           |> SMC.add_value(2)
           |> SMC.add_reference
 
-    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree)) == smc |> SMC.add_value(2)
+    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree), nil) == smc |> SMC.add_value(2)
   end
 
   #Expressão: x/y, x=2 e y=1
@@ -209,7 +209,7 @@ defmodule CompilerTest do
     result = smc
              |> SMC.add_value(2)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree)) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree), nil) == result
   end
 
   #Expressão: 3 + 4 - 2
@@ -228,7 +228,7 @@ defmodule CompilerTest do
     result = SMC.new
              |> SMC.add_value(5)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   #Expressão: 3 * 5 + 2
@@ -247,7 +247,7 @@ defmodule CompilerTest do
     result = SMC.new
              |> SMC.add_value(17)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) ==result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) ==result
   end
 
   #Expressão: 2 * 10 - 3 * 1
@@ -270,7 +270,7 @@ defmodule CompilerTest do
     result = SMC.new
           |> SMC.add_value(17)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
 
@@ -287,7 +287,7 @@ defmodule CompilerTest do
     result = SMC.new
           |> SMC.add_value(true)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   @tag :skip
@@ -306,7 +306,7 @@ defmodule CompilerTest do
             |> SMC.add_store("x", 5)
             |> SMC.add_store("y", 5)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "Maior que" do
@@ -320,7 +320,7 @@ defmodule CompilerTest do
     result = SMC.new
           |> SMC.add_value(true)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "Maior que com variaveis" do
@@ -339,7 +339,7 @@ defmodule CompilerTest do
     result = smc
             |> SMC.add_value(true)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree_gt)) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree_gt), nil) == result
   end
 
   test "Menor que" do
@@ -353,7 +353,7 @@ defmodule CompilerTest do
     result = SMC.new
              |> SMC.add_value(true)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "Menor que com variaveis" do
@@ -372,7 +372,7 @@ defmodule CompilerTest do
     result = smc
              |> SMC.add_value(true)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree_lt)) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree_lt), nil) == result
   end
 
   test "Negação booleana" do
@@ -385,7 +385,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(true)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "Negação booleana com variavel" do
@@ -400,7 +400,7 @@ defmodule CompilerTest do
     result = smc
              |> SMC.add_value(false)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree_neg)) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc |> SMC.add_control(tree_neg), nil) == result
   end
 
   @tag :skip
@@ -420,7 +420,7 @@ defmodule CompilerTest do
 
     result = %SMC{e: %Environment{refs: [var: x]}, m: %{x => 5}}
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "if com else entrando no if" do
@@ -445,7 +445,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(4)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "if com else entrando no else" do
@@ -472,7 +472,7 @@ defmodule CompilerTest do
     result = SMC.new
             |> SMC.add_value(0)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "if sem else entrando no else" do
@@ -490,7 +490,7 @@ defmodule CompilerTest do
     smc = SMC.new
           |> SMC.add_control(if_tree)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == SMC.new
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == SMC.new
   end
 
   test "Sequencia" do
@@ -513,7 +513,7 @@ defmodule CompilerTest do
             |> SMC.add_value(9)
             |> SMC.add_value(5)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == result
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == result
   end
 
   test "While não executando" do
@@ -530,7 +530,7 @@ defmodule CompilerTest do
     smc = SMC.new
           |> SMC.add_control(while)
 
-    assert GeorgeCompiler.Compiler.evaluate(smc) == SMC.new
+    assert GeorgeCompiler.Compiler.evaluate(smc, nil) == SMC.new
   end
 
   @tag :skip
@@ -557,7 +557,7 @@ defmodule CompilerTest do
           |> SMC.add_reference
           |> SMC.add_control(while)
 
-    result = GeorgeCompiler.Compiler.evaluate(smc)
+    result = GeorgeCompiler.Compiler.evaluate(smc, nil)
 
     %SMC{e: %Environment{refs: [i: x]}} = result
 

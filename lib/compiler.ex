@@ -10,15 +10,26 @@ defmodule GeorgeCompiler.Compiler do
     @doc """
     Operação que consome a pilha C para aplicação das regras
     """
-    def evaluate(smc) do
+    def evaluate(smc, verbose) do
+      case {smc, verbose} do
+        {smc, "smc"} ->
+          if Stack.depth(smc.c) > 0 do
+              SMC.pop_control(smc)
+              |> do_operation
+              |> IO.inspect
+              |> evaluate(verbose)
+          else
+              smc
+          end
+        _ ->
         if Stack.depth(smc.c) > 0 do
             SMC.pop_control(smc)
             |> do_operation
-            # |> IO.inspect
-            |> evaluate
+            |> evaluate(verbose)
         else
             smc
         end
+      end
     end
 
     @doc """
