@@ -421,7 +421,7 @@ defmodule ParserTest do
             %Tree{leafs: [], value: "foo"},
             %Formals{items: [%Par{id: "x", type: :int}]},
             %Tree{
-              leafs: [%Tree{leafs: [], value: "bar"}, %Stack{elements: [1]}],
+              leafs: [%Tree{leafs: [], value: "bar"},%Actuals{items: [1]}],
               value: :cal
             }
           ],
@@ -519,7 +519,7 @@ defmodule ParserTest do
           value: :prc
         },
         %Tree{
-          leafs: [%Tree{leafs: [], value: "fact"}, %Stack{elements: [5]}],
+          leafs: [%Tree{leafs: [], value: "fact"}, %Actuals{items: [5]}],
           value: :cal
         }
       ],
@@ -618,7 +618,7 @@ defmodule ParserTest do
           leafs: [
             %Tree{leafs: [], value: "result"},
             %Tree{
-              leafs: [%Tree{leafs: [], value: "fact"}, %Stack{elements: ["x"]}],
+              leafs: [%Tree{leafs: [], value: "fact"}, %Actuals{items: ["x"]}],
               value: :cal
             }
           ],

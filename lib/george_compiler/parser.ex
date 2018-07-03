@@ -255,7 +255,7 @@ defmodule GeorgeCompiler.Parser do
   end
 
   define :actuals, "<lp> actual+ <rp>" do
-    [actuals] -> %Stack{elements: actuals}
+    [actuals] -> %Actuals{items: actuals}
   end
 
 
