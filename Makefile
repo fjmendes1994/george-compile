@@ -1,6 +1,7 @@
 EXECS=george_compiler
 path=examples
 file=fast_code.imp
+verbose=none
 
 all:
 	@echo "George make: compiling..."
@@ -33,7 +34,7 @@ build:
 	mix escript.build
 
 run:
-	./george_compiler --path=${path} --file=${file} --verbose=all
+	./george_compiler --path=${path} --file=${file} --verbose=${verbose}
 
 clean:
 	rm -f george_compiler
