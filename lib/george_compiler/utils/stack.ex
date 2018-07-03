@@ -16,6 +16,10 @@ defmodule Stack do
     def pop(%Stack{elements: [top | rest]}) do
         {top, %Stack{elements: rest}}
     end
+
+    def reverse(stack) do
+        %Stack{elements: Enum.reverse(stack.elements)}
+    end
      
     def depth(%Stack{elements: elements}), do: length(elements)
 end

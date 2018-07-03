@@ -16,7 +16,7 @@ defmodule GeorgeCompiler.SMC.Arit do
     
     E − E < m m' S, M, +/-/* C > ⇒ < n S, M, C >
     """
-    def artit_exp(operation, smc) do
+    def arit_exp(operation, smc) do
         expression = @operations[operation]
         expression.(smc)
     end
