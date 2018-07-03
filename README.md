@@ -4,8 +4,12 @@
   [![Coverage Status](https://coveralls.io/repos/github/fjmendes1994/george-compiler/badge.svg?branch=master)](https://coveralls.io/github/fjmendes1994/george-compiler?branch=master)
 
   Trabalho da disciplina de compiladores do curso de ciencia da computação.
+  
   Universidade Federal Fluminense, Nitéroi, 2018.
+  
   Para maiores informações consulte a [documentação](https://fjmendes1994.github.io/george-compiler/api-reference.html).
+  
+  Também disponobilizamos um [notebook](https://nbviewer.jupyter.org/github/fjmendes1994/george-compiler/blob/development-P3/notebook/GerogeCompiler.ipynb) com a implementação
 
 ## Install
 
