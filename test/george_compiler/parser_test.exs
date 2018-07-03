@@ -351,6 +351,7 @@ defmodule ParserTest do
            }
   end
 
+
   test "declaração de variáveis" do
     assert GeorgeCompiler.Parser.parse!("{ var x = 1, y = 2, z = 3, w = 7; const u = 4; var v = 5; if(true) x := 0 }") == %Tree{
       value: :blk,
@@ -368,4 +369,269 @@ defmodule ParserTest do
         %Tree{leafs: [%Tree{leafs: [], value: "true"}, %Tree{leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: 0}], value: :attrib}], value: :if}]}
 
   end
+
+
+  test "module" do
+    assert GeorgeCompiler.Parser.parse!("
+    module Foo
+      var x = 0;
+      const y = 1;
+      proc bar(x,y){
+        x:=y
+      };
+      proc foo(x) {
+        bar(1)
+      }
+    end") == %Tree{
+  leafs: [
+    %Tree{leafs: [], value: "Foo"},
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "x"}, %Tree{leafs: [], value: 0}],
+          value: :ref
+        },
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: 1}],
+          value: :cns
+        }
+      ],
+      value: :decl
+    },
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "bar"},
+            %Formals{
+              items: [%Par{id: "x", type: :int}, %Par{id: "y", type: :int}]
+            },
+            %Tree{
+              leafs: [
+                %Tree{leafs: [], value: "x"},
+                %Tree{leafs: [], value: "y"}
+              ],
+              value: :attrib
+            }
+          ],
+          value: :prc
+        },
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "foo"},
+            %Formals{items: [%Par{id: "x", type: :int}]},
+            %Tree{
+              leafs: [%Tree{leafs: [], value: "bar"}, %Stack{elements: [1]}],
+              value: :cal
+            }
+          ],
+          value: :prc
+        }
+      ],
+      value: :seq
+    }
+  ],
+  value: :mdl
+}
+  end
+
+  test "module_fact" do
+     assert GeorgeCompiler.Parser.parse!("
+  module Fact
+    var y = 1;
+    proc fact(x) {
+      while (x != 0) do {
+  		  y := y * x;
+        x := x - 1
+      };
+		print(y)
+	  };
+    fact(5)
+  end") == %Tree{
+  leafs: [
+    %Tree{leafs: [], value: "Fact"},
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: 1}],
+          value: :ref
+        }
+      ],
+      value: :decl
+    },
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "fact"},
+            %Formals{items: [%Par{id: "x", type: :int}]},
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [
+                    %Tree{
+                      leafs: [
+                        %Tree{leafs: [], value: "x"},
+                        %Tree{leafs: [], value: 0}
+                      ],
+                      value: :neq
+                    },
+                    %Tree{
+                      leafs: [
+                        %Tree{
+                          leafs: [
+                            %Tree{leafs: [], value: "y"},
+                            %Tree{
+                              leafs: [
+                                %Tree{leafs: [], value: "y"},
+                                %Tree{leafs: [], value: "x"}
+                              ],
+                              value: :mul
+                            }
+                          ],
+                          value: :attrib
+                        },
+                        %Tree{
+                          leafs: [
+                            %Tree{leafs: [], value: "x"},
+                            %Tree{
+                              leafs: [
+                                %Tree{leafs: [], value: "x"},
+                                %Tree{leafs: [], value: 1}
+                              ],
+                              value: :sub
+                            }
+                          ],
+                          value: :attrib
+                        }
+                      ],
+                      value: :seq
+                    }
+                  ],
+                  value: :while
+                },
+                ["print"],
+                "y"
+              ],
+              value: :seq
+            }
+          ],
+          value: :prc
+        },
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "fact"}, %Stack{elements: [5]}],
+          value: :cal
+        }
+      ],
+      value: :seq
+    }
+  ],
+  value: :mdl
+}
+  end
+
+  @tag :wip
+  test "fun_fact" do
+     assert GeorgeCompiler.Parser.parse!("
+  module Fact
+    var y = 1;
+    fun fact(x) {
+      while (x != 0) do {
+  		  y := y * x;
+        x := x - 1
+      };
+		print(y)
+	  };
+    result := fact(x)
+  end") == %Tree{
+  leafs: [
+    %Tree{leafs: [], value: "Fact"},
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [%Tree{leafs: [], value: "y"}, %Tree{leafs: [], value: 1}],
+          value: :ref
+        }
+      ],
+      value: :decl
+    },
+    %Tree{
+      leafs: [
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "fact"},
+            %Formals{items: [%Par{id: "x", type: :int}]},
+            %Tree{
+              leafs: [
+                %Tree{
+                  leafs: [
+                    %Tree{
+                      leafs: [
+                        %Tree{leafs: [], value: "x"},
+                        %Tree{leafs: [], value: 0}
+                      ],
+                      value: :neq
+                    },
+                    %Tree{
+                      leafs: [
+                        %Tree{
+                          leafs: [
+                            %Tree{leafs: [], value: "y"},
+                            %Tree{
+                              leafs: [
+                                %Tree{leafs: [], value: "y"},
+                                %Tree{leafs: [], value: "x"}
+                              ],
+                              value: :mul
+                            }
+                          ],
+                          value: :attrib
+                        },
+                        %Tree{
+                          leafs: [
+                            %Tree{leafs: [], value: "x"},
+                            %Tree{
+                              leafs: [
+                                %Tree{leafs: [], value: "x"},
+                                %Tree{leafs: [], value: 1}
+                              ],
+                              value: :sub
+                            }
+                          ],
+                          value: :attrib
+                        }
+                      ],
+                      value: :seq
+                    }
+                  ],
+                  value: :while
+                },
+                ["print"],
+                "y"
+              ],
+              value: :seq
+            }
+          ],
+          value: :fun
+        },
+        %Tree{
+          leafs: [
+            %Tree{leafs: [], value: "result"},
+            %Tree{
+              leafs: [%Tree{leafs: [], value: "fact"}, %Stack{elements: ["x"]}],
+              value: :cal
+            }
+          ],
+          value: :attrib
+        }
+      ],
+      value: :seq
+    }
+  ],
+  value: :mdl
+}
+
+  end
+
+
 end

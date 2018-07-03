@@ -28,7 +28,7 @@ defmodule GeorgeCompiler.Compiler do
     C nil \< S, M, nil C \> ⇒ \< S, M, C \>
     """
     def do_operation({node, smc}) do
-        if Tree.is_leaf node do 
+        if Tree.is_leaf node do
             unless TreeUtils.is_nil(node) do
                 modify_s(node, smc)
             else
@@ -44,7 +44,7 @@ defmodule GeorgeCompiler.Compiler do
             is_arit_exp(tree.value) -> arit_decompose_tree(tree, smc)
             is_attribution(tree.value) -> attribution_decompose_tree(tree, smc)
             is_bool_exp(tree.value) -> bool_decompose_tree(tree, smc)
-            is_command(tree.value) -> command_decompose_tree(tree, smc) 
+            is_command(tree.value) -> command_decompose_tree(tree, smc)
             is_declaration(tree.value) -> decl_decompose_tree(tree, smc)
         end
     end

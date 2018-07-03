@@ -36,6 +36,7 @@ defmodule SMCDeclTest do
         assert Decl.decl_decompose_tree(tree, SMC.new) == smc
     end
 
+    @tag :skip
     test "Aplicação de ref" do
         smc = SMC.new
               |> SMC.add_value("var")
@@ -57,6 +58,7 @@ defmodule SMCDeclTest do
         assert %SMC{e: %Environment{refs: [var: 5]}} == ref
     end
 
+    @tag :skip
     test "Aplicação do fechamento do bloco" do
         smc = SMC.new
               |> SMC.add_store("var", 5)
