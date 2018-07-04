@@ -1,12 +1,12 @@
 defmodule GeorgeCompiler.SMC.Decl do
   @operations %{
-      :decl => nil,
-      :ref => &GeorgeCompiler.SMC.Decl.ref/1,
-      :cns => &GeorgeCompiler.SMC.Decl.cns/1,
-      :blk => &GeorgeCompiler.SMC.Decl.blk/1,
-      :cal => &GeorgeCompiler.SMC.Decl.cal/1,
-      :prc => nil,
-      :mdl => nil
+    :ref => &GeorgeCompiler.SMC.Decl.ref/1,
+    :cns => &GeorgeCompiler.SMC.Decl.cns/1,
+    :blk => &GeorgeCompiler.SMC.Decl.blk/1,
+    :cal => &GeorgeCompiler.SMC.Decl.cal/1,
+    :decl => nil,
+    :prc => nil,
+    :mdl => nil
   }
   alias GeorgeCompiler.SMC, as: SMC
 
@@ -20,17 +20,31 @@ defmodule GeorgeCompiler.SMC.Decl do
     |> SMC.add_reference
   end
 
+  
   def cns(smc) do
     smc
     |> SMC.add_const
   end
-
+  
   def blk(smc) do
     {env, smc} = SMC.pop_value(smc)
+
     %{smc | e: env}
     |> SMC.clean_store
   end
+  
+  def cal(smc) do
+    {values, id, smc} = SMC.pop_twice_value(smc)
 
+    blk = Environment.get_address(smc.e, id)
+          |> ABS.add_dec(values)
+
+    IO.inspect blk
+    
+    smc
+    |> SMC.add_control(blk)
+  end
+  
   def is_declaration(operation) do
     Map.has_key? @operations, operation
   end
@@ -51,7 +65,7 @@ defmodule GeorgeCompiler.SMC.Decl do
     |> push_values(tree)
   end
 
-  defp blk_decompose_tree(tree, smc) do
+  defp blk_decompose_tree(tree, smc) do     
     smc
     |> SMC.add_control(tree.value)
     |> SMC.add_value(smc.e)
@@ -65,22 +79,11 @@ defmodule GeorgeCompiler.SMC.Decl do
   end
 
 
-  defp cal_decompose_tree(tree, smc) do
+  defp cal_decompose_tree(tree, smc) do    
     smc
     |> SMC.add_control(tree.value)
-    # |> SMC.add_value(call_push_values(tree))
-  end
-
-  defp call_push_values(value_stack, tree) do
-    elem = Enum.at(tree.leafs,0)
-    if length(tree.leafs) > 1 do
-      value_stack
-        |> call_push_values(TreeUtils.remove_first_leaf(tree))
-        |> Stack.push(elem)
-    else
-        smc
-        |> Stack.push(elem)
-    end
+    |> SMC.add_value(Tree.get_leaf(tree, 0).value)
+    |> SMC.add_value(Actuals.get_values(Tree.get_leaf(tree, 1), smc))
   end
 
   defp push_values(smc, tree) do

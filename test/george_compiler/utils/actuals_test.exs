@@ -3,6 +3,7 @@ defmodule ActualsTest do
 
   use ExUnit.Case
   import Actuals
+  alias GeorgeCompiler.SMC, as: SMC
 
   test "Pegando valores" do
     tree_add = Tree.new(:add) 
@@ -11,6 +12,6 @@ defmodule ActualsTest do
     tree_bool = Tree.new(:eq)
                 |> Tree.add_leaf(3)
                 |> Tree.add_leaf(2)
-    assert get_values(%Actuals{items: [tree_add, tree_bool]}) == Stack.new |> Stack.push(5) |> Stack.push(false)
+    assert get_values(%Actuals{items: [tree_add, tree_bool]}, SMC.new) == Stack.new |> Stack.push(5) |> Stack.push(false)
   end
 end

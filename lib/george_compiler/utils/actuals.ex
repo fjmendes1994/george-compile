@@ -5,11 +5,17 @@ defmodule Actuals do
   alias GeorgeCompiler.SMC.Bool, as: Bool
   alias GeorgeCompiler.SMC, as: SMC
 
-  def get_values(%Actuals{items: items}) do
+  import GeorgeCompiler.SMC.Attribution, only: [get_variable_value: 2]
+
+  def get_values(%Actuals{items: items}, smc) do
     SMC.new
     |> add_items(items)
-    |> solve_expressions
+    |> solve_expressions(smc)
     |> return_value
+  end
+
+  defp get_parameters_values(items, smc) do
+    [get_parameters_values(Enum.at(items.value, 0), smc)] ++ get_parameters_values(Enum.drop(items, 1), smc)
   end
 
   defp add_items(smc, items) when length(items) > 0 do
@@ -22,19 +28,19 @@ defmodule Actuals do
     smc
   end
 
-  defp solve_expressions(smc) do
+  defp solve_expressions(smc, context) do    
     if Stack.depth(smc.c) > 0 do
       {tree, smc} = SMC.pop_control(smc)
       unless Tree.is_leaf(tree) do 
         cond do
-          Arit.is_arit_exp(tree.value) -> Arit.arit_decompose_tree(tree, smc) |> solve_expressions
-          Bool.is_bool_exp(tree.value) -> Bool.bool_decompose_tree(tree, smc) |> solve_expressions
+          Arit.is_arit_exp(tree.value) -> Arit.arit_decompose_tree(tree, smc) |> solve_expressions(context)
+          Bool.is_bool_exp(tree.value) -> Bool.bool_decompose_tree(tree, smc) |> solve_expressions(context)
         end
       else
         cond do
-          Arit.is_arit_exp(tree.value) -> Arit.arit_exp(tree.value, smc) |> solve_expressions
-          Bool.is_bool_exp(tree.value) -> Bool.bool_exp(tree.value, smc) |> solve_expressions
-          true -> SMC.add_value(smc, tree.value) |> solve_expressions
+          Arit.is_arit_exp(tree.value) -> Arit.arit_exp(tree.value, smc) |> solve_expressions(context)
+          Bool.is_bool_exp(tree.value) -> Bool.bool_exp(tree.value, smc) |> solve_expressions(context)
+          true -> SMC.add_value(smc, get_variable_value(tree.value, context)) |> solve_expressions(context)
         end 
       end
     else

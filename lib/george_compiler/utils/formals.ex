@@ -10,6 +10,5 @@ end
 
 defmodule Par do
   defstruct id: nil, type: nil
-
   def new(id, type), do: %Par{id: id, type: type}
 end
