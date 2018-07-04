@@ -1,12 +1,12 @@
-{
-  var i=0, j=0, k=0, t=0;
-  i := 0;
-  j := 1;
-  k := 1;
-  while (k < 6) do {
-    t := i + j;
-    i := j;
-    j := t;
-    k := k + 1
-  }
-}
+module Fib
+  var i =0, j=1, k=1, t=0;
+  proc fib(x) {
+    while (k < x) do {
+      t := i + j;
+      i := j;
+      j := t;
+      k := k + 1
+    }
+  };
+  fib(6)
+end

@@ -7,7 +7,7 @@ all:
 	@echo "George make: compiling..."
 	@$(MAKE) build
 	@echo "George make: runing..."
-	@$(MAKE) run
+	@$(MAKE) run verbose=all
 	@echo "George make: cleaning..."
 	@$(MAKE) clean
 	@echo "George make: Done."
