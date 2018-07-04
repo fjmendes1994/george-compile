@@ -48,5 +48,5 @@ defmodule Actuals do
     end
   end
 
-  defp return_value(smc), do: Stack.reverse(smc.s)
+  defp return_value(smc), do: smc.s
 end
