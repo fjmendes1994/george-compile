@@ -27,8 +27,11 @@ defmodule GeorgeCompiler.SMC.Decl do
   end
   
   def blk(smc) do
-    {env, smc} = SMC.pop_value(smc)
-
+    if Stack.depth(smc.s) > 0 do
+      {env, smc} = SMC.pop_value(smc)
+    else
+      env = %Environment{}
+    end
     %{smc | e: env}
     |> SMC.clean_store
   end
@@ -37,11 +40,9 @@ defmodule GeorgeCompiler.SMC.Decl do
     {values, id, smc} = SMC.pop_twice_value(smc)
 
     blk = Environment.get_address(smc.e, id)
-          |> ABS.add_dec(values)
-
-    IO.inspect blk
-    
+          |> ABS.add_dec(values)    
     smc
+    |> SMC.add_control(:blk)
     |> SMC.add_control(blk)
   end
   
