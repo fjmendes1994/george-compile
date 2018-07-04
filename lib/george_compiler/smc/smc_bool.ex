@@ -38,7 +38,7 @@ defmodule GeorgeCompiler.SMC.Bool do
         SMC.add_value(smc, get_variable_value(x, smc)==get_variable_value(y, smc))
     end
 
-    @doc false  
+    @doc false
     def greater_than(smc) do
         {y, x, smc} = SMC.pop_twice_value(smc)
         SMC.add_value(smc, get_variable_value(x, smc)>get_variable_value(y, smc))
@@ -95,10 +95,10 @@ defmodule GeorgeCompiler.SMC.Bool do
         elem = Enum.at(tree.leafs,0)
         if length(tree.leafs) > 1 do
             smc
-            |> push_values(TreeUtils.remove_first_leaf(tree)) 
+            |> push_values(TreeUtils.remove_first_leaf(tree))
             |> SMC.add_control(elem)
         else
-            smc 
+            smc
             |> SMC.add_control(elem)
         end
     end

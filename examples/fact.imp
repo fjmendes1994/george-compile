@@ -6,5 +6,5 @@ module Fact
        x := x - 1
      }
    };
-   fact(50000)
+   fact(20000)
  end
