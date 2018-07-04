@@ -153,7 +153,7 @@ defmodule GeorgeCompiler.Parser do
 
   # Comandos
   define :BlockCommandDecl, "<lk> declSeq? CommandDecl? <rk> " do
-    [nil, cmd] -> cmd
+    [nil, cmd] -> Tree.new(:blk) |> Tree.add_leaf(cmd)
     [decls,cmd] -> Tree.new(:blk) |> Tree.add_leaf(Tree.new(:decl) |> Tree.add_leaf(decls) ) |> Tree.add_leaf(cmd)
   end
 
@@ -268,10 +268,5 @@ defmodule GeorgeCompiler.Parser do
   define :actuals, "<lp> actual+ <rp>" do
     [actuals] -> %Actuals{items: actuals}
   end
-
-
-
-
-
 
 end

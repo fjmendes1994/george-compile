@@ -1,8 +1,11 @@
-{
-  var i = 100, fact = 1;
-  while (i > 1) do
-  {
-    fact := fact * i;
-    i := i - 1
-  }
-}
+ module Fact
+    var y = 1;
+    proc fact(x) {
+      var z = 4;
+      while (x > 0) do {
+  		  y := y * x;
+        x := x - 1
+      }
+	  };
+    fact(5)
+  end
