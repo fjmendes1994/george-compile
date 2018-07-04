@@ -9,7 +9,7 @@
   
   Para maiores informações consulte a [documentação](https://fjmendes1994.github.io/george-compiler/api-reference.html).
   
-  Também disponobilizamos um [notebook](https://nbviewer.jupyter.org/github/fjmendes1994/george-compiler/blob/development-P3/notebook/GerogeCompiler.ipynb) com a implementação
+  Também disponobilizamos um [notebook](https://nbviewer.jupyter.org/github/fjmendes1994/george-compiler/blob/master/notebook/GerogeCompiler.ipynb) com a implementação
 
 ## Install
 
