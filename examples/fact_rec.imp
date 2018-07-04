@@ -1,0 +1,10 @@
+module FactRec
+   var y = 1;
+   proc fact(x) {
+      if (x > 0) {
+    		y := y * x ;
+    		fact(x - 1)
+      }
+   };
+   fact(120)
+end
