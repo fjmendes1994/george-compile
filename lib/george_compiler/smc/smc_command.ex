@@ -5,7 +5,8 @@ defmodule GeorgeCompiler.SMC.Command do
     @operations %{
         :if => &GeorgeCompiler.SMC.Command.if_command/1,
         :while => &GeorgeCompiler.SMC.Command.while/1,
-        :seq => nil
+        :seq => nil,
+        :print => &GeorgeCompiler.SMC.Command.print/1
     }
     
     @doc """
@@ -56,6 +57,11 @@ defmodule GeorgeCompiler.SMC.Command do
         end
     end
 
+    def print(smc) do
+        {value, smc} = SMC.pop_value(smc)
+        IO.puts value
+    end
+
     def command_decompose_tree(tree, smc) do
         smc = smc
               |>  SMC.add_control(tree.value)
@@ -98,6 +104,18 @@ defmodule GeorgeCompiler.SMC.Command do
         smc
         |> SMC.add_control(Enum.at(tree.leafs, 1))
         |> SMC.add_control(Enum.at(tree.leafs, 0))
+    end
+
+    def print_decompose(tree, smc) do
+        smc
+        |> SMC.add_control(tree.value)
+        |> push_values(tree)
+    end
+
+    defp push_values(smc, tree) do
+        elem = Enum.at(tree.leafs,0)
+        smc
+        |> SMC.add_control(elem)
     end
 
     @doc "Verifica se a operação está mapeada no módulo"

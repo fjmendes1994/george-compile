@@ -180,7 +180,9 @@ defmodule GeorgeCompiler.Parser do
     [predicate, block] -> Tree.new(:while) |> Tree.add_leaf(predicate) |> Tree.add_leaf(block)
   end
 
-  define :print, "printOp <lp> Expression <rp>"
+  define :print, "<printOp> <lp> Expression <rp>" do
+    [exp] -> Tree.new(:print) |> Tree.add_leaf(exp)
+  end
 
   define :exit, "exitOp <lp> Expression <rp>"
 
