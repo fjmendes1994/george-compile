@@ -14,8 +14,13 @@ defmodule ABS do
     %Tree{leafs: leafs, value: :blk}
   end
 
-  defp add_references(ids, values, blk = %Tree{leafs: [decl | coms]} ) when decl != nil do
-    [append_declarations(decl, ids, values)] ++ coms
+  defp add_references(ids, values, blk = %Tree{leafs: leafs} ) when length(leafs) > 1 do
+    [decl, coms] = leafs
+    [append_declarations(decl, ids, values)] ++ [coms]
+  end
+
+  defp add_references(ids, values, blk = %Tree{leafs: [leafs]} ) do
+    [append_declarations(Tree.new(:decl), ids, values)] ++ [leafs]
   end
 
   defp append_declarations(decl, ids, values) do
