@@ -1,10 +1,10 @@
- module Fact
-    var y = 1;
-    proc fact(x,z) {
-      while (x > 0) do {
-  		  y := y * x;
-        x := x - 1 - z
+module FactRec
+   var y = 1;
+   proc fact(x, z) {
+      if (x > 0) {
+    		y := y * x - z;
+    		fact(x - 1, 0)
       }
-	  };
-    fact(120, 0)
-  end
+   };
+end
+fact(120)
